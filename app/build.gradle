@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.egorshustov.vpoiske"
         minSdk 23
-        targetSdk 32
+        targetSdk 31
         versionCode 7
         versionName "2.0"
 
