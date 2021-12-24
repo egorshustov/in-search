@@ -28,7 +28,7 @@ fun MainSearchScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "ВПоиске")
+                    Text(text = stringResource(R.string.app_name))
                 },
                 navigationIcon = {
                     IconButton(
