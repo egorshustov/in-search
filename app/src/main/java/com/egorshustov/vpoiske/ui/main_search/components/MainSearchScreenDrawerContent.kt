@@ -12,11 +12,11 @@ import com.egorshustov.vpoiske.R
 
 @Composable
 fun MainSearchScreenDrawerContent(
-    modifier: Modifier = Modifier,
     onLastSearchItemClicked: () -> Unit,
     onNewSearchItemClicked: () -> Unit,
     onSearchHistoryItemClicked: () -> Unit,
-    onChangeThemeItemClicked: () -> Unit
+    onChangeThemeItemClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier
