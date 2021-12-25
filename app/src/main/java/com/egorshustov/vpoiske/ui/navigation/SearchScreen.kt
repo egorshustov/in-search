@@ -1,12 +1,11 @@
 package com.egorshustov.vpoiske.ui.navigation
 
-sealed class SearchScreen(val screenRoute: String) {
+enum class SearchScreen(val screenRoute: String) {
 
-    object Main : SearchScreen("search_main")
-
-    object Params : SearchScreen("search_params")
+    MAIN("search_main"),
+    PARAMS("search_params");
 
     companion object {
-        val graphRoute = "search"
+        const val graphRoute = "search"
     }
 }

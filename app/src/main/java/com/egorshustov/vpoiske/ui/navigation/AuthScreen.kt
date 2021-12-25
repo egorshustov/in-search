@@ -1,10 +1,10 @@
 package com.egorshustov.vpoiske.ui.navigation
 
-sealed class AuthScreen(val screenRoute: String) {
+enum class AuthScreen(val screenRoute: String) {
 
-    object Login : AuthScreen("auth_login")
+    LOGIN("auth_login");
 
     companion object {
-        val graphRoute = "auth"
+        const val graphRoute = "auth"
     }
 }

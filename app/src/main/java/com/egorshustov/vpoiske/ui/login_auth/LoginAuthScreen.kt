@@ -6,4 +6,12 @@ import androidx.compose.runtime.Composable
 @Composable
 fun LoginAuthScreen() {
     Text(text = "LoginAuthScreen")
+    /*onClick = {
+        navController.navigate(SearchScreen.Main.screenRoute) {
+            launchSingleTop = true
+            popUpTo(AuthScreen.Login.screenRoute) {
+                inclusive = true
+            }
+        }
+    }*/
 }
