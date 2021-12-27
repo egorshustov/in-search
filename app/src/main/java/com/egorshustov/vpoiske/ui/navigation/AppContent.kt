@@ -15,10 +15,11 @@ import androidx.navigation.compose.rememberNavController
 import com.egorshustov.vpoiske.R
 import com.egorshustov.vpoiske.ui.login_auth.LoginAuthScreen
 import com.egorshustov.vpoiske.ui.main_search.MainSearchScreen
-import com.egorshustov.vpoiske.ui.main_search.components.NavigationIconButton
 import com.egorshustov.vpoiske.ui.main_search.components.drawerContent
+import com.egorshustov.vpoiske.ui.main_search.components.navigationIconButton
 import com.egorshustov.vpoiske.ui.params_search.ParamsSearchScreen
 import com.egorshustov.vpoiske.ui.theme.VPoiskeTheme
+import com.egorshustov.vpoiske.utils.getCurrentRoute
 import kotlinx.coroutines.launch
 
 @Composable
@@ -32,19 +33,29 @@ fun AppContent() {
             topBar = {
                 TopAppBar(
                     title = { Text(text = stringResource(R.string.app_name)) },
-                    navigationIcon = {
-                        NavigationIconButton(
-                            onClick = {
-                                coroutineScope.launch { scaffoldState.drawerState.open() }
-                            }
-                        )
-                    },
+                    navigationIcon = navigationIconButton(
+                        currentRoute = navController.getCurrentRoute(),
+                        onClick = {
+                            coroutineScope.launch { scaffoldState.drawerState.open() }
+                        }
+                    ),
                     backgroundColor = Color.Blue,
                     contentColor = Color.White,
                     elevation = 12.dp
                 )
             },
-            drawerContent = drawerContent(navController)
+            drawerContent = drawerContent(
+                currentRoute = navController.getCurrentRoute(),
+                onLastSearchItemClicked = {
+                    // TODO: this is only for testing, will be removed later:
+                    navController.navigate(AuthScreen.LOGIN.screenRoute)
+                },
+                onNewSearchItemClicked = {
+                    navController.navigate(SearchScreen.PARAMS.screenRoute)
+                },
+                onSearchHistoryItemClicked = {},
+                onChangeThemeItemClicked = {}
+            )
         ) {
             NavHost(
                 navController = navController,
