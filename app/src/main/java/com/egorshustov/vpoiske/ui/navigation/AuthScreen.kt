@@ -1,8 +1,14 @@
 package com.egorshustov.vpoiske.ui.navigation
 
-enum class AuthScreen(val screenRoute: String) {
+import androidx.annotation.StringRes
+import com.egorshustov.vpoiske.R
 
-    LOGIN("auth_login");
+enum class AuthScreen(
+    val screenRoute: String,
+    @StringRes val titleRes: Int? = null
+) {
+
+    LOGIN("auth_login", R.string.authorization);
 
     companion object {
         const val graphRoute = "auth"

@@ -1,9 +1,15 @@
 package com.egorshustov.vpoiske.ui.navigation
 
-enum class SearchScreen(val screenRoute: String) {
+import androidx.annotation.StringRes
+import com.egorshustov.vpoiske.R
 
-    MAIN("search_main"),
-    PARAMS("search_params");
+enum class SearchScreen(
+    val screenRoute: String,
+    @StringRes val titleRes: Int? = null
+) {
+
+    MAIN("search_main", R.string.app_name),
+    PARAMS("search_params", R.string.new_search);
 
     companion object {
         const val graphRoute = "search"

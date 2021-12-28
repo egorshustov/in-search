@@ -4,7 +4,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -12,11 +11,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.egorshustov.vpoiske.R
 import com.egorshustov.vpoiske.ui.login_auth.LoginAuthScreen
 import com.egorshustov.vpoiske.ui.main_search.MainSearchScreen
 import com.egorshustov.vpoiske.ui.main_search.components.drawerContent
 import com.egorshustov.vpoiske.ui.main_search.components.navigationIconButton
+import com.egorshustov.vpoiske.ui.main_search.components.topAppBarTitle
 import com.egorshustov.vpoiske.ui.params_search.ParamsSearchScreen
 import com.egorshustov.vpoiske.ui.theme.VPoiskeTheme
 import com.egorshustov.vpoiske.utils.getCurrentRoute
@@ -25,18 +24,22 @@ import kotlinx.coroutines.launch
 @Composable
 fun AppContent() {
     VPoiskeTheme {
-        val navController = rememberNavController()
         val coroutineScope = rememberCoroutineScope()
         val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
+        val navController = rememberNavController()
         Scaffold(
             scaffoldState = scaffoldState,
             topBar = {
                 TopAppBar(
-                    title = { Text(text = stringResource(R.string.app_name)) },
+                    title = topAppBarTitle(currentRoute = navController.getCurrentRoute()),
                     navigationIcon = navigationIconButton(
                         currentRoute = navController.getCurrentRoute(),
-                        onClick = {
-                            coroutineScope.launch { scaffoldState.drawerState.open() }
+                        onClick = { route ->
+                            when (route) {
+                                SearchScreen.MAIN.screenRoute ->
+                                    coroutineScope.launch { scaffoldState.drawerState.open() }
+                                else -> navController.popBackStack()
+                            }
                         }
                     ),
                     backgroundColor = Color.Blue,
@@ -46,15 +49,10 @@ fun AppContent() {
             },
             drawerContent = drawerContent(
                 currentRoute = navController.getCurrentRoute(),
-                onLastSearchItemClicked = {
-                    // TODO: this is only for testing, will be removed later:
-                    navController.navigate(AuthScreen.LOGIN.screenRoute)
+                onItemClick = { itemRoute ->
+                    coroutineScope.launch { scaffoldState.drawerState.close() }
+                    navController.navigate(itemRoute)
                 },
-                onNewSearchItemClicked = {
-                    navController.navigate(SearchScreen.PARAMS.screenRoute)
-                },
-                onSearchHistoryItemClicked = {},
-                onChangeThemeItemClicked = {}
             )
         ) {
             NavHost(
