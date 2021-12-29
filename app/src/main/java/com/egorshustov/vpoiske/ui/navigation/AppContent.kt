@@ -18,6 +18,7 @@ import com.egorshustov.vpoiske.ui.main_search.components.navigationIconButton
 import com.egorshustov.vpoiske.ui.main_search.components.topAppBarTitle
 import com.egorshustov.vpoiske.ui.params_search.ParamsSearchScreen
 import com.egorshustov.vpoiske.ui.theme.VPoiskeTheme
+import com.egorshustov.vpoiske.utils.BackPressHandler
 import com.egorshustov.vpoiske.utils.getCurrentRoute
 import kotlinx.coroutines.launch
 
@@ -25,8 +26,14 @@ import kotlinx.coroutines.launch
 fun AppContent() {
     VPoiskeTheme {
         val coroutineScope = rememberCoroutineScope()
-        val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val scaffoldState = rememberScaffoldState(drawerState)
         val navController = rememberNavController()
+        if (drawerState.isOpen) {
+            BackPressHandler {
+                coroutineScope.launch { drawerState.close() }
+            }
+        }
         Scaffold(
             scaffoldState = scaffoldState,
             topBar = {
