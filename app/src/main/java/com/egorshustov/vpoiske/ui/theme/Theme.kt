@@ -37,8 +37,8 @@ fun VPoiskeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composabl
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
-        shapes = Shapes,
+        typography = QuickSandTypography,
+        shapes = AppShapes,
         content = content
     )
 }
