@@ -3,7 +3,6 @@ package com.egorshustov.vpoiske.ui.navigation
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -49,8 +48,6 @@ fun AppContent() {
                             }
                         }
                     ),
-                    backgroundColor = Color.Blue,
-                    contentColor = Color.White,
                     elevation = 12.dp
                 )
             },
