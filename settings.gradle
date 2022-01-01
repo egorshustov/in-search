@@ -6,4 +6,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "VPoiske"
-include ':app'
+include ':app',
+        ':core',
+
+        ':feature'
