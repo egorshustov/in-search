@@ -1,4 +1,4 @@
-package com.egorshustov.feature_api
+package com.egorshustov.core.feature_api
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.egorshustov.core.feature_api.FeatureApi
 
 /**
  * Starts recomposition when back stack changes

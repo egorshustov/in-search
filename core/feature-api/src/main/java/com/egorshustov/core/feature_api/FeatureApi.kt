@@ -1,4 +1,4 @@
-package com.egorshustov.feature_api
+package com.egorshustov.core.feature_api
 
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
