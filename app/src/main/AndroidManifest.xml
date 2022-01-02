@@ -3,6 +3,7 @@
     package="com.egorshustov.vpoiske">
 
     <application
+        android:name=".VPoiskeApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"

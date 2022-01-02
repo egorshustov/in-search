@@ -34,6 +34,11 @@ android {
 }
 
 dependencies {
-    api "com.google.dagger:hilt-android:$hiltVersion"
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+
+    implementation project(":feature:auth:api")
+    implementation project(":feature:auth:impl")
+    implementation project(":feature:search:api")
+    implementation project(":feature:search:impl")
 }

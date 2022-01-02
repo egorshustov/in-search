@@ -1,6 +1,12 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+kapt {
+    correctErrorTypes true
 }
 
 android {
@@ -49,6 +55,8 @@ android {
 dependencies {
     implementation project(":core:feature-api")
     implementation project(":core:di")
+    implementation project(":feature:auth:api")
+    implementation project(":feature:search:api")
 
     implementation "androidx.core:core-ktx:$coreKtxVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
@@ -58,6 +66,9 @@ dependencies {
     implementation "androidx.activity:activity-compose:$activityComposeVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleRuntimeKtxVersion"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistSystemUiControllerVersion"
+
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 
     debugImplementation "androidx.compose.ui:ui-tooling:$composeVersion"
 }

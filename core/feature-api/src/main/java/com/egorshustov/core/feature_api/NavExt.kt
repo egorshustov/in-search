@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.egorshustov.core.feature_api.FeatureApi
 
 /**
  * Starts recomposition when back stack changes

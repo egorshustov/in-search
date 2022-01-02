@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.ui.main_search.components
+package com.egorshustov.vpoiske.ui.components
 
 import androidx.annotation.StringRes
 import androidx.compose.material.MaterialTheme
@@ -6,8 +6,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.egorshustov.vpoiske.ui.navigation.AuthScreen
-import com.egorshustov.vpoiske.ui.navigation.SearchScreen
+import com.egorshustov.core.feature_api.routes.AuthScreen
+import com.egorshustov.core.feature_api.routes.SearchScreen
 
 @Composable
 fun topAppBarTitle(

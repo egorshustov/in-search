@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.ui.params_search
+package com.egorshustov.search.impl.params_search
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

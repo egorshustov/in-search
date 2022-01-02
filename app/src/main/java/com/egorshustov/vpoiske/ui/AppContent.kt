@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.ui.navigation
+package com.egorshustov.vpoiske.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -6,24 +6,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.egorshustov.auth.api.AuthFeatureApi
 import com.egorshustov.core.feature_api.getCurrentRoute
-import com.egorshustov.vpoiske.ui.login_auth.LoginAuthScreen
-import com.egorshustov.vpoiske.ui.main_search.MainSearchScreen
-import com.egorshustov.vpoiske.ui.main_search.components.drawerContent
-import com.egorshustov.vpoiske.ui.main_search.components.navigationIconButton
-import com.egorshustov.vpoiske.ui.main_search.components.topAppBarTitle
-import com.egorshustov.vpoiske.ui.params_search.ParamsSearchScreen
+import com.egorshustov.core.feature_api.routes.SearchScreen
+import com.egorshustov.search.api.SearchFeatureApi
+import com.egorshustov.vpoiske.ui.components.drawerContent
+import com.egorshustov.vpoiske.ui.components.navigationIconButton
+import com.egorshustov.vpoiske.ui.components.topAppBarTitle
 import com.egorshustov.vpoiske.ui.theme.VPoiskeTheme
 import com.egorshustov.vpoiske.utils.BackPressHandler
 import kotlinx.coroutines.launch
 
 @Composable
-fun AppContent() {
+fun AppContent(
+    authFeatureApi: AuthFeatureApi,
+    searchFeatureApi: SearchFeatureApi
+) {
+
     VPoiskeTheme {
         val coroutineScope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -61,40 +61,11 @@ fun AppContent() {
             )
         ) { innerPaddingModifier ->
             AppNavGraph(
+                authFeatureApi = authFeatureApi,
+                searchFeatureApi = searchFeatureApi,
                 navController = navController,
                 modifier = Modifier.padding(innerPaddingModifier)
             )
-        }
-    }
-}
-
-fun NavGraphBuilder.searchGraph(navController: NavController) {
-    navigation(
-        startDestination = SearchScreen.MAIN.screenRoute,
-        route = SearchScreen.graphRoute
-    ) {
-        composable(
-            route = SearchScreen.MAIN.screenRoute
-        ) { navBackStackEntry ->
-            MainSearchScreen()
-        }
-        composable(
-            route = SearchScreen.PARAMS.screenRoute
-        ) { navBackStackEntry ->
-            ParamsSearchScreen()
-        }
-    }
-}
-
-fun NavGraphBuilder.authGraph(navController: NavController) {
-    navigation(
-        startDestination = AuthScreen.LOGIN.screenRoute,
-        route = AuthScreen.graphRoute
-    ) {
-        composable(
-            route = AuthScreen.LOGIN.screenRoute
-        ) { navBackStackEntry ->
-            LoginAuthScreen()
         }
     }
 }

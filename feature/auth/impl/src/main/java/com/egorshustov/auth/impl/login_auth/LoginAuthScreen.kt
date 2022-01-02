@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.ui.login_auth
+package com.egorshustov.auth.impl.login_auth
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

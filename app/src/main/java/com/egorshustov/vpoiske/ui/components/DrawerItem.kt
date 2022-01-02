@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.ui.main_search.components
+package com.egorshustov.vpoiske.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

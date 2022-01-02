@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.ui.main_search.components
+package com.egorshustov.vpoiske.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -10,8 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.egorshustov.vpoiske.R
-import com.egorshustov.vpoiske.ui.navigation.AuthScreen
-import com.egorshustov.vpoiske.ui.navigation.SearchScreen
+import com.egorshustov.core.feature_api.routes.AuthScreen
+import com.egorshustov.core.feature_api.routes.SearchScreen
 
 @Composable
 fun drawerContent(

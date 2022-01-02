@@ -1,0 +1,5 @@
+<resources>
+    <string name="search_main_title">ВПоиске</string>
+    <string name="search_params_title">Новый поиск</string>
+    <string name="auth_login_title">Авторизация</string>
+</resources>

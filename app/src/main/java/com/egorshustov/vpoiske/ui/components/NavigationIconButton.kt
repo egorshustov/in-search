@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.ui.main_search.components
+package com.egorshustov.vpoiske.ui.components
 
 import androidx.annotation.StringRes
 import androidx.compose.material.Icon
@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.egorshustov.vpoiske.R
-import com.egorshustov.vpoiske.ui.navigation.SearchScreen
+import com.egorshustov.core.feature_api.routes.SearchScreen
 
 @Composable
 fun navigationIconButton(
