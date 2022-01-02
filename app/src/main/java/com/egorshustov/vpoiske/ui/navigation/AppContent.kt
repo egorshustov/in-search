@@ -11,6 +11,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.egorshustov.feature_api.getCurrentRoute
 import com.egorshustov.vpoiske.ui.login_auth.LoginAuthScreen
 import com.egorshustov.vpoiske.ui.main_search.MainSearchScreen
 import com.egorshustov.vpoiske.ui.main_search.components.drawerContent
@@ -19,7 +20,6 @@ import com.egorshustov.vpoiske.ui.main_search.components.topAppBarTitle
 import com.egorshustov.vpoiske.ui.params_search.ParamsSearchScreen
 import com.egorshustov.vpoiske.ui.theme.VPoiskeTheme
 import com.egorshustov.vpoiske.utils.BackPressHandler
-import com.egorshustov.vpoiske.utils.getCurrentRoute
 import kotlinx.coroutines.launch
 
 @Composable
