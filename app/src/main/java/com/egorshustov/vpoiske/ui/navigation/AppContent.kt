@@ -11,7 +11,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.egorshustov.feature_api.getCurrentRoute
+import com.egorshustov.core.feature_api.getCurrentRoute
 import com.egorshustov.vpoiske.ui.login_auth.LoginAuthScreen
 import com.egorshustov.vpoiske.ui.main_search.MainSearchScreen
 import com.egorshustov.vpoiske.ui.main_search.components.drawerContent

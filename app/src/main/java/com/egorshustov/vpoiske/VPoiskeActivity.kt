@@ -7,7 +7,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import com.egorshustov.vpoiske.ui.navigation.AppContent
 import com.egorshustov.vpoiske.ui.theme.VPoiskeTheme
 import com.egorshustov.vpoiske.utils.LocalBackPressedDispatcher
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class VPoiskeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
