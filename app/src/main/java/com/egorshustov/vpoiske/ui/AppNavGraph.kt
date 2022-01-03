@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.egorshustov.auth.api.AuthFeatureApi
 import com.egorshustov.core.feature_api.register
-import com.egorshustov.core.feature_api.routes.SearchScreen
 import com.egorshustov.search.api.SearchFeatureApi
 
 @Composable
@@ -19,7 +18,7 @@ fun AppNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = SearchScreen.graphRoute
+        startDestination = searchFeatureApi.searchGraphRoute()
     ) {
         register(
             featureApi = searchFeatureApi,

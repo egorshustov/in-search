@@ -12,7 +12,9 @@ import com.egorshustov.search.impl.params_search.ParamsSearchScreen
 
 class SearchFeatureImpl : SearchFeatureApi {
 
-    override fun searchRoute(): String = ""
+    private val searchGraphRoute = "search"
+
+    override fun searchGraphRoute(): String = searchGraphRoute
 
     override fun registerGraph(
         navGraphBuilder: NavGraphBuilder,
@@ -21,7 +23,7 @@ class SearchFeatureImpl : SearchFeatureApi {
     ) {
         navGraphBuilder.navigation(
             startDestination = SearchScreen.MAIN.screenRoute,
-            route = SearchScreen.graphRoute
+            route = searchGraphRoute
         ) {
             composable(
                 route = SearchScreen.MAIN.screenRoute

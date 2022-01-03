@@ -11,7 +11,9 @@ import com.egorshustov.core.feature_api.routes.AuthScreen
 
 class AuthFeatureImpl : AuthFeatureApi {
 
-    override fun authRoute(): String = ""
+    private val authGraphRoute = "auth"
+
+    override fun authGraphRoute(): String = authGraphRoute
 
     override fun registerGraph(
         navGraphBuilder: NavGraphBuilder,
@@ -20,7 +22,7 @@ class AuthFeatureImpl : AuthFeatureApi {
     ) {
         navGraphBuilder.navigation(
             startDestination = AuthScreen.LOGIN.screenRoute,
-            route = AuthScreen.graphRoute
+            route = authGraphRoute
         ) {
             composable(
                 route = AuthScreen.LOGIN.screenRoute

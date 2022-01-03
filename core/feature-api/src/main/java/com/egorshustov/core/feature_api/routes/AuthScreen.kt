@@ -9,8 +9,4 @@ enum class AuthScreen(
 ) {
 
     LOGIN("auth_login", R.string.auth_login_title);
-
-    companion object {
-        const val graphRoute = "auth"
-    }
 }

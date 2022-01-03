@@ -10,8 +10,4 @@ enum class SearchScreen(
 
     MAIN("search_main", R.string.search_main_title),
     PARAMS("search_params", R.string.search_params_title);
-
-    companion object {
-        const val graphRoute = "search"
-    }
 }

@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object FeatureModule {
+object FeaturesModule {
 
     @Singleton
     @Provides
@@ -21,5 +21,4 @@ object FeatureModule {
     @Singleton
     @Provides
     fun provideSearchFeatureApi(): SearchFeatureApi = SearchFeatureImpl()
-
 }
