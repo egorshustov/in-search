@@ -9,9 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.egorshustov.vpoiske.R
 import com.egorshustov.core.feature_api.routes.AuthScreen
 import com.egorshustov.core.feature_api.routes.SearchScreen
+import com.egorshustov.vpoiske.R
 
 @Composable
 fun drawerContent(
