@@ -33,7 +33,7 @@ project.ext {
     minSdkVersion = 21
     compileSdkVersion = 31
     targetSdkVersion = 31
-    versionCode = 7
+    versionCode = 8
     versionName = "2.0"
     javaCompileVersion = JavaVersion.VERSION_11
 }

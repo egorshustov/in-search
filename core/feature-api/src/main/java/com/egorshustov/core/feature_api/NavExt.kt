@@ -15,7 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun NavController.getCurrentRoute(): String {
     val navBackStackEntry by currentBackStackEntryAsState()
-    return navBackStackEntry?.destination?.route ?: "search_main"
+    return navBackStackEntry?.destination?.route.orEmpty()
 }
 
 fun NavGraphBuilder.register(

@@ -1,11 +1,11 @@
 package com.egorshustov.auth.impl.login_auth
 
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import com.egorshustov.core.common.utils.showMessage
 
 @Composable
-fun LoginAuthScreen() {
-    Text(text = "LoginAuthScreen")
+internal fun LoginAuthScreen() {
     /*onClick = {
         navController.navigate(SearchScreen.Main.screenRoute) {
             launchSingleTop = true
@@ -14,4 +14,14 @@ fun LoginAuthScreen() {
             }
         }
     }*/
+    val context = LocalContext.current
+    AuthProcessWebView(
+        login = "some_email@mail.ru",
+        password = "some_password",
+        onAuthDataObtained = { userId, accessToken ->
+        },
+        onError = {
+            context.run { showMessage(getString(it.errorResId)) }
+        }
+    )
 }

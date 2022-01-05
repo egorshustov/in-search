@@ -15,8 +15,8 @@ fun topAppBarTitle(
     modifier: Modifier = Modifier
 ): @Composable () -> Unit = {
     @StringRes val screenTitleRes: Int? =
-        SearchScreen.values().find { it.screenRoute == currentRoute }?.titleRes
-            ?: AuthScreen.values().find { it.screenRoute == currentRoute }?.titleRes
+        SearchScreen.values().find { it.screenRoute == currentRoute }?.titleResId
+            ?: AuthScreen.values().find { it.screenRoute == currentRoute }?.titleResId
     val screenTitle = screenTitleRes?.let { stringResource(it) }.orEmpty()
     Text(
         text = screenTitle,

@@ -10,6 +10,7 @@ include ':app',
         ':core',
         ':core:feature-api',
         ':core:di',
+        ':core:common',
 
         ':feature',
         ':feature:auth',

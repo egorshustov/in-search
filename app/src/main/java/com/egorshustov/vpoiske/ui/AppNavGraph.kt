@@ -18,16 +18,16 @@ fun AppNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = searchFeatureApi.searchGraphRoute()
+        startDestination = authFeatureApi.authGraphRoute()
     ) {
         register(
-            featureApi = searchFeatureApi,
+            featureApi = authFeatureApi,
             navController = navController,
             modifier = modifier
         )
 
         register(
-            featureApi = authFeatureApi,
+            featureApi = searchFeatureApi,
             navController = navController,
             modifier = modifier
         )

@@ -5,7 +5,7 @@ import com.egorshustov.core.feature_api.R
 
 enum class SearchScreen(
     val screenRoute: String,
-    @StringRes val titleRes: Int? = null
+    @StringRes val titleResId: Int? = null
 ) {
 
     MAIN("search_main", R.string.search_main_title),
