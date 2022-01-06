@@ -30,4 +30,6 @@ android {
 
 dependencies {
     api "androidx.navigation:navigation-compose:$navigationComposeVersion"
+    api "com.google.dagger:hilt-android:$hiltVersion"
+    api "androidx.hilt:hilt-navigation-compose:$hiltNavigationComposeVersion"
 }

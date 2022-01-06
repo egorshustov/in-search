@@ -1,4 +1,8 @@
 <resources>
+    <string name="email_or_phone">Email или телефон</string>
+    <string name="password">Пароль</string>
+    <string name="login">Войти</string>
+
     <string name="error_something_went_wrong">Что-то пошло не так. Попробуйте повторить позднее</string>
     <string name="error_check_internet_or_unavailable">Ошибка соединения: отсутствует подключение к сети или сервер недоступен</string>
     <string name="error_wrong_login_or_password">Указан неверный логин или пароль!</string>

@@ -13,7 +13,7 @@ buildscript {
         lifecycleRuntimeKtxVersion = '2.4.0'
         accompanistSystemUiControllerVersion = '0.22.0-rc'
         hiltVersion = '2.40.5'
-        hiltNavigationVersion = '1.0.0'
+        hiltNavigationComposeVersion = '1.0.0-rc01'
     }
     repositories {
         google()

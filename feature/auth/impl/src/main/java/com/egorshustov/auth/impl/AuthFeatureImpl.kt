@@ -1,12 +1,14 @@
 package com.egorshustov.auth.impl
 
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.egorshustov.auth.api.AuthFeatureApi
 import com.egorshustov.auth.impl.login_auth.LoginAuthScreen
+import com.egorshustov.auth.impl.login_auth.LoginAuthViewModel
 import com.egorshustov.core.feature_api.routes.AuthScreen
 
 class AuthFeatureImpl : AuthFeatureApi {
@@ -26,8 +28,13 @@ class AuthFeatureImpl : AuthFeatureApi {
         ) {
             composable(
                 route = AuthScreen.LOGIN.screenRoute
-            ) { navBackStackEntry ->
-                LoginAuthScreen()
+            ) {
+                val viewModel = hiltViewModel<LoginAuthViewModel>()
+                LoginAuthScreen(
+                    state = viewModel.state.value,
+                    onTriggerEvent = viewModel::onTriggerEvent,
+                    modifier = modifier
+                )
             }
         }
     }
