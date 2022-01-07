@@ -12,8 +12,10 @@ buildscript {
         activityComposeVersion = '1.4.0'
         lifecycleRuntimeKtxVersion = '2.4.0'
         accompanistSystemUiControllerVersion = '0.22.0-rc'
+        javaxInjectVersion = '1'
         hiltVersion = '2.40.5'
         hiltNavigationComposeVersion = '1.0.0-rc01'
+        datastorePreferencesVersion = '1.0.0'
     }
     repositories {
         google()
