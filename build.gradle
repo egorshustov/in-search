@@ -16,6 +16,10 @@ buildscript {
         hiltVersion = '2.40.5'
         hiltNavigationComposeVersion = '1.0.0-rc01'
         datastorePreferencesVersion = '1.0.0'
+        timberVersion = '5.0.1'
+        firebaseCrashlyticsVersion = '2.8.1'
+        googleServicesVersion = '4.3.10'
+        firebaseBomVersion = '29.0.3'
     }
     repositories {
         google()
@@ -25,6 +29,8 @@ buildscript {
         classpath "com.android.tools.build:gradle:$gradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        classpath "com.google.gms:google-services:$googleServicesVersion"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:$firebaseCrashlyticsVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

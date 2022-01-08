@@ -32,4 +32,5 @@ dependencies {
     implementation "androidx.compose.runtime:runtime:$composeVersion"
     implementation "androidx.datastore:datastore-preferences:$datastorePreferencesVersion"
     implementation "javax.inject:javax.inject:$javaxInjectVersion"
+    api "com.jakewharton.timber:timber:$timberVersion"
 }

@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 kapt {
@@ -53,6 +55,7 @@ android {
 }
 
 dependencies {
+    implementation project(":core:common")
     implementation project(":core:feature-api")
     implementation project(":core:di")
     implementation project(":feature:auth:api")
@@ -69,6 +72,10 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+
+    implementation platform("com.google.firebase:firebase-bom:$firebaseBomVersion")
+    implementation "com.google.firebase:firebase-crashlytics-ktx"
+    implementation "com.google.firebase:firebase-analytics-ktx"
 
     debugImplementation "androidx.compose.ui:ui-tooling:$composeVersion"
 }
