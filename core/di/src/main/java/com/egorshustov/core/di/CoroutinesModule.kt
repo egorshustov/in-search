@@ -1,5 +1,9 @@
 package com.egorshustov.core.di
 
+import com.egorshustov.core.common.utils.DefaultDispatcher
+import com.egorshustov.core.common.utils.IoDispatcher
+import com.egorshustov.core.common.utils.MainDispatcher
+import com.egorshustov.core.common.utils.MainImmediateDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

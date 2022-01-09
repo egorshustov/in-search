@@ -1,4 +1,4 @@
-package com.egorshustov.core.di
+package com.egorshustov.core.common.utils
 
 import javax.inject.Qualifier
 
