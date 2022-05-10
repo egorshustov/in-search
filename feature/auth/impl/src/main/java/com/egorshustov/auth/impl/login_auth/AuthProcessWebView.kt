@@ -2,6 +2,7 @@ package com.egorshustov.auth.impl.login_auth
 
 import android.annotation.SuppressLint
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -13,6 +14,9 @@ import com.egorshustov.core.common.network.AppJsInterface
 import com.egorshustov.core.common.utils.evaluateJavascriptInMainThread
 import com.egorshustov.core.common.utils.loadUrlInMainThread
 import com.egorshustov.core.common.utils.prepareUrlAndParseSafely
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @SuppressLint("JavascriptInterface", "SetJavaScriptEnabled")
 @Composable
@@ -37,6 +41,13 @@ internal fun AuthProcessWebView(
             settings.javaScriptEnabled = true
             webViewClient = authWebViewClient
             visibility = View.GONE
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            webView.clearCache(true) // TODO remove after testing
+        }
+        CookieManager.getInstance().removeAllCookies {
+            CookieManager.getInstance().setAcceptCookie(true)
+            CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
         }
         appJsInterface.setObtainPageCallback(object : AppJsInterface.ObtainPageCallback {
 
@@ -65,9 +76,9 @@ internal fun AuthProcessWebView(
                                 val userId = uri.getQueryParameter("user_id")
                                 if (userId != null && accessToken != null) {
                                     onAuthDataObtained(userId, accessToken)
-                                    /*CoroutineScope(Dispatchers.Main).launch {
+                                    CoroutineScope(Dispatchers.Main).launch {
                                         webView.clearCache(true) // TODO remove after testing
-                                    }*/
+                                    }
                                     return
                                 }
                             }

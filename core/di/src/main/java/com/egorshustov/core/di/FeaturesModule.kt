@@ -16,9 +16,9 @@ object FeaturesModule {
 
     @Singleton
     @Provides
-    fun provideAuthFeatureApi(): AuthFeatureApi = AuthFeatureImpl()
+    fun provideSearchFeatureApi(): SearchFeatureApi = SearchFeatureImpl()
 
     @Singleton
     @Provides
-    fun provideSearchFeatureApi(): SearchFeatureApi = SearchFeatureImpl()
+    fun provideAuthFeatureApi(): AuthFeatureApi = AuthFeatureImpl()
 }

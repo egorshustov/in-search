@@ -24,8 +24,11 @@ import com.egorshustov.core.common.utils.showMessage
 internal fun LoginAuthScreen(
     state: LoginAuthState,
     onTriggerEvent: (LoginAuthEvent) -> Unit,
+    onAuthDataObtained: () -> Unit,
     modifier: Modifier
 ) {
+    if (state.isAuthDataObtained) onAuthDataObtained()
+
     val keyboardController = LocalSoftwareKeyboardController.current
     Column(
         modifier = modifier
@@ -75,7 +78,7 @@ internal fun LoginAuthScreen(
         }
     }
 
-    if (state.isLoading) {
+    if (state.isLoading && !state.isAuthDataObtained) {
         val context = LocalContext.current
         AuthProcessWebView(
             login = state.login,

@@ -10,6 +10,7 @@ import com.egorshustov.auth.api.AuthFeatureApi
 import com.egorshustov.auth.impl.login_auth.LoginAuthScreen
 import com.egorshustov.auth.impl.login_auth.LoginAuthViewModel
 import com.egorshustov.core.feature_api.routes.AuthScreen
+import com.egorshustov.core.feature_api.routes.SearchScreen
 
 class AuthFeatureImpl : AuthFeatureApi {
 
@@ -33,8 +34,18 @@ class AuthFeatureImpl : AuthFeatureApi {
                 LoginAuthScreen(
                     state = viewModel.state.value,
                     onTriggerEvent = viewModel::onTriggerEvent,
+                    onAuthDataObtained = { navController.navigateToMainSearchScreen() },
                     modifier = modifier
                 )
+            }
+        }
+    }
+
+    private fun NavHostController.navigateToMainSearchScreen() {
+        navigate(SearchScreen.MAIN.screenRoute) {
+            launchSingleTop = true
+            popUpTo(AuthScreen.LOGIN.screenRoute) {
+                inclusive = true
             }
         }
     }

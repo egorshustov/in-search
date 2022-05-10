@@ -1,12 +1,13 @@
 package com.egorshustov.auth.impl.login_auth
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.egorshustov.auth.impl.domain.GetAccessTokenUseCase
 import com.egorshustov.auth.impl.domain.SaveAccessTokenUseCase
 import com.egorshustov.auth.impl.domain.SaveAccessTokenUseCaseParams
+import com.egorshustov.core.common.domain.GetAccessTokenUseCase
 import com.egorshustov.core.common.model.data
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -19,12 +20,14 @@ internal class LoginAuthViewModel @Inject constructor(
     private val saveAccessTokenUseCase: SaveAccessTokenUseCase
 ) : ViewModel() {
 
-    val state: MutableState<LoginAuthState> = mutableStateOf(LoginAuthState())
+    private val _state: MutableState<LoginAuthState> = mutableStateOf(LoginAuthState())
+    val state: State<LoginAuthState> = _state
 
     init {
         viewModelScope.launch {
             getAccessTokenUseCase(Unit).collect {
                 val accessToken = it.data
+                _state.value = state.value.copy(isAuthDataObtained = !accessToken.isNullOrBlank())
             }
         }
     }
@@ -43,15 +46,15 @@ internal class LoginAuthViewModel @Inject constructor(
     }
 
     private fun onUpdateLogin(login: String) {
-        state.value = state.value.copy(login = login)
+        _state.value = state.value.copy(login = login)
     }
 
     private fun onUpdatePassword(password: String) {
-        state.value = state.value.copy(password = password)
+        _state.value = state.value.copy(password = password)
     }
 
     private fun onStartAuthProcess() {
-        state.value = state.value.copy(isLoading = true)
+        _state.value = state.value.copy(isLoading = true)
     }
 
     private fun onAuthDataObtained(userId: String, accessToken: String) {
@@ -61,6 +64,6 @@ internal class LoginAuthViewModel @Inject constructor(
     }
 
     private fun onAuthError() {
-        state.value = state.value.copy(isLoading = false)
+        _state.value = state.value.copy(isLoading = false)
     }
 }

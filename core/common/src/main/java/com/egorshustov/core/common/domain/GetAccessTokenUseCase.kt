@@ -1,4 +1,4 @@
-package com.egorshustov.auth.impl.domain
+package com.egorshustov.core.common.domain
 
 import com.egorshustov.core.common.base.FlowUseCase
 import com.egorshustov.core.common.model.Result
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class GetAccessTokenUseCase @Inject constructor(
+class GetAccessTokenUseCase @Inject constructor(
     private val preferenceStorage: PreferenceStorage,
     @IoDispatcher dispatcher: CoroutineDispatcher
 ) : FlowUseCase<Unit, String>(dispatcher) {

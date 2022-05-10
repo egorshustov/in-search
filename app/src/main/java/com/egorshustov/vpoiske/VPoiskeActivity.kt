@@ -16,10 +16,10 @@ import javax.inject.Inject
 class VPoiskeActivity : ComponentActivity() {
 
     @Inject
-    lateinit var authFeatureApi: AuthFeatureApi
+    lateinit var searchFeatureApi: SearchFeatureApi
 
     @Inject
-    lateinit var searchFeatureApi: SearchFeatureApi
+    lateinit var authFeatureApi: AuthFeatureApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +29,8 @@ class VPoiskeActivity : ComponentActivity() {
             ) {
                 VPoiskeTheme {
                     AppContent(
-                        authFeatureApi = authFeatureApi,
-                        searchFeatureApi = searchFeatureApi
+                        searchFeatureApi = searchFeatureApi,
+                        authFeatureApi = authFeatureApi
                     )
                 }
             }
