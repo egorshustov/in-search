@@ -1,6 +1,6 @@
 package com.egorshustov.core.di
 
-import com.egorshustov.core.common.utils.ApplicationScope
+import com.egorshustov.core.common.utils.ApplicationCoroutineScope
 import com.egorshustov.core.common.utils.DefaultDispatcher
 import dagger.Module
 import dagger.Provides
@@ -15,10 +15,10 @@ import javax.inject.Singleton
 @Module
 class AppModule {
 
-    @ApplicationScope
+    @ApplicationCoroutineScope
     @Singleton
     @Provides
-    fun providesApplicationScope(
+    fun provideApplicationCoroutineScope(
         @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
     ): CoroutineScope = CoroutineScope(SupervisorJob() + defaultDispatcher)
 }

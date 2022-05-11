@@ -19,21 +19,21 @@ object FeaturesModule {
 
     @Singleton
     @Provides
-    fun provideSearchFeatureApi(): SearchFeatureApi = SearchFeatureImpl()
-
-    @Singleton
-    @Provides
     fun provideAuthFeatureApi(): AuthFeatureApi = AuthFeatureImpl()
 
-    @Named(DI_NAME_SEARCH_ROUTE)
     @Singleton
     @Provides
-    fun provideSearchRoute(searchFeatureApi: SearchFeatureApi): String =
-        searchFeatureApi.searchRoute()
+    fun provideSearchFeatureApi(): SearchFeatureApi = SearchFeatureImpl()
 
     @Named(DI_NAME_AUTH_ROUTE)
     @Singleton
     @Provides
     fun provideAuthRoute(authFeatureApi: AuthFeatureApi): String =
         authFeatureApi.authRoute()
+
+    @Named(DI_NAME_SEARCH_ROUTE)
+    @Singleton
+    @Provides
+    fun provideSearchRoute(searchFeatureApi: SearchFeatureApi): String =
+        searchFeatureApi.searchRoute()
 }

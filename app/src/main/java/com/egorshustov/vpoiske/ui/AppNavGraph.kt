@@ -10,25 +10,25 @@ import com.egorshustov.search.api.SearchFeatureApi
 
 @Composable
 fun AppNavGraph(
-    searchFeatureApi: SearchFeatureApi,
     authFeatureApi: AuthFeatureApi,
+    searchFeatureApi: SearchFeatureApi,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
 
     NavHost(
         navController = navController,
-        startDestination = searchFeatureApi.searchRoute()
+        startDestination = authFeatureApi.authRoute()
     ) {
 
         register(
-            featureApi = searchFeatureApi,
+            featureApi = authFeatureApi,
             navController = navController,
             modifier = modifier
         )
 
         register(
-            featureApi = authFeatureApi,
+            featureApi = searchFeatureApi,
             navController = navController,
             modifier = modifier
         )

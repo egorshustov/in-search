@@ -20,4 +20,4 @@ annotation class MainImmediateDispatcher
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class ApplicationScope
+annotation class ApplicationCoroutineScope

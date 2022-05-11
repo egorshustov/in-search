@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AppContent(
-    searchFeatureApi: SearchFeatureApi,
-    authFeatureApi: AuthFeatureApi
+    authFeatureApi: AuthFeatureApi,
+    searchFeatureApi: SearchFeatureApi
 ) {
     VPoiskeTheme {
         val coroutineScope = rememberCoroutineScope()
@@ -76,8 +76,8 @@ fun AppContent(
             )
         ) { innerPaddingModifier ->
             AppNavGraph(
-                searchFeatureApi = searchFeatureApi,
                 authFeatureApi = authFeatureApi,
+                searchFeatureApi = searchFeatureApi,
                 navController = navController,
                 modifier = Modifier.padding(innerPaddingModifier)
             )
