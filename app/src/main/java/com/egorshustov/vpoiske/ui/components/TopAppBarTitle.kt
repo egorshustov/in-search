@@ -6,8 +6,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.egorshustov.core.feature_api.routes.AuthScreen
-import com.egorshustov.core.feature_api.routes.SearchScreen
+import com.egorshustov.auth.api.AuthScreen
+import com.egorshustov.search.api.SearchScreen
 
 @Composable
 fun topAppBarTitle(

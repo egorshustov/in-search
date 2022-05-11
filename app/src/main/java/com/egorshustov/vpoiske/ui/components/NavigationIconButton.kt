@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.egorshustov.vpoiske.R
-import com.egorshustov.core.feature_api.routes.SearchScreen
+import com.egorshustov.search.api.SearchScreen
 
 @Composable
 fun navigationIconButton(

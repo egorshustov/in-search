@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.egorshustov.auth.api.AuthFeatureApi
 import com.egorshustov.core.feature_api.getCurrentRoute
-import com.egorshustov.core.feature_api.routes.SearchScreen
+import com.egorshustov.search.api.SearchScreen
 import com.egorshustov.search.api.SearchFeatureApi
 import com.egorshustov.vpoiske.ui.components.drawerContent
 import com.egorshustov.vpoiske.ui.components.navigationIconButton

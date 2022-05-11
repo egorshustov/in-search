@@ -1,4 +1,4 @@
-package com.egorshustov.core.feature_api.routes
+package com.egorshustov.search.api
 
 import androidx.annotation.StringRes
 import com.egorshustov.core.feature_api.R

@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.egorshustov.core.feature_api.routes.SearchScreen
+import com.egorshustov.search.api.SearchScreen
 import com.egorshustov.search.api.SearchFeatureApi
 import com.egorshustov.search.impl.main_search.MainSearchScreen
 import com.egorshustov.search.impl.main_search.MainSearchViewModel

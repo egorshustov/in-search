@@ -9,7 +9,7 @@ import androidx.navigation.compose.navigation
 import com.egorshustov.auth.api.AuthFeatureApi
 import com.egorshustov.auth.impl.login_auth.LoginAuthScreen
 import com.egorshustov.auth.impl.login_auth.LoginAuthViewModel
-import com.egorshustov.core.feature_api.routes.AuthScreen
+import com.egorshustov.auth.api.AuthScreen
 
 class AuthFeatureImpl : AuthFeatureApi {
 
