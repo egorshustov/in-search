@@ -4,5 +4,5 @@ import com.egorshustov.core.feature_api.FeatureApi
 
 interface SearchFeatureApi : FeatureApi {
 
-    fun searchGraphRoute(): String
+    fun searchRoute(moveToSearchParams: Boolean = false): String
 }

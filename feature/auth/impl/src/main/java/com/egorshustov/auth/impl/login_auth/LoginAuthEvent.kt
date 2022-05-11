@@ -10,5 +10,7 @@ internal sealed interface LoginAuthEvent {
 
     data class OnAuthDataObtained(val userId: String, val accessToken: String) : LoginAuthEvent
 
+    object OnNeedToFinishAuthProcessed : LoginAuthEvent
+
     object OnAuthError : LoginAuthEvent
 }

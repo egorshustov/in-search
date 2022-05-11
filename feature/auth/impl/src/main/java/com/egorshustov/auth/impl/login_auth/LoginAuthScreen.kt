@@ -24,10 +24,13 @@ import com.egorshustov.core.common.utils.showMessage
 internal fun LoginAuthScreen(
     state: LoginAuthState,
     onTriggerEvent: (LoginAuthEvent) -> Unit,
-    onAuthDataObtained: () -> Unit,
+    onAuthFinished: () -> Unit,
     modifier: Modifier
 ) {
-    if (state.isAuthDataObtained) onAuthDataObtained() // todo check for redundant multiple calls
+    if (state.needToFinishAuth) {
+        onAuthFinished()
+        onTriggerEvent(LoginAuthEvent.OnNeedToFinishAuthProcessed)
+    }
 
     val keyboardController = LocalSoftwareKeyboardController.current
     Column(
@@ -40,7 +43,7 @@ internal fun LoginAuthScreen(
         TextField(
             modifier = modifier.fillMaxWidth(),
             enabled = !state.isLoading,
-            value = state.login,
+            value = state.typedLoginText,
             onValueChange = { onTriggerEvent(LoginAuthEvent.OnUpdateLogin(it)) },
             label = { Text(text = stringResource(R.string.email_or_phone)) },
             keyboardOptions = KeyboardOptions(
@@ -53,7 +56,7 @@ internal fun LoginAuthScreen(
         TextField(
             modifier = modifier.fillMaxWidth(),
             enabled = !state.isLoading,
-            value = state.password,
+            value = state.typedPasswordText,
             onValueChange = { onTriggerEvent(LoginAuthEvent.OnUpdatePassword(it)) },
             label = { Text(text = stringResource(R.string.password)) },
             keyboardOptions = KeyboardOptions(
@@ -78,11 +81,11 @@ internal fun LoginAuthScreen(
         }
     }
 
-    if (state.isLoading && !state.isAuthDataObtained) {
+    if (state.isLoading && !state.needToFinishAuth) {
         val context = LocalContext.current
         AuthProcessWebView(
-            login = state.login,
-            password = state.password,
+            login = state.typedLoginText,
+            password = state.typedPasswordText,
             onAuthDataObtained = { userId, accessToken ->
                 onTriggerEvent(LoginAuthEvent.OnAuthDataObtained(userId, accessToken))
             },

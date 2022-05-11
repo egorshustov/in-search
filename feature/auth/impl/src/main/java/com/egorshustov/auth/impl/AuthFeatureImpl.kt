@@ -7,15 +7,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.egorshustov.auth.api.AuthFeatureApi
+import com.egorshustov.auth.api.AuthScreen
 import com.egorshustov.auth.impl.login_auth.LoginAuthScreen
 import com.egorshustov.auth.impl.login_auth.LoginAuthViewModel
-import com.egorshustov.auth.api.AuthScreen
 
 class AuthFeatureImpl : AuthFeatureApi {
 
     private val authGraphRoute = "auth"
 
-    override fun authGraphRoute(): String = authGraphRoute
+    override fun authRoute(): String = authGraphRoute
 
     override fun registerGraph(
         navGraphBuilder: NavGraphBuilder,
@@ -33,7 +33,7 @@ class AuthFeatureImpl : AuthFeatureApi {
                 LoginAuthScreen(
                     state = viewModel.state.value,
                     onTriggerEvent = viewModel::onTriggerEvent,
-                    onAuthDataObtained = { navController.navigateToSearch(viewModel.searchRoute) },
+                    onAuthFinished = { navController.navigateToSearch(viewModel.searchRoute) },
                     modifier = modifier
                 )
             }
@@ -43,9 +43,7 @@ class AuthFeatureImpl : AuthFeatureApi {
     private fun NavHostController.navigateToSearch(searchRoute: String) {
         navigate(searchRoute) {
             launchSingleTop = true
-            popUpTo(authGraphRoute) {
-                inclusive = true
-            }
+            popUpTo(authGraphRoute) { inclusive = true }
         }
     }
 }

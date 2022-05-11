@@ -9,6 +9,7 @@ import com.egorshustov.auth.impl.domain.SaveAccessTokenUseCase
 import com.egorshustov.auth.impl.domain.SaveAccessTokenUseCaseParams
 import com.egorshustov.core.common.domain.GetAccessTokenUseCase
 import com.egorshustov.core.common.model.data
+import com.egorshustov.core.common.utils.DI_NAME_SEARCH_ROUTE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ import javax.inject.Named
 internal class LoginAuthViewModel @Inject constructor(
     getAccessTokenUseCase: GetAccessTokenUseCase,
     private val saveAccessTokenUseCase: SaveAccessTokenUseCase,
-    @Named("SearchRoute") val searchRoute: String
+    @Named(DI_NAME_SEARCH_ROUTE) val searchRoute: String
 ) : ViewModel() {
 
     private val _state: MutableState<LoginAuthState> = mutableStateOf(LoginAuthState())
@@ -29,7 +30,7 @@ internal class LoginAuthViewModel @Inject constructor(
         viewModelScope.launch {
             getAccessTokenUseCase(Unit).collect {
                 val accessToken = it.data
-                _state.value = state.value.copy(isAuthDataObtained = !accessToken.isNullOrBlank())
+                _state.value = state.value.copy(needToFinishAuth = !accessToken.isNullOrBlank())
             }
         }
     }
@@ -43,16 +44,17 @@ internal class LoginAuthViewModel @Inject constructor(
                 event.userId,
                 event.accessToken
             )
+            LoginAuthEvent.OnNeedToFinishAuthProcessed -> onNeedToFinishAuthProcessed()
             LoginAuthEvent.OnAuthError -> onAuthError()
         }
     }
 
     private fun onUpdateLogin(login: String) {
-        _state.value = state.value.copy(login = login)
+        _state.value = state.value.copy(typedLoginText = login)
     }
 
     private fun onUpdatePassword(password: String) {
-        _state.value = state.value.copy(password = password)
+        _state.value = state.value.copy(typedPasswordText = password)
     }
 
     private fun onStartAuthProcess() {
@@ -63,6 +65,10 @@ internal class LoginAuthViewModel @Inject constructor(
         viewModelScope.launch {
             saveAccessTokenUseCase(SaveAccessTokenUseCaseParams(accessToken = accessToken))
         }
+    }
+
+    private fun onNeedToFinishAuthProcessed() {
+        _state.value = state.value.copy(needToFinishAuth = false)
     }
 
     private fun onAuthError() {

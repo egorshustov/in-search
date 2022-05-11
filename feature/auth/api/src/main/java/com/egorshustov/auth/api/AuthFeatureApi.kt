@@ -4,5 +4,5 @@ import com.egorshustov.core.feature_api.FeatureApi
 
 interface AuthFeatureApi : FeatureApi {
 
-    fun authGraphRoute(): String
+    fun authRoute(): String
 }

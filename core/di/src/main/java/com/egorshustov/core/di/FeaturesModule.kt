@@ -2,6 +2,8 @@ package com.egorshustov.core.di
 
 import com.egorshustov.auth.api.AuthFeatureApi
 import com.egorshustov.auth.impl.AuthFeatureImpl
+import com.egorshustov.core.common.utils.DI_NAME_AUTH_ROUTE
+import com.egorshustov.core.common.utils.DI_NAME_SEARCH_ROUTE
 import com.egorshustov.search.api.SearchFeatureApi
 import com.egorshustov.search.impl.SearchFeatureImpl
 import dagger.Module
@@ -23,15 +25,15 @@ object FeaturesModule {
     @Provides
     fun provideAuthFeatureApi(): AuthFeatureApi = AuthFeatureImpl()
 
-    @Named("SearchRoute")
+    @Named(DI_NAME_SEARCH_ROUTE)
     @Singleton
     @Provides
-    fun provideSearchFeatureRoute(searchFeatureApi: SearchFeatureApi): String =
-        searchFeatureApi.searchGraphRoute()
+    fun provideSearchRoute(searchFeatureApi: SearchFeatureApi): String =
+        searchFeatureApi.searchRoute()
 
-    @Named("AuthRoute")
+    @Named(DI_NAME_AUTH_ROUTE)
     @Singleton
     @Provides
-    fun provideAuthFeatureRoute(authFeatureApi: AuthFeatureApi): String =
-        authFeatureApi.authGraphRoute()
+    fun provideAuthRoute(authFeatureApi: AuthFeatureApi): String =
+        authFeatureApi.authRoute()
 }

@@ -18,7 +18,7 @@ fun AppNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = searchFeatureApi.searchGraphRoute()
+        startDestination = searchFeatureApi.searchRoute()
     ) {
 
         register(

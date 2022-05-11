@@ -9,11 +9,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.egorshustov.auth.api.AuthFeatureApi
 import com.egorshustov.core.feature_api.getCurrentRoute
-import com.egorshustov.search.api.SearchScreen
 import com.egorshustov.search.api.SearchFeatureApi
+import com.egorshustov.search.api.SearchScreen
 import com.egorshustov.vpoiske.ui.components.drawerContent
 import com.egorshustov.vpoiske.ui.components.navigationIconButton
 import com.egorshustov.vpoiske.ui.components.topAppBarTitle
+import com.egorshustov.vpoiske.ui.models.ClickedDrawerItem
 import com.egorshustov.vpoiske.ui.theme.VPoiskeTheme
 import com.egorshustov.vpoiske.utils.BackPressHandler
 import kotlinx.coroutines.launch
@@ -53,9 +54,24 @@ fun AppContent(
             },
             drawerContent = drawerContent(
                 currentRoute = navController.getCurrentRoute(),
-                onItemClick = { itemRoute ->
+                onItemClick = { item ->
                     coroutineScope.launch { scaffoldState.drawerState.close() }
-                    navController.navigate(itemRoute)
+                    when (item) {
+                        ClickedDrawerItem.LAST_SEARCH -> {
+                            // No need to navigate to search main screen,
+                            // because if we're able to click this, we're already in here
+                        }
+                        ClickedDrawerItem.NEW_SEARCH ->
+                            navController.navigate(
+                                searchFeatureApi.searchRoute(moveToSearchParams = true)
+                            )
+                        ClickedDrawerItem.SEARCH_HISTORY -> {
+                            // TODO change later (this is only for testing):
+                            navController.navigate(authFeatureApi.authRoute())
+                        }
+                        ClickedDrawerItem.CHANGE_THEME -> {
+                        }
+                    }
                 },
             )
         ) { innerPaddingModifier ->

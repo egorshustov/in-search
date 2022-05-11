@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.egorshustov.core.common.domain.GetAccessTokenUseCase
 import com.egorshustov.core.common.model.data
+import com.egorshustov.core.common.utils.DI_NAME_AUTH_ROUTE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -16,7 +17,7 @@ import javax.inject.Named
 @HiltViewModel
 internal class MainSearchViewModel @Inject constructor(
     getAccessTokenUseCase: GetAccessTokenUseCase,
-    @Named("AuthRoute") val authRoute: String
+    @Named(DI_NAME_AUTH_ROUTE) val authRoute: String
 ) : ViewModel() {
 
     private val _state: MutableState<MainSearchState> = mutableStateOf(MainSearchState())

@@ -6,8 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.egorshustov.search.api.SearchScreen
 import com.egorshustov.search.api.SearchFeatureApi
+import com.egorshustov.search.api.SearchScreen
 import com.egorshustov.search.impl.main_search.MainSearchScreen
 import com.egorshustov.search.impl.main_search.MainSearchViewModel
 import com.egorshustov.search.impl.params_search.ParamsSearchScreen
@@ -16,7 +16,8 @@ class SearchFeatureImpl : SearchFeatureApi {
 
     private val searchGraphRoute = "search"
 
-    override fun searchGraphRoute(): String = searchGraphRoute
+    override fun searchRoute(moveToSearchParams: Boolean): String =
+        if (moveToSearchParams) SearchScreen.PARAMS.screenRoute else searchGraphRoute
 
     override fun registerGraph(
         navGraphBuilder: NavGraphBuilder,
@@ -49,9 +50,7 @@ class SearchFeatureImpl : SearchFeatureApi {
     private fun NavHostController.navigateToAuth(authRoute: String) {
         navigate(authRoute) {
             launchSingleTop = true
-            popUpTo(searchGraphRoute) {
-                inclusive = true
-            }
+            popUpTo(searchGraphRoute) { inclusive = true }
         }
     }
 }
