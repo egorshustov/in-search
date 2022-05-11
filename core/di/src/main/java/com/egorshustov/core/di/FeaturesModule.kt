@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -21,4 +22,16 @@ object FeaturesModule {
     @Singleton
     @Provides
     fun provideAuthFeatureApi(): AuthFeatureApi = AuthFeatureImpl()
+
+    @Named("SearchRoute")
+    @Singleton
+    @Provides
+    fun provideSearchFeatureRoute(searchFeatureApi: SearchFeatureApi): String =
+        searchFeatureApi.searchGraphRoute()
+
+    @Named("AuthRoute")
+    @Singleton
+    @Provides
+    fun provideAuthFeatureRoute(authFeatureApi: AuthFeatureApi): String =
+        authFeatureApi.authGraphRoute()
 }

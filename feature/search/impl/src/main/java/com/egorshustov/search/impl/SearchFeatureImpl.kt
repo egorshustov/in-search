@@ -6,7 +6,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.egorshustov.core.feature_api.routes.AuthScreen
 import com.egorshustov.core.feature_api.routes.SearchScreen
 import com.egorshustov.search.api.SearchFeatureApi
 import com.egorshustov.search.impl.main_search.MainSearchScreen
@@ -35,7 +34,7 @@ class SearchFeatureImpl : SearchFeatureApi {
                 MainSearchScreen(
                     state = viewModel.state.value,
                     onTriggerEvent = viewModel::onTriggerEvent,
-                    onAuthRequired = { navController.navigateToLoginAuthScreen() },
+                    requireAuth = { navController.navigateToAuth(viewModel.authRoute) },
                     modifier = modifier
                 )
             }
@@ -47,10 +46,10 @@ class SearchFeatureImpl : SearchFeatureApi {
         }
     }
 
-    private fun NavHostController.navigateToLoginAuthScreen() {
-        navigate(AuthScreen.LOGIN.screenRoute) {
+    private fun NavHostController.navigateToAuth(authRoute: String) {
+        navigate(authRoute) {
             launchSingleTop = true
-            popUpTo(SearchScreen.MAIN.screenRoute) {
+            popUpTo(searchGraphRoute) {
                 inclusive = true
             }
         }

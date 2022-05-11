@@ -27,7 +27,7 @@ internal fun LoginAuthScreen(
     onAuthDataObtained: () -> Unit,
     modifier: Modifier
 ) {
-    if (state.isAuthDataObtained) onAuthDataObtained()
+    if (state.isAuthDataObtained) onAuthDataObtained() // todo check for redundant multiple calls
 
     val keyboardController = LocalSoftwareKeyboardController.current
     Column(

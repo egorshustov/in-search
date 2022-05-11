@@ -13,11 +13,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 internal class LoginAuthViewModel @Inject constructor(
     getAccessTokenUseCase: GetAccessTokenUseCase,
-    private val saveAccessTokenUseCase: SaveAccessTokenUseCase
+    private val saveAccessTokenUseCase: SaveAccessTokenUseCase,
+    @Named("SearchRoute") val searchRoute: String
 ) : ViewModel() {
 
     private val _state: MutableState<LoginAuthState> = mutableStateOf(LoginAuthState())

@@ -11,10 +11,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 internal class MainSearchViewModel @Inject constructor(
-    getAccessTokenUseCase: GetAccessTokenUseCase
+    getAccessTokenUseCase: GetAccessTokenUseCase,
+    @Named("AuthRoute") val authRoute: String
 ) : ViewModel() {
 
     private val _state: MutableState<MainSearchState> = mutableStateOf(MainSearchState())
@@ -30,6 +32,12 @@ internal class MainSearchViewModel @Inject constructor(
     }
 
     fun onTriggerEvent(event: MainSearchEvent) {
+        when (event) {
+            MainSearchEvent.OnAuthRequested -> onAuthRequested()
+        }
+    }
 
+    private fun onAuthRequested() {
+        _state.value = state.value.copy(isAuthRequired = false)
     }
 }

@@ -8,9 +8,12 @@ import androidx.compose.ui.Modifier
 internal fun MainSearchScreen(
     state: MainSearchState,
     onTriggerEvent: (MainSearchEvent) -> Unit,
-    onAuthRequired: () -> Unit,
+    requireAuth: () -> Unit,
     modifier: Modifier
 ) {
-    if (state.isAuthRequired) onAuthRequired()
+    if (state.isAuthRequired) {
+        requireAuth()
+        onTriggerEvent(MainSearchEvent.OnAuthRequested)
+    }
     Text(text = "MainSearchScreen")
 }
