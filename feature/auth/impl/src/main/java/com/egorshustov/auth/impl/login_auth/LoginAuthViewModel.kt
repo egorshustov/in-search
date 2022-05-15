@@ -5,11 +5,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.egorshustov.auth.impl.domain.SaveAccessTokenUseCase
-import com.egorshustov.auth.impl.domain.SaveAccessTokenUseCaseParams
-import com.egorshustov.core.common.domain.GetAccessTokenUseCase
-import com.egorshustov.core.common.model.data
+import com.egorshustov.vpoiske.core.domain.SaveAccessTokenUseCase
+import com.egorshustov.vpoiske.core.domain.SaveAccessTokenUseCaseParams
 import com.egorshustov.core.common.utils.DI_NAME_SEARCH_ROUTE
+import com.egorshustov.vpoiske.core.common.model.data
+import com.egorshustov.vpoiske.core.domain.GetAccessTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

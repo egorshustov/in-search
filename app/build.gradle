@@ -55,11 +55,12 @@ android {
 }
 
 dependencies {
-    implementation project(":core:common")
-    implementation project(":core:feature-api")
-    implementation project(":core:di")
+    implementation project(":core-common")
+    implementation project(":core-navigation")
     implementation project(":feature:auth:api")
     implementation project(":feature:search:api")
+    implementation project(":feature:auth:impl")
+    implementation project(":feature:search:impl")
 
     implementation "androidx.core:core-ktx:$coreKtxVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"

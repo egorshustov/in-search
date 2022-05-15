@@ -1,7 +1,6 @@
 package com.egorshustov.auth.api
 
 import androidx.annotation.StringRes
-import com.egorshustov.core.feature_api.R
 
 enum class AuthScreen(
     val screenRoute: String,

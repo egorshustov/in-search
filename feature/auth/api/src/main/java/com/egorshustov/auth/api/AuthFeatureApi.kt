@@ -1,8 +1,8 @@
 package com.egorshustov.auth.api
 
-import com.egorshustov.core.feature_api.FeatureApi
+import com.egorshustov.core.navigation.FeatureApi
 
-interface AuthFeatureApi : FeatureApi {
+interface AuthFeatureApi : com.egorshustov.core.navigation.FeatureApi {
 
     fun authRoute(): String
 }

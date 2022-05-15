@@ -1,6 +1,6 @@
 package com.egorshustov.auth.impl.utils
 
-import com.egorshustov.core.common.network.DEFAULT_API_VERSION
+import com.egorshustov.vpoiske.core.common.network.DEFAULT_API_VERSION
 
 internal object AuthHelper {
 

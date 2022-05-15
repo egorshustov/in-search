@@ -8,14 +8,11 @@ dependencyResolutionManagement {
 rootProject.name = "VPoiske"
 include ':app',
 
-        ':core',
-        ':core:common',
-        ':core:feature-api',
-        ':core:di',
-
-        ':network',
-        ':network:api',
-        ':network:impl',
+        ':core-common',
+        ':core-datastore',
+        ':core-domain',
+        ':core-navigation',
+        ':core-network',
 
         ':feature',
         ':feature:auth',

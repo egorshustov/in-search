@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.egorshustov.auth.api.AuthFeatureApi
-import com.egorshustov.core.feature_api.register
+import com.egorshustov.core.navigation.register
 import com.egorshustov.search.api.SearchFeatureApi
 
 @Composable

@@ -9,10 +9,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
-import com.egorshustov.core.common.domain.GetAccessTokenUseCase
-import com.egorshustov.core.common.model.data
 import com.egorshustov.core.common.utils.DI_NAME_AUTH_ROUTE
 import com.egorshustov.search.impl.SearchProcessWorker
+import com.egorshustov.vpoiske.core.common.model.data
+import com.egorshustov.vpoiske.core.domain.GetAccessTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.collect

@@ -10,7 +10,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.egorshustov.auth.impl.utils.AuthErrorType
 import com.egorshustov.auth.impl.utils.AuthHelper
 import com.egorshustov.auth.impl.utils.AuthRequestType
-import com.egorshustov.core.common.network.AppJsInterface
+import com.egorshustov.vpoiske.core.common.network.AppJsInterface
 import com.egorshustov.core.common.utils.evaluateJavascriptInMainThread
 import com.egorshustov.core.common.utils.loadUrlInMainThread
 import com.egorshustov.core.common.utils.prepareUrlAndParseSafely

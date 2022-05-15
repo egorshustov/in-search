@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.egorshustov.auth.api.AuthFeatureApi
-import com.egorshustov.core.feature_api.getCurrentRoute
+import com.egorshustov.core.navigation.getCurrentRoute
 import com.egorshustov.search.api.SearchFeatureApi
 import com.egorshustov.search.api.SearchScreen
 import com.egorshustov.vpoiske.ui.components.drawerContent

@@ -18,6 +18,7 @@ buildscript {
         hiltNavigationComposeVersion = '1.0.0'
         hiltWorkVersion = '1.0.0'
         hiltExtensionCompilerVersion = '1.0.0'
+        ktorVersion = '2.0.0'
         datastorePreferencesVersion = '1.0.0'
         timberVersion = '5.0.1'
         firebaseCrashlyticsVersion = '2.8.1'

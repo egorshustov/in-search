@@ -1,7 +1,6 @@
 package com.egorshustov.search.api
 
 import androidx.annotation.StringRes
-import com.egorshustov.core.feature_api.R
 
 enum class SearchScreen(
     val screenRoute: String,

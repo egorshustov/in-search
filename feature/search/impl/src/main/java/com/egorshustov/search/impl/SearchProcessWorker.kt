@@ -9,7 +9,7 @@ import dagger.assisted.AssistedInject
 import timber.log.Timber
 
 @HiltWorker
-class SearchProcessWorker @AssistedInject constructor(
+internal class SearchProcessWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters
 ) : CoroutineWorker(appContext, workerParams) {

@@ -1,6 +1,6 @@
 package com.egorshustov.search.api
 
-import com.egorshustov.core.feature_api.FeatureApi
+import com.egorshustov.core.navigation.FeatureApi
 
 interface SearchFeatureApi : FeatureApi {
 

@@ -29,5 +29,6 @@ android {
 }
 
 dependencies {
-    api project(":core:feature-api")
+    api project(":core-common")
+    api project(":core-navigation")
 }
