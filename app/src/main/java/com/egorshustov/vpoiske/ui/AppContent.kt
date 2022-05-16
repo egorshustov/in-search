@@ -7,10 +7,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.egorshustov.auth.api.AuthFeatureApi
-import com.egorshustov.core.navigation.getCurrentRoute
-import com.egorshustov.search.api.SearchFeatureApi
-import com.egorshustov.search.api.SearchScreen
+import com.egorshustov.vpoiske.core.navigation.getCurrentRoute
+import com.egorshustov.vpoiske.feature.auth.navigation.AuthDestination
+import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
+import com.egorshustov.vpoiske.feature.search.navigation.SearchScreen
 import com.egorshustov.vpoiske.ui.components.drawerContent
 import com.egorshustov.vpoiske.ui.components.navigationIconButton
 import com.egorshustov.vpoiske.ui.components.topAppBarTitle
@@ -20,10 +20,7 @@ import com.egorshustov.vpoiske.utils.BackPressHandler
 import kotlinx.coroutines.launch
 
 @Composable
-fun AppContent(
-    authFeatureApi: AuthFeatureApi,
-    searchFeatureApi: SearchFeatureApi
-) {
+fun AppContent() {
     VPoiskeTheme {
         val coroutineScope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -62,12 +59,10 @@ fun AppContent(
                             // because if we're able to click this, we're already in here
                         }
                         ClickedDrawerItem.NEW_SEARCH ->
-                            navController.navigate(
-                                searchFeatureApi.searchRoute(moveToSearchParams = true)
-                            )
+                            navController.navigate(SearchDestination.screenRoute)
                         ClickedDrawerItem.SEARCH_HISTORY -> {
                             // TODO change later (this is only for testing):
-                            navController.navigate(authFeatureApi.authRoute())
+                            navController.navigate(AuthDestination.graphDestination)
                         }
                         ClickedDrawerItem.CHANGE_THEME -> {
                         }
@@ -76,8 +71,6 @@ fun AppContent(
             )
         ) { innerPaddingModifier ->
             AppNavGraph(
-                authFeatureApi = authFeatureApi,
-                searchFeatureApi = searchFeatureApi,
                 navController = navController,
                 modifier = Modifier.padding(innerPaddingModifier)
             )

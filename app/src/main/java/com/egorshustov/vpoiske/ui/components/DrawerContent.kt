@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.egorshustov.search.api.SearchScreen
 import com.egorshustov.vpoiske.R
+import com.egorshustov.vpoiske.feature.search.navigation.SearchScreen
 import com.egorshustov.vpoiske.ui.models.ClickedDrawerItem
 
 @Composable

@@ -14,11 +14,5 @@ include ':app',
         ':core-navigation',
         ':core-network',
 
-        ':feature',
-        ':feature:auth',
-        ':feature:auth:api',
-        ':feature:auth:impl',
-
-        ':feature:search',
-        ':feature:search:api',
-        ':feature:search:impl'
+        ':feature-auth',
+        ':feature-search'

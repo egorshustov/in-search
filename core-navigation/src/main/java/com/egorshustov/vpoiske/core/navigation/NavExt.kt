@@ -1,11 +1,8 @@
-package com.egorshustov.core.navigation
+package com.egorshustov.vpoiske.core.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 /**
@@ -16,16 +13,4 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 fun NavController.getCurrentRoute(): String {
     val navBackStackEntry by currentBackStackEntryAsState()
     return navBackStackEntry?.destination?.route.orEmpty()
-}
-
-fun NavGraphBuilder.register(
-    featureApi: FeatureApi,
-    navController: NavHostController,
-    modifier: Modifier = Modifier
-) {
-    featureApi.registerGraph(
-        navGraphBuilder = this,
-        navController = navController,
-        modifier = modifier
-    )
 }
