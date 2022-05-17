@@ -10,7 +10,7 @@ import com.egorshustov.vpoiske.feature.auth.login_auth.LoginAuthScreen
 import com.egorshustov.vpoiske.feature.auth.login_auth.LoginAuthViewModel
 
 object AuthDestination : AppNavigationDestination {
-    override val screenRoute = AuthScreen.LOGIN.screenRoute
+    override val screenRoute = AuthFeatureScreens.LOGIN.screenRoute
     override val graphDestination = "auth_destination"
 }
 

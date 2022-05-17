@@ -4,20 +4,13 @@ import com.egorshustov.vpoiske.core.common.model.Result.Success
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
- * A generic class that holds a value with its loading status.
+ * A generic interface that holds a value with its loading status.
  * @param <T>
  */
-sealed class Result<out R> {
-
-    data class Success<out T>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-    object Loading : Result<Nothing>()
-
-    override fun toString(): String = when (this) {
-        is Success<*> -> "Success[data=$data]"
-        is Error -> "Error[exception=$exception]"
-        Loading -> "Loading"
-    }
+sealed interface Result<out R> {
+    data class Success<out T>(val data: T) : Result<T>
+    data class Error(val exception: Throwable? = null) : Result<Nothing>
+    object Loading : Result<Nothing>
 }
 
 /**

@@ -1,23 +1,31 @@
-package com.egorshustov.vpoiske.ui
+package com.egorshustov.vpoiske.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.egorshustov.vpoiske.feature.auth.navigation.AuthDestination
 import com.egorshustov.vpoiske.feature.auth.navigation.authGraph
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
 import com.egorshustov.vpoiske.feature.search.navigation.searchGraph
 
+/**
+ * Top-level navigation graph.
+ *
+ * The navigation graph defined in this file defines the different top level routes.
+ */
 @Composable
-fun AppNavGraph(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+fun AppNavHost(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    startDestination: String = AuthDestination.graphDestination
 ) {
 
     NavHost(
         navController = navController,
-        startDestination = AuthDestination.graphDestination
+        startDestination = startDestination,
+        modifier = modifier
     ) {
 
         authGraph(

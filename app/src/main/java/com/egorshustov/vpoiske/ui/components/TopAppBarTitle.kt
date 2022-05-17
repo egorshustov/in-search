@@ -6,9 +6,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.egorshustov.vpoiske.feature.search.navigation.SearchScreen
+import com.egorshustov.vpoiske.feature.search.navigation.SearchFeatureScreens
 import com.egorshustov.vpoiske.R
-import com.egorshustov.vpoiske.feature.auth.navigation.AuthScreen
+import com.egorshustov.vpoiske.feature.auth.navigation.AuthFeatureScreens
 
 @Composable
 fun topAppBarTitle(
@@ -17,8 +17,8 @@ fun topAppBarTitle(
 ): @Composable () -> Unit = {
 
     @StringRes val screenTitleRes: Int =
-        SearchScreen.values().find { it.screenRoute == currentRoute }?.titleResId
-            ?: AuthScreen.values().find { it.screenRoute == currentRoute }?.titleResId
+        SearchFeatureScreens.values().find { it.screenRoute == currentRoute }?.titleResId
+            ?: AuthFeatureScreens.values().find { it.screenRoute == currentRoute }?.titleResId
             ?: R.string.app_name
 
     val screenTitle = stringResource(screenTitleRes)
