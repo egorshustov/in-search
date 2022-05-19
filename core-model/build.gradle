@@ -20,12 +20,6 @@ android {
         jvmTarget = rootProject.ext.javaCompileVersion.toString()
         useIR = true
     }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion composeVersion
-    }
 }
 
 dependencies {
