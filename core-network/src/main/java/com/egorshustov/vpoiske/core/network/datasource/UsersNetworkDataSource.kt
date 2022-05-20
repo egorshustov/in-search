@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UsersNetworkDataSource {
 
-    suspend fun searchUsers(
+    fun searchUsers(
         searchUsersParams: SearchUsersRequestParams,
         commonParams: VkCommonRequestParams
     ): Flow<Result<List<SearchUserResponse>>>

@@ -13,6 +13,7 @@ internal class KtorClientFactoryAndroidImpl : KtorClientFactory {
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true // if the server sends extra fields, ignore
+                explicitNulls = false
             })
         }
         install(HttpTimeout) {
