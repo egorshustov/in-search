@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface UsersNetworkDataSource {
 
+    /**
+     * [users.search VK API](https://dev.vk.com/method/users.search)
+     */
     fun searchUsers(
         searchUsersParams: SearchUsersRequestParams,
         commonParams: VkCommonRequestParams

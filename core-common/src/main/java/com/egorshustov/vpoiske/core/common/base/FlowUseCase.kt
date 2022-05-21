@@ -1,5 +1,6 @@
 package com.egorshustov.vpoiske.core.common.base
 
+import com.egorshustov.vpoiske.core.common.model.AppException
 import com.egorshustov.vpoiske.core.common.model.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.flowOn
 abstract class FlowUseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher) {
 
     operator fun invoke(parameters: P): Flow<Result<R>> = execute(parameters)
-        .catch { e -> emit(Result.Error(Exception(e))) }
+        .catch { e -> emit(Result.Error(AppException(e))) }
         .flowOn(coroutineDispatcher)
 
     protected abstract fun execute(parameters: P): Flow<Result<R>>

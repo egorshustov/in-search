@@ -1,11 +1,13 @@
 package com.egorshustov.vpoiske.core.network.datasource
 
+import com.egorshustov.vpoiske.core.common.model.AppException
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.model.data.SearchUsersRequestParams
 import com.egorshustov.vpoiske.core.model.data.VkCommonRequestParams
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
+import com.egorshustov.vpoiske.core.network.ktor.isSuccessful
 import com.egorshustov.vpoiske.core.network.model.SearchUserResponse
 import com.egorshustov.vpoiske.core.network.model.SearchUsersResponse
 import io.ktor.client.*
@@ -32,7 +34,7 @@ class UsersKtorDataSource @Inject constructor(
         emit(Result.Loading)
 
         try {
-            val searchUserResponseList = httpClient.get("$baseUrl/users.search") {
+            val httpResponse = httpClient.get("$baseUrl/users.search") {
                 parameter("country", searchUsersParams.countryId)
                 parameter("city", searchUsersParams.cityId)
                 parameter("age_from", searchUsersParams.ageFrom)
@@ -48,11 +50,24 @@ class UsersKtorDataSource @Inject constructor(
                 parameter("sort", searchUsersParams.sortType)
                 parameter("access_token", commonParams.accessToken)
                 parameter("v", commonParams.apiVersion)
-            }.body<SearchUsersResponse>().response?.searchUserResponseList.orEmpty()
+            }
 
-            emit(Result.Success(searchUserResponseList))
+            val responseBody = httpResponse.body<SearchUsersResponse>()
+
+            if (httpResponse.isSuccessful && responseBody.error == null) {
+                emit(Result.Success(responseBody.response?.searchUserResponseList.orEmpty()))
+            } else {
+                emit(
+                    Result.Error(
+                        AppException(
+                            message = responseBody.error?.errorMessage,
+                            vkErrorCode = responseBody.error?.errorCode
+                        )
+                    )
+                )
+            }
         } catch (e: Throwable) {
-            emit(Result.Error(e))
+            emit(Result.Error(AppException(e)))
         }
     }.flowOn(ioDispatcher)
 }
