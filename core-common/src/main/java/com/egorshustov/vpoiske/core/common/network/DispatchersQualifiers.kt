@@ -2,22 +2,10 @@ package com.egorshustov.vpoiske.core.common.network
 
 import javax.inject.Qualifier
 
-@Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class DefaultDispatcher
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Dispatcher(val appDispatcher: AppDispatchers)
 
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class IoDispatcher
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class MainDispatcher
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class MainImmediateDispatcher
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class ApplicationCoroutineScope
+enum class AppDispatchers {
+    IO
+}

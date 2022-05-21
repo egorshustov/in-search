@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 data class SearchUsersInnerResponse(
 
     @SerialName("count")
-    val count: Int?,
+    val count: Int? = null,
 
     @SerialName("items")
-    val searchUserResponseList: List<SearchUserResponse>?
+    val searchUserResponseList: List<SearchUserResponse>? = null
 )

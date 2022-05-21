@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 data class VkErrorResponse(
 
     @SerialName("error_code")
-    val errorCode: Int?,
+    val errorCode: Int? = null,
 
     @SerialName("error_msg")
-    val errorMessage: String?
+    val errorMessage: String? = null
 )

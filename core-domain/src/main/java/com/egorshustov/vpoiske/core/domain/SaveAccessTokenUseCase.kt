@@ -1,7 +1,8 @@
 package com.egorshustov.vpoiske.core.domain
 
 import com.egorshustov.vpoiske.core.common.base.UseCase
-import com.egorshustov.vpoiske.core.common.network.IoDispatcher
+import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
+import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.datastore.PreferenceStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
@@ -12,8 +13,8 @@ data class SaveAccessTokenUseCaseParams(
 
 class SaveAccessTokenUseCase @Inject constructor(
     private val preferenceStorage: PreferenceStorage,
-    @IoDispatcher dispatcher: CoroutineDispatcher
-) : UseCase<SaveAccessTokenUseCaseParams, Unit>(dispatcher) {
+    @Dispatcher(IO) ioDispatcher: CoroutineDispatcher
+) : UseCase<SaveAccessTokenUseCaseParams, Unit>(ioDispatcher) {
 
     override suspend fun execute(parameters: SaveAccessTokenUseCaseParams) {
         preferenceStorage.saveAccessToken(parameters.accessToken)

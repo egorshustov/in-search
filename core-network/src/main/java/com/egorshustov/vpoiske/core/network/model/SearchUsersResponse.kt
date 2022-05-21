@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 data class SearchUsersResponse(
 
     @SerialName("response")
-    val response: SearchUsersInnerResponse?,
+    val response: SearchUsersInnerResponse? = null,
 
     @SerialName("error")
-    override val error: VkErrorResponse?
+    override val error: VkErrorResponse? = null
 ) : BaseVkResponse()

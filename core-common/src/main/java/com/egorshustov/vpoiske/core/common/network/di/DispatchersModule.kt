@@ -1,9 +1,7 @@
 package com.egorshustov.vpoiske.core.common.network.di
 
-import com.egorshustov.vpoiske.core.common.network.DefaultDispatcher
-import com.egorshustov.vpoiske.core.common.network.IoDispatcher
-import com.egorshustov.vpoiske.core.common.network.MainDispatcher
-import com.egorshustov.vpoiske.core.common.network.MainImmediateDispatcher
+import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
+import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,19 +13,7 @@ import kotlinx.coroutines.Dispatchers
 @Module
 object DispatchersModule {
 
-    @DefaultDispatcher
     @Provides
-    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
-
-    @IoDispatcher
-    @Provides
+    @Dispatcher(IO)
     fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-    @MainDispatcher
-    @Provides
-    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
-
-    @MainImmediateDispatcher
-    @Provides
-    fun providesMainImmediateDispatcher(): CoroutineDispatcher = Dispatchers.Main.immediate
 }

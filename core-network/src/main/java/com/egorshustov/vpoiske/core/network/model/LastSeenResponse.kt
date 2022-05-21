@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 data class LastSeenResponse(
 
     @SerialName("time")
-    val timeUnixSeconds: Int?,
+    val timeUnixSeconds: Int? = null,
 
     @SerialName("platform")
-    val platform: Int?
+    val platform: Int? = null
 )

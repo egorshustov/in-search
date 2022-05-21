@@ -7,14 +7,14 @@ import kotlinx.serialization.Serializable
 data class CityResponse(
 
     @SerialName("id")
-    val id: Int?,
+    val id: Int? = null,
 
     @SerialName("title")
-    val title: String?,
+    val title: String? = null,
 
     @SerialName("area")
-    val area: String?,
+    val area: String? = null,
 
     @SerialName("region")
-    val region: String?
+    val region: String? = null
 )

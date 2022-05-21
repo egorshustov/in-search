@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 data class CountryResponse(
 
     @SerialName("id")
-    val id: Int?,
+    val id: Int? = null,
 
     @SerialName("title")
-    val title: String?
+    val title: String? = null
 )

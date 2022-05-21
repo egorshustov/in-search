@@ -1,19 +1,28 @@
 package com.egorshustov.vpoiske.core.network.datasource
 
 import com.egorshustov.vpoiske.core.common.model.Result
+import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
+import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.model.data.SearchUsersRequestParams
 import com.egorshustov.vpoiske.core.model.data.VkCommonRequestParams
+import com.egorshustov.vpoiske.core.network.AppBaseUrl
 import com.egorshustov.vpoiske.core.network.model.SearchUserResponse
 import com.egorshustov.vpoiske.core.network.model.SearchUsersResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UsersKtorDataSource(
+@Singleton
+class UsersKtorDataSource @Inject constructor(
     private val httpClient: HttpClient,
-    private val baseUrl: String
+    @AppBaseUrl private val baseUrl: String,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher
 ) : UsersNetworkDataSource {
 
     override fun searchUsers(
@@ -45,5 +54,5 @@ class UsersKtorDataSource(
         } catch (e: Throwable) {
             emit(Result.Error(e))
         }
-    }
+    }.flowOn(ioDispatcher)
 }
