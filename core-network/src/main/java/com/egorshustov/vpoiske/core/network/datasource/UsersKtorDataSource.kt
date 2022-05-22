@@ -4,8 +4,8 @@ import com.egorshustov.vpoiske.core.common.model.AppException
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
-import com.egorshustov.vpoiske.core.model.data.SearchUsersRequestParams
-import com.egorshustov.vpoiske.core.model.data.VkCommonRequestParams
+import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
+import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
 import com.egorshustov.vpoiske.core.network.ktor.isSuccessful
 import com.egorshustov.vpoiske.core.network.model.SearchUserResponse
@@ -50,6 +50,7 @@ class UsersKtorDataSource @Inject constructor(
                 parameter("sort", searchUsersParams.sortType)
                 parameter("access_token", commonParams.accessToken)
                 parameter("v", commonParams.apiVersion)
+                parameter("lang", commonParams.responseLanguage)
             }
 
             val responseBody = httpResponse.body<SearchUsersResponse>()

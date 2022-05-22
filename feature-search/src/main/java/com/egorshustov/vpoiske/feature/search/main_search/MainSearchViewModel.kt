@@ -12,8 +12,8 @@ import androidx.work.WorkManager
 import com.egorshustov.vpoiske.core.common.model.data
 import com.egorshustov.vpoiske.core.common.network.DEFAULT_API_VERSION
 import com.egorshustov.vpoiske.core.domain.GetAccessTokenUseCase
-import com.egorshustov.vpoiske.core.model.data.SearchUsersRequestParams
-import com.egorshustov.vpoiske.core.model.data.VkCommonRequestParams
+import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
+import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import com.egorshustov.vpoiske.core.network.datasource.UsersNetworkDataSource
 import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -72,7 +72,8 @@ internal class MainSearchViewModel @Inject constructor(
             ),
             VkCommonRequestParams(
                 accessToken = accessToken.orEmpty(),
-                apiVersion = DEFAULT_API_VERSION
+                apiVersion = DEFAULT_API_VERSION,
+                responseLanguage = "en"
             )
         ).onEach {
             val res = it

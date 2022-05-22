@@ -1,18 +1,15 @@
-package com.egorshustov.vpoiske.core.network.datasource
+package com.egorshustov.vpoiske.core.data.repository
 
 import com.egorshustov.vpoiske.core.common.model.Result
+import com.egorshustov.vpoiske.core.model.data.User
 import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
-import com.egorshustov.vpoiske.core.network.model.SearchUserResponse
 import kotlinx.coroutines.flow.Flow
 
-interface UsersNetworkDataSource {
+interface UsersRepository {
 
-    /**
-     * [users.search VK API](https://dev.vk.com/method/users.search)
-     */
     fun searchUsers(
         searchUsersParams: SearchUsersRequestParams,
         commonParams: VkCommonRequestParams
-    ): Flow<Result<List<SearchUserResponse>>>
+    ): Flow<Result<List<User>>>
 }

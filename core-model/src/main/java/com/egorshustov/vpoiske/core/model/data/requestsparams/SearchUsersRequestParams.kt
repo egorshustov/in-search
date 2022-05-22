@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.core.model.data
+package com.egorshustov.vpoiske.core.model.data.requestsparams
 
 data class SearchUsersRequestParams(
     val countryId: Int,
