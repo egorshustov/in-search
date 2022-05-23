@@ -1,5 +1,7 @@
 package com.egorshustov.vpoiske.core.network.model
 
+import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
+import com.egorshustov.vpoiske.core.model.data.City
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,3 +20,12 @@ data class CityResponse(
     @SerialName("region")
     val region: String? = null
 )
+
+fun CityResponse?.asExternalModel() = this?.let {
+    City(
+        id = id ?: NO_VALUE,
+        title = title.orEmpty(),
+        area = area.orEmpty(),
+        region = region.orEmpty()
+    )
+}

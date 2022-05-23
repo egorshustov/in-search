@@ -12,9 +12,10 @@ import androidx.work.WorkManager
 import com.egorshustov.vpoiske.core.common.model.data
 import com.egorshustov.vpoiske.core.common.network.DEFAULT_API_VERSION
 import com.egorshustov.vpoiske.core.domain.GetAccessTokenUseCase
+import com.egorshustov.vpoiske.core.domain.SearchUsersUseCase
+import com.egorshustov.vpoiske.core.domain.SearchUsersUseCaseParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
-import com.egorshustov.vpoiske.core.network.datasource.UsersNetworkDataSource
 import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class MainSearchViewModel @Inject constructor(
     getAccessTokenUseCase: GetAccessTokenUseCase,
-    private val usersNetworkDataSource: UsersNetworkDataSource,
+    private val searchUsersUseCase: SearchUsersUseCase,
     @ApplicationContext appContext: Context
 ) : ViewModel() {
 
@@ -54,26 +55,28 @@ internal class MainSearchViewModel @Inject constructor(
 
     private fun searchUsers(accessToken: String?) {
         if (accessToken.isNullOrBlank()) return
-        usersNetworkDataSource.searchUsers(
-            SearchUsersRequestParams(
-                countryId = 1,
-                cityId = 2,
-                ageFrom = 18,
-                ageTo = 30,
-                birthDay = 17,
-                birthMonth = 3,
-                fields = "last_seen,contacts,followers_count,photo_id,sex,bdate,city,country,home_town,photo_50,photo_max,photo_max_orig,contacts,relation,can_write_private_message,can_send_friend_request,can_write_private_message",
-                homeTown = null,
-                relation = 1,
-                sex = 1,
-                hasPhoto = 1,
-                count = 1000,
-                sortType = 1
-            ),
-            VkCommonRequestParams(
-                accessToken = accessToken.orEmpty(),
-                apiVersion = DEFAULT_API_VERSION,
-                responseLanguage = "en"
+        searchUsersUseCase(
+            SearchUsersUseCaseParams(
+                searchUsersParams = SearchUsersRequestParams(
+                    countryId = 1,
+                    cityId = 2,
+                    ageFrom = 18,
+                    ageTo = 30,
+                    birthDay = 17,
+                    birthMonth = 3,
+                    fields = "last_seen,contacts,followers_count,photo_id,sex,bdate,city,country,home_town,photo_50,photo_max,photo_max_orig,contacts,relation,can_write_private_message,can_send_friend_request,can_write_private_message",
+                    homeTown = null,
+                    relation = 1,
+                    sex = 1,
+                    hasPhoto = 1,
+                    count = 1000,
+                    sortType = 1
+                ),
+                commonParams = VkCommonRequestParams(
+                    accessToken = accessToken.orEmpty(),
+                    apiVersion = DEFAULT_API_VERSION,
+                    responseLanguage = "en"
+                )
             )
         ).onEach {
             val res = it

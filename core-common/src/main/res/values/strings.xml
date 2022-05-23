@@ -7,6 +7,29 @@
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
 
+    <string name="sex_any">Любой</string>
+    <string name="sex_female">Женский</string>
+    <string name="sex_male">Мужской</string>
+
+    <string name="relation_female_any">Любое</string>
+    <string name="relation_male_any">Любое</string>
+    <string name="relation_female_not_married">Не замужем</string>
+    <string name="relation_male_not_married">Не женат</string>
+    <string name="relation_female_has_friend">Есть друг</string>
+    <string name="relation_male_has_friend">Есть подруга</string>
+    <string name="relation_female_engaged">Помолвлена</string>
+    <string name="relation_male_engaged">Помолвлен</string>
+    <string name="relation_female_married">Замужем</string>
+    <string name="relation_male_married">Женат</string>
+    <string name="relation_female_all_complicated">Всё сложно</string>
+    <string name="relation_male_all_complicated">Всё сложно</string>
+    <string name="relation_female_in_active_search">В активном поиске</string>
+    <string name="relation_male_in_active_search">В активном поиске</string>
+    <string name="relation_female_in_love">Влюблена</string>
+    <string name="relation_male_in_love">Влюблён</string>
+    <string name="relation_female_in_civil_marriage">В гражданском браке</string>
+    <string name="relation_male_in_civil_marriage">В гражданском браке</string>
+
     <string name="error_something_went_wrong">Что-то пошло не так. Попробуйте повторить позднее</string>
     <string name="error_check_internet_or_unavailable">Ошибка соединения: отсутствует подключение к сети или сервер недоступен</string>
     <string name="error_wrong_login_or_password">Указан неверный логин или пароль!</string>

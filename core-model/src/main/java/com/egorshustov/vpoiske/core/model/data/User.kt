@@ -4,10 +4,10 @@ data class User(
     val id: Long,
     val firstName: String,
     val lastName: String,
-    val sex: Int,
+    val sex: Int?,
     val birthDate: String,
-    val city: City,
-    val country: Country,
+    val city: City?,
+    val country: Country?,
     val homeTown: String,
     val photosInfo: UserPhotosInfo,
     val mobilePhone: String,
@@ -15,9 +15,8 @@ data class User(
     val relation: Int?,
     val lastSeen: UserLastSeen?,
     val counters: UserCounters?,
+    val usersPermissions: UserPermissions,
     // custom fields:
-    val isFavorite: Boolean,
-    val isInBlacklist: Boolean,
-    val searchId: Long,
-    val foundUnixMillis: Long
+    var searchId: Long?,
+    var foundUnixMillis: Long?
 )

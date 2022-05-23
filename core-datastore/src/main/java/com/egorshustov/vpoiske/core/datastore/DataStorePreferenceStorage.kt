@@ -9,7 +9,7 @@ import com.egorshustov.vpoiske.core.common.model.Theme
 import com.egorshustov.vpoiske.core.datastore.DataStorePreferenceStorage.PreferencesKeys.PREF_KEY_ACCESS_TOKEN
 import com.egorshustov.vpoiske.core.datastore.DataStorePreferenceStorage.PreferencesKeys.PREF_KEY_SELECTED_COLUMN_COUNT
 import com.egorshustov.vpoiske.core.datastore.DataStorePreferenceStorage.PreferencesKeys.PREF_KEY_SELECTED_THEME
-import com.egorshustov.core.common.utils.MAX_COLUMN_COUNT
+import com.egorshustov.vpoiske.core.common.utils.MAX_COLUMN_COUNT
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

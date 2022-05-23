@@ -14,7 +14,7 @@ buildscript {
         workVersion = '2.7.1'
         accompanistSystemUiControllerVersion = '0.24.6-alpha'
         javaxInjectVersion = '1'
-        hiltVersion = '2.41'
+        hiltVersion = '2.42'
         hiltNavigationComposeVersion = '1.0.0'
         hiltWorkVersion = '1.0.0'
         hiltExtensionCompilerVersion = '1.0.0'
