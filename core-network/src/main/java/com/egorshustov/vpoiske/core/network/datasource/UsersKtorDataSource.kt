@@ -5,11 +5,14 @@ import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
+import com.egorshustov.vpoiske.core.model.data.requestsparams.UserGetRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
 import com.egorshustov.vpoiske.core.network.ktor.isSuccessful
+import com.egorshustov.vpoiske.core.network.model.GetUserResponse
 import com.egorshustov.vpoiske.core.network.model.SearchUserResponse
 import com.egorshustov.vpoiske.core.network.model.SearchUsersResponse
+import com.egorshustov.vpoiske.core.network.model.UserResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -57,6 +60,40 @@ class UsersKtorDataSource @Inject constructor(
 
             if (httpResponse.isSuccessful && responseBody.error == null) {
                 emit(Result.Success(responseBody.response?.searchUserResponseList.orEmpty()))
+            } else {
+                emit(
+                    Result.Error(
+                        AppException(
+                            message = responseBody.error?.errorMessage,
+                            vkErrorCode = responseBody.error?.errorCode
+                        )
+                    )
+                )
+            }
+        } catch (e: Throwable) {
+            emit(Result.Error(AppException(e)))
+        }
+    }.flowOn(ioDispatcher)
+
+    override fun getUser(
+        userGetRequestParams: UserGetRequestParams,
+        commonParams: VkCommonRequestParams
+    ): Flow<Result<List<UserResponse>>> = flow {
+        emit(Result.Loading)
+
+        try {
+            val httpResponse = httpClient.get("$baseUrl/users.get") {
+                parameter("user_ids", userGetRequestParams.userId)
+                parameter("fields", userGetRequestParams.fields)
+                parameter("access_token", commonParams.accessToken)
+                parameter("v", commonParams.apiVersion)
+                parameter("lang", commonParams.responseLanguage)
+            }
+
+            val responseBody = httpResponse.body<GetUserResponse>()
+
+            if (httpResponse.isSuccessful && responseBody.error == null) {
+                emit(Result.Success(responseBody.userResponseList.orEmpty()))
             } else {
                 emit(
                     Result.Error(
