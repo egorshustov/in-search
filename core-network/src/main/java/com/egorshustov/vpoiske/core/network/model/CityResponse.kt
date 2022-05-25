@@ -21,7 +21,7 @@ data class CityResponse(
     val region: String? = null
 )
 
-fun CityResponse?.asExternalModel() = this?.let {
+fun CityResponse?.asExternalModel(): City? = this?.let {
     City(
         id = id ?: NO_VALUE,
         title = title.orEmpty(),

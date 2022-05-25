@@ -1,5 +1,9 @@
 package com.egorshustov.vpoiske.core.network.model
 
+import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
+import com.egorshustov.vpoiske.core.model.data.User
+import com.egorshustov.vpoiske.core.model.data.UserPermissions
+import com.egorshustov.vpoiske.core.model.data.UserPhotosInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -64,5 +68,39 @@ data class UserResponse(
     val relation: Int? = null,
 
     @SerialName("counters")
-    val counters: CountersResponse? = null
+    val counters: UserCountersResponse? = null
+)
+
+fun UserResponse.asExternalModel() = User(
+    id = id ?: NO_VALUE.toLong(),
+    firstName = firstName.orEmpty(),
+    lastName = lastName.orEmpty(),
+    sex = sex,
+    birthDate = birthDate.orEmpty(),
+    city = city.asExternalModel(),
+    country = country.asExternalModel(),
+    homeTown = homeTown.orEmpty(),
+    photosInfo = getUserPhotosInfo(),
+    mobilePhone = mobilePhone.orEmpty(),
+    homePhone = homePhone.orEmpty(),
+    relation = relation,
+    lastSeen = null,
+    counters = counters.asExternalModel(),
+    usersPermissions = getUserPermissions(),
+    searchId = null,
+    foundUnixMillis = null
+)
+
+fun UserResponse.getUserPhotosInfo() = UserPhotosInfo(
+    photoId = photoId.orEmpty(),
+    photo50Url = photo50Url.orEmpty(),
+    photoMaxUrl = photoMaxUrl.orEmpty(),
+    photoMaxOrigUrl = photoMaxOrigUrl.orEmpty()
+)
+
+fun UserResponse.getUserPermissions() = UserPermissions(
+    isClosed = isClosed,
+    canAccessClosed = canAccessClosed,
+    canWritePrivateMessage = canWritePrivateMessage?.let { it == 1 },
+    canSendFriendRequest = canSendFriendRequest?.let { it == 1 }
 )

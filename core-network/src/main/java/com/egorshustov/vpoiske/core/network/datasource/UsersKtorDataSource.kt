@@ -4,8 +4,8 @@ import com.egorshustov.vpoiske.core.common.model.AppException
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
+import com.egorshustov.vpoiske.core.model.data.requestsparams.GetUserRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
-import com.egorshustov.vpoiske.core.model.data.requestsparams.UserGetRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
 import com.egorshustov.vpoiske.core.network.ktor.isSuccessful
@@ -76,24 +76,25 @@ class UsersKtorDataSource @Inject constructor(
     }.flowOn(ioDispatcher)
 
     override fun getUser(
-        userGetRequestParams: UserGetRequestParams,
+        getUserParams: GetUserRequestParams,
         commonParams: VkCommonRequestParams
-    ): Flow<Result<List<UserResponse>>> = flow {
+    ): Flow<Result<UserResponse>> = flow {
         emit(Result.Loading)
 
         try {
             val httpResponse = httpClient.get("$baseUrl/users.get") {
-                parameter("user_ids", userGetRequestParams.userId)
-                parameter("fields", userGetRequestParams.fields)
+                parameter("user_ids", getUserParams.userId)
+                parameter("fields", getUserParams.fields)
                 parameter("access_token", commonParams.accessToken)
                 parameter("v", commonParams.apiVersion)
                 parameter("lang", commonParams.responseLanguage)
             }
 
             val responseBody = httpResponse.body<GetUserResponse>()
+            val userResponse = responseBody.userResponseList?.firstOrNull()
 
-            if (httpResponse.isSuccessful && responseBody.error == null) {
-                emit(Result.Success(responseBody.userResponseList.orEmpty()))
+            if (httpResponse.isSuccessful && responseBody.error == null && userResponse != null) {
+                emit(Result.Success(userResponse))
             } else {
                 emit(
                     Result.Error(

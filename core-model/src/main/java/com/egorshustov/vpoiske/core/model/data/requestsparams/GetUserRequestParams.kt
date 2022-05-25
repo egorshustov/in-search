@@ -1,6 +1,6 @@
 package com.egorshustov.vpoiske.core.model.data.requestsparams
 
-data class UserGetRequestParams(
-    val userId: Int,
+data class GetUserRequestParams(
+    val userId: Long,
     val fields: String
 )

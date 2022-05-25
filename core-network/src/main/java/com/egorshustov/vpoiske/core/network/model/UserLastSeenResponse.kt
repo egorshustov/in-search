@@ -14,7 +14,7 @@ data class UserLastSeenResponse(
     val platform: Int? = null
 )
 
-fun UserLastSeenResponse?.asExternalModel() = this?.let {
+fun UserLastSeenResponse?.asExternalModel(): UserLastSeen? = this?.let {
     UserLastSeen(
         timeUnixSeconds = timeUnixSeconds,
         platform = platform

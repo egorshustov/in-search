@@ -15,7 +15,7 @@ data class CountryResponse(
     val title: String? = null
 )
 
-fun CountryResponse?.asExternalModel() = this?.let {
+fun CountryResponse?.asExternalModel(): Country? = this?.let {
     Country(
         id = id ?: NO_VALUE,
         title = title.orEmpty()

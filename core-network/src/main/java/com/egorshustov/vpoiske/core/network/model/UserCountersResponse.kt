@@ -1,10 +1,11 @@
 package com.egorshustov.vpoiske.core.network.model
 
+import com.egorshustov.vpoiske.core.model.data.UserCounters
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CountersResponse(
+data class UserCountersResponse(
 
     @SerialName("albums")
     val albums: Int? = null,
@@ -54,3 +55,24 @@ data class CountersResponse(
     @SerialName("pages")
     val pages: Int? = null
 )
+
+fun UserCountersResponse?.asExternalModel(): UserCounters? = this?.run {
+    UserCounters(
+        albums = albums,
+        videos = videos,
+        audios = audios,
+        photos = photos,
+        notes = notes,
+        gifts = gifts,
+        articles = articles,
+        friends = friends,
+        groups = groups,
+        mutualFriends = mutualFriends,
+        userPhotos = userPhotos,
+        userVideos = userVideos,
+        followers = followers,
+        clipsFollowers = clipsFollowers,
+        subscriptions = subscriptions,
+        pages = pages
+    )
+}
