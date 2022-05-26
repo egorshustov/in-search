@@ -9,10 +9,10 @@ import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequest
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
 import com.egorshustov.vpoiske.core.network.ktor.isSuccessful
-import com.egorshustov.vpoiske.core.network.model.GetUserResponse
-import com.egorshustov.vpoiske.core.network.model.SearchUserResponse
-import com.egorshustov.vpoiske.core.network.model.SearchUsersResponse
-import com.egorshustov.vpoiske.core.network.model.UserResponse
+import com.egorshustov.vpoiske.core.network.model.getuser.GetUserResponse
+import com.egorshustov.vpoiske.core.network.model.getuser.UserResponse
+import com.egorshustov.vpoiske.core.network.model.searchuser.SearchUserResponse
+import com.egorshustov.vpoiske.core.network.model.searchuser.SearchUsersResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*

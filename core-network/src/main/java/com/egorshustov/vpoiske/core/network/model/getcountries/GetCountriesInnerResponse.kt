@@ -1,14 +1,14 @@
-package com.egorshustov.vpoiske.core.network.model
+package com.egorshustov.vpoiske.core.network.model.getcountries
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchUsersInnerResponse(
+data class GetCountriesInnerResponse(
 
     @SerialName("count")
     val count: Int? = null,
 
     @SerialName("items")
-    val searchUserResponseList: List<SearchUserResponse>? = null
+    val countryResponseList: List<CountryResponse>? = null
 )

@@ -1,15 +1,18 @@
-package com.egorshustov.vpoiske.core.network.model
+package com.egorshustov.vpoiske.core.network.model.getuser
 
 import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
 import com.egorshustov.vpoiske.core.model.data.User
-import com.egorshustov.vpoiske.core.model.data.UserCounters
 import com.egorshustov.vpoiske.core.model.data.UserPermissions
 import com.egorshustov.vpoiske.core.model.data.UserPhotosInfo
+import com.egorshustov.vpoiske.core.network.model.getcities.CityResponse
+import com.egorshustov.vpoiske.core.network.model.getcities.asExternalModel
+import com.egorshustov.vpoiske.core.network.model.getcountries.CountryResponse
+import com.egorshustov.vpoiske.core.network.model.getcountries.asExternalModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchUserResponse(
+data class UserResponse(
 
     @SerialName("id")
     val id: Long? = null,
@@ -42,7 +45,7 @@ data class SearchUserResponse(
     val homeTown: String? = null,
 
     @SerialName("photo_id")
-    val photoId: String? = null,
+    val photoId: String?,
 
     @SerialName("photo_50")
     val photo50Url: String? = null,
@@ -68,14 +71,11 @@ data class SearchUserResponse(
     @SerialName("relation")
     val relation: Int? = null,
 
-    @SerialName("last_seen")
-    val lastSeen: UserLastSeenResponse? = null,
-
-    @SerialName("followers_count")
-    val followersCount: Int? = null
+    @SerialName("counters")
+    val counters: UserCountersResponse? = null
 )
 
-fun SearchUserResponse.asExternalModel() = User(
+fun UserResponse.asExternalModel() = User(
     id = id ?: NO_VALUE.toLong(),
     firstName = firstName.orEmpty(),
     lastName = lastName.orEmpty(),
@@ -88,42 +88,21 @@ fun SearchUserResponse.asExternalModel() = User(
     mobilePhone = mobilePhone.orEmpty(),
     homePhone = homePhone.orEmpty(),
     relation = relation,
-    lastSeen = lastSeen.asExternalModel(),
-    counters = getUserCounters(),
+    lastSeen = null,
+    counters = counters.asExternalModel(),
     usersPermissions = getUserPermissions(),
     searchId = null,
     foundUnixMillis = null
 )
 
-fun List<SearchUserResponse>.asExternalModelList(): List<User> = map { it.asExternalModel() }
-
-fun SearchUserResponse.getUserPhotosInfo() = UserPhotosInfo(
+fun UserResponse.getUserPhotosInfo() = UserPhotosInfo(
     photoId = photoId.orEmpty(),
     photo50Url = photo50Url.orEmpty(),
     photoMaxUrl = photoMaxUrl.orEmpty(),
     photoMaxOrigUrl = photoMaxOrigUrl.orEmpty()
 )
 
-fun SearchUserResponse.getUserCounters() = UserCounters(
-    albums = null,
-    videos = null,
-    audios = null,
-    photos = null,
-    notes = null,
-    gifts = null,
-    articles = null,
-    friends = null,
-    groups = null,
-    mutualFriends = null,
-    userPhotos = null,
-    userVideos = null,
-    followers = followersCount,
-    clipsFollowers = null,
-    subscriptions = null,
-    pages = null
-)
-
-fun SearchUserResponse.getUserPermissions() = UserPermissions(
+fun UserResponse.getUserPermissions() = UserPermissions(
     isClosed = isClosed,
     canAccessClosed = canAccessClosed,
     canWritePrivateMessage = canWritePrivateMessage?.let { it == 1 },

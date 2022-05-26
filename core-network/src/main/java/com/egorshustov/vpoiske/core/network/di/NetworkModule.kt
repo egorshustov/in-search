@@ -2,6 +2,8 @@ package com.egorshustov.vpoiske.core.network.di
 
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
 import com.egorshustov.vpoiske.core.network.VkUrlConfig
+import com.egorshustov.vpoiske.core.network.datasource.CountriesKtorDataSource
+import com.egorshustov.vpoiske.core.network.datasource.CountriesNetworkDataSource
 import com.egorshustov.vpoiske.core.network.datasource.UsersKtorDataSource
 import com.egorshustov.vpoiske.core.network.datasource.UsersNetworkDataSource
 import com.egorshustov.vpoiske.core.network.ktor.KtorClientFactory
@@ -22,6 +24,11 @@ internal interface NetworkModule {
     fun bindUsersNetworkDataSource(
         usersKtorDataSource: UsersKtorDataSource
     ): UsersNetworkDataSource
+
+    @Binds
+    fun bindCountriesNetworkDataSource(
+        countriesKtorDataSource: CountriesKtorDataSource
+    ): CountriesNetworkDataSource
 
     companion object {
 

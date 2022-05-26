@@ -8,8 +8,8 @@ import com.egorshustov.vpoiske.core.model.data.requestsparams.GetUserRequestPara
 import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import com.egorshustov.vpoiske.core.network.datasource.UsersNetworkDataSource
-import com.egorshustov.vpoiske.core.network.model.asExternalModel
-import com.egorshustov.vpoiske.core.network.model.asExternalModelList
+import com.egorshustov.vpoiske.core.network.model.getuser.asExternalModel
+import com.egorshustov.vpoiske.core.network.model.searchuser.asExternalModelList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

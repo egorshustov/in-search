@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.core.network.model
+package com.egorshustov.vpoiske.core.network.model.getuser
 
 import com.egorshustov.vpoiske.core.model.data.UserCounters
 import kotlinx.serialization.SerialName

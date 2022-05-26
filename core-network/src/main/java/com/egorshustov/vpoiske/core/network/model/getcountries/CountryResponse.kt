@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.core.network.model
+package com.egorshustov.vpoiske.core.network.model.getcountries
 
 import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
 import com.egorshustov.vpoiske.core.model.data.Country

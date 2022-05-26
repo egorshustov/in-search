@@ -1,5 +1,7 @@
-package com.egorshustov.vpoiske.core.network.model
+package com.egorshustov.vpoiske.core.network.model.searchuser
 
+import com.egorshustov.vpoiske.core.network.model.BaseVkResponse
+import com.egorshustov.vpoiske.core.network.model.VkErrorResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

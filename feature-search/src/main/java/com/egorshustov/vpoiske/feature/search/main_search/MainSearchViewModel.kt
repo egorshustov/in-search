@@ -12,9 +12,11 @@ import androidx.work.WorkManager
 import com.egorshustov.vpoiske.core.common.model.data
 import com.egorshustov.vpoiske.core.common.network.DEFAULT_API_VERSION
 import com.egorshustov.vpoiske.core.domain.*
+import com.egorshustov.vpoiske.core.model.data.requestsparams.GetCountriesRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.GetUserRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
+import com.egorshustov.vpoiske.core.network.datasource.CountriesNetworkDataSource
 import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -28,6 +30,7 @@ internal class MainSearchViewModel @Inject constructor(
     getAccessTokenUseCase: GetAccessTokenUseCase,
     private val searchUsersUseCase: SearchUsersUseCase,
     private val getUserUseCase: GetUserUseCase,
+    private val countriesNetworkDataSource: CountriesNetworkDataSource,
     @ApplicationContext appContext: Context
 ) : ViewModel() {
 
@@ -40,7 +43,8 @@ internal class MainSearchViewModel @Inject constructor(
             _state.value = state.value.copy(isAuthRequired = accessToken.isNullOrBlank())
 
             //searchUsers(accessToken)
-            getUser(accessToken)
+            //getUser(accessToken)
+            getCountries(accessToken)
         }.launchIn(viewModelScope)
 
         enqueueWorkRequest(appContext)
@@ -99,6 +103,23 @@ internal class MainSearchViewModel @Inject constructor(
                     responseLanguage = "en"
                 )
             )
+        ).onEach {
+            val res = it
+            Timber.d(res.toString())
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getCountries(accessToken: String?) {
+        if (accessToken.isNullOrBlank()) return
+        countriesNetworkDataSource.getCountries(
+            getCountriesParams = GetCountriesRequestParams(
+            ),
+            commonParams = VkCommonRequestParams(
+                accessToken = accessToken.orEmpty(),
+                apiVersion = DEFAULT_API_VERSION,
+                responseLanguage = "en"
+            )
+
         ).onEach {
             val res = it
             Timber.d(res.toString())

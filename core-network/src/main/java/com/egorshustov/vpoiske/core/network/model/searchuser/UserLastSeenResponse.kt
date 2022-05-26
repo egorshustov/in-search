@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.core.network.model
+package com.egorshustov.vpoiske.core.network.model.searchuser
 
 import com.egorshustov.vpoiske.core.model.data.UserLastSeen
 import kotlinx.serialization.SerialName
