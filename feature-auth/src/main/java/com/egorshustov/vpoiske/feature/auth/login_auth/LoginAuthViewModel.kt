@@ -10,7 +10,8 @@ import com.egorshustov.vpoiske.core.domain.GetAccessTokenUseCase
 import com.egorshustov.vpoiske.core.domain.SaveAccessTokenUseCase
 import com.egorshustov.vpoiske.core.domain.SaveAccessTokenUseCaseParams
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,12 +25,10 @@ internal class LoginAuthViewModel @Inject constructor(
     val state: State<LoginAuthState> = _state
 
     init {
-        viewModelScope.launch {
-            getAccessTokenUseCase(Unit).collect {
-                val accessToken = it.data
-                _state.value = state.value.copy(needToFinishAuth = !accessToken.isNullOrBlank())
-            }
-        }
+        getAccessTokenUseCase(Unit).onEach {
+            val accessToken = it.data
+            _state.value = state.value.copy(needToFinishAuth = !accessToken.isNullOrBlank())
+        }.launchIn(viewModelScope)
     }
 
     fun onTriggerEvent(event: LoginAuthEvent) {

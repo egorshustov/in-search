@@ -21,7 +21,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CountriesKtorDataSource @Inject constructor(
+internal class CountriesKtorDataSource @Inject constructor(
     private val httpClient: HttpClient,
     @AppBaseUrl private val baseUrl: String,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher

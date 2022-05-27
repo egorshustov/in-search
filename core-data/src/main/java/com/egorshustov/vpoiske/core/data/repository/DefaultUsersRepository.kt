@@ -18,7 +18,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultUsersRepository @Inject constructor(
+internal class DefaultUsersRepository @Inject constructor(
     private val usersNetworkDataSource: UsersNetworkDataSource,
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : UsersRepository {

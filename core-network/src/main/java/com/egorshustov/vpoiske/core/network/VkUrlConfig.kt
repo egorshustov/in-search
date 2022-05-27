@@ -1,6 +1,6 @@
 package com.egorshustov.vpoiske.core.network
 
-object VkUrlConfig {
+internal object VkUrlConfig {
 
     const val BASE_URL = "https://api.vk.com/method/"
 }
