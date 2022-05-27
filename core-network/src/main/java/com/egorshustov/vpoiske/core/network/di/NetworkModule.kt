@@ -2,10 +2,7 @@ package com.egorshustov.vpoiske.core.network.di
 
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
 import com.egorshustov.vpoiske.core.network.VkUrlConfig
-import com.egorshustov.vpoiske.core.network.datasource.CountriesKtorDataSource
-import com.egorshustov.vpoiske.core.network.datasource.CountriesNetworkDataSource
-import com.egorshustov.vpoiske.core.network.datasource.UsersKtorDataSource
-import com.egorshustov.vpoiske.core.network.datasource.UsersNetworkDataSource
+import com.egorshustov.vpoiske.core.network.datasource.*
 import com.egorshustov.vpoiske.core.network.ktor.KtorClientFactory
 import com.egorshustov.vpoiske.core.network.ktor.KtorClientFactoryAndroidImpl
 import dagger.Binds
@@ -29,6 +26,11 @@ internal interface NetworkModule {
     fun bindCountriesNetworkDataSource(
         countriesKtorDataSource: CountriesKtorDataSource
     ): CountriesNetworkDataSource
+
+    @Binds
+    fun bindCitiesNetworkDataSource(
+        citiesKtorDataSource: CitiesKtorDataSource
+    ): CitiesNetworkDataSource
 
     companion object {
 
