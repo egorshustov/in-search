@@ -1,7 +1,6 @@
 package com.egorshustov.vpoiske.core.common.model
 
-import com.egorshustov.vpoiske.core.common.model.Result.Success
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.*
 
 /**
  * A generic interface that holds a value with its loading status.
@@ -13,20 +12,29 @@ sealed interface Result<out R> {
     object Loading : Result<Nothing>
 }
 
+fun <T> Flow<T>.asResult(): Flow<Result<T>> {
+    return this
+        .map<T, Result<T>> {
+            Result.Success(it)
+        }
+        .onStart { emit(Result.Loading) }
+        .catch { emit(Result.Error(AppException(it))) }
+}
+
 /**
- * `true` if [Result] is of type [Success] & holds non-null [Success.data].
+ * `true` if [Result] is of type [Result.Success] & holds non-null [Result.Success.data].
  */
 val Result<*>.succeeded
-    get() = this is Success && data != null
+    get() = this is Result.Success && data != null
 
-fun <T> Result<T>.successOr(fallback: T): T = (this as? Success<T>)?.data ?: fallback
+fun <T> Result<T>.successOr(fallback: T): T = (this as? Result.Success<T>)?.data ?: fallback
 
 val <T> Result<T>.data: T?
-    get() = (this as? Success)?.data
+    get() = (this as? Result.Success)?.data
 
 /**
- * Updates value of [MutableStateFlow] if [Result] is of type [Success]
+ * Updates value of [MutableStateFlow] if [Result] is of type [Result.Success]
  */
 inline fun <reified T> Result<T>.updateOnSuccess(stateFlow: MutableStateFlow<T>) {
-    if (this is Success) stateFlow.value = data
+    if (this is Result.Success) stateFlow.value = data
 }
