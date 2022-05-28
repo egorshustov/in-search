@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object DataStoreModule {
+internal object DataStoreModule {
 
     private val Context.dataStore by preferencesDataStore(
         name = DataStorePreferenceStorage.PREFS_NAME,
@@ -30,6 +30,6 @@ object DataStoreModule {
 
     @Singleton
     @Provides
-    fun providePreferenceStorage(@ApplicationContext context: Context): PreferenceStorage =
+    internal fun providePreferenceStorage(@ApplicationContext context: Context): PreferenceStorage =
         DataStorePreferenceStorage(context.dataStore)
 }

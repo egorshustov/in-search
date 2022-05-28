@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.core.domain
+package com.egorshustov.vpoiske.core.domain.token
 
 import com.egorshustov.vpoiske.core.common.base.FlowUseCase
 import com.egorshustov.vpoiske.core.common.model.Result

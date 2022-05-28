@@ -11,10 +11,16 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import com.egorshustov.vpoiske.core.common.model.data
 import com.egorshustov.vpoiske.core.common.network.DEFAULT_API_VERSION
-import com.egorshustov.vpoiske.core.domain.*
+import com.egorshustov.vpoiske.core.domain.country.GetCountriesStreamUseCase
+import com.egorshustov.vpoiske.core.domain.country.RequestCountriesUseCase
+import com.egorshustov.vpoiske.core.domain.country.RequestCountriesUseCaseParams
+import com.egorshustov.vpoiske.core.domain.token.GetAccessTokenUseCase
+import com.egorshustov.vpoiske.core.domain.user.GetUserUseCase
+import com.egorshustov.vpoiske.core.domain.user.GetUserUseCaseParams
+import com.egorshustov.vpoiske.core.domain.user.SearchUsersUseCase
+import com.egorshustov.vpoiske.core.domain.user.SearchUsersUseCaseParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.*
 import com.egorshustov.vpoiske.core.network.datasource.CitiesNetworkDataSource
-import com.egorshustov.vpoiske.core.network.datasource.CountriesNetworkDataSource
 import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -28,7 +34,8 @@ internal class MainSearchViewModel @Inject constructor(
     getAccessTokenUseCase: GetAccessTokenUseCase,
     private val searchUsersUseCase: SearchUsersUseCase,
     private val getUserUseCase: GetUserUseCase,
-    private val countriesNetworkDataSource: CountriesNetworkDataSource,
+    private val requestCountriesUseCase: RequestCountriesUseCase,
+    private val getCountriesStreamUseCase: GetCountriesStreamUseCase,
     private val citiesNetworkDataSource: CitiesNetworkDataSource,
     @ApplicationContext appContext: Context
 ) : ViewModel() {
@@ -43,8 +50,8 @@ internal class MainSearchViewModel @Inject constructor(
 
             //searchUsers(accessToken)
             //getUser(accessToken)
-            //getCountries(accessToken)
-            getCities(accessToken)
+            getCountries(accessToken)
+            //getCities(accessToken)
         }.launchIn(viewModelScope)
 
         enqueueWorkRequest(appContext)
@@ -111,15 +118,22 @@ internal class MainSearchViewModel @Inject constructor(
 
     private fun getCountries(accessToken: String?) {
         if (accessToken.isNullOrBlank()) return
-        countriesNetworkDataSource.getCountries(
-            getCountriesParams = GetCountriesRequestParams(
-            ),
-            commonParams = VkCommonRequestParams(
-                accessToken = accessToken.orEmpty(),
-                apiVersion = DEFAULT_API_VERSION,
-                responseLanguage = "en"
-            )
 
+        getCountriesStreamUseCase(Unit).onEach {
+            val res = it
+            Timber.d(res.toString())
+        }.launchIn(viewModelScope)
+
+        requestCountriesUseCase(
+            RequestCountriesUseCaseParams(
+                getCountriesParams = GetCountriesRequestParams(
+                ),
+                commonParams = VkCommonRequestParams(
+                    accessToken = accessToken.orEmpty(),
+                    apiVersion = DEFAULT_API_VERSION,
+                    responseLanguage = "en"
+                )
+            )
         ).onEach {
             val res = it
             Timber.d(res.toString())

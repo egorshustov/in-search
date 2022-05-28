@@ -16,7 +16,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataStorePreferenceStorage @Inject constructor(
+internal class DataStorePreferenceStorage @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : PreferenceStorage {
 

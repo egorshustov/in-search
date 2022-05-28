@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.egorshustov.vpoiske.core.common.model.data
-import com.egorshustov.vpoiske.core.domain.GetAccessTokenUseCase
-import com.egorshustov.vpoiske.core.domain.SaveAccessTokenUseCase
-import com.egorshustov.vpoiske.core.domain.SaveAccessTokenUseCaseParams
+import com.egorshustov.vpoiske.core.domain.token.GetAccessTokenUseCase
+import com.egorshustov.vpoiske.core.domain.token.SaveAccessTokenUseCase
+import com.egorshustov.vpoiske.core.domain.token.SaveAccessTokenUseCaseParams
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
