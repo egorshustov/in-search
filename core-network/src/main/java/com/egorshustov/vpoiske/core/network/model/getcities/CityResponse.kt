@@ -29,3 +29,5 @@ fun CityResponse?.asExternalModel(): City? = this?.let {
         region = region.orEmpty()
     )
 }
+
+fun List<CityResponse>.asExternalModelList() = mapNotNull { it.asExternalModel() }

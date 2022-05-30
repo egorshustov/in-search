@@ -1,9 +1,6 @@
 package com.egorshustov.vpoiske.core.data.di
 
-import com.egorshustov.vpoiske.core.data.repository.CountriesRepository
-import com.egorshustov.vpoiske.core.data.repository.DefaultCountriesRepository
-import com.egorshustov.vpoiske.core.data.repository.DefaultUsersRepository
-import com.egorshustov.vpoiske.core.data.repository.UsersRepository
+import com.egorshustov.vpoiske.core.data.repository.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,4 +19,9 @@ internal interface DataModule {
     fun bindsCountriesRepository(
         defaultCountriesRepository: DefaultCountriesRepository
     ): CountriesRepository
+
+    @Binds
+    fun bindsCitiesRepository(
+        defaultCitiesRepository: DefaultCitiesRepository
+    ): CitiesRepository
 }

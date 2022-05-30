@@ -11,6 +11,8 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import com.egorshustov.vpoiske.core.common.model.data
 import com.egorshustov.vpoiske.core.common.network.DEFAULT_API_VERSION
+import com.egorshustov.vpoiske.core.domain.city.GetCitiesUseCase
+import com.egorshustov.vpoiske.core.domain.city.GetCitiesUseCaseParams
 import com.egorshustov.vpoiske.core.domain.country.GetCountriesStreamUseCase
 import com.egorshustov.vpoiske.core.domain.country.RequestCountriesUseCase
 import com.egorshustov.vpoiske.core.domain.country.RequestCountriesUseCaseParams
@@ -20,7 +22,6 @@ import com.egorshustov.vpoiske.core.domain.user.GetUserUseCaseParams
 import com.egorshustov.vpoiske.core.domain.user.SearchUsersUseCase
 import com.egorshustov.vpoiske.core.domain.user.SearchUsersUseCaseParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.*
-import com.egorshustov.vpoiske.core.network.datasource.CitiesNetworkDataSource
 import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -36,7 +37,7 @@ internal class MainSearchViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val requestCountriesUseCase: RequestCountriesUseCase,
     private val getCountriesStreamUseCase: GetCountriesStreamUseCase,
-    private val citiesNetworkDataSource: CitiesNetworkDataSource,
+    private val getCitiesUseCase: GetCitiesUseCase,
     @ApplicationContext appContext: Context
 ) : ViewModel() {
 
@@ -50,8 +51,8 @@ internal class MainSearchViewModel @Inject constructor(
 
             //searchUsers(accessToken)
             //getUser(accessToken)
-            getCountries(accessToken)
-            //getCities(accessToken)
+            //getCountries(accessToken)
+            getCities(accessToken)
         }.launchIn(viewModelScope)
 
         enqueueWorkRequest(appContext)
@@ -142,16 +143,17 @@ internal class MainSearchViewModel @Inject constructor(
 
     private fun getCities(accessToken: String?) {
         if (accessToken.isNullOrBlank()) return
-        citiesNetworkDataSource.getCities(
-            getCitiesParams = GetCitiesRequestParams(
-                countryId = 1
-            ),
-            commonParams = VkCommonRequestParams(
-                accessToken = accessToken.orEmpty(),
-                apiVersion = DEFAULT_API_VERSION,
-                responseLanguage = "en"
+        getCitiesUseCase(
+            GetCitiesUseCaseParams(
+                getCitiesParams = GetCitiesRequestParams(
+                    countryId = 1
+                ),
+                commonParams = VkCommonRequestParams(
+                    accessToken = accessToken.orEmpty(),
+                    apiVersion = DEFAULT_API_VERSION,
+                    responseLanguage = "en"
+                )
             )
-
         ).onEach {
             val res = it
             Timber.d(res.toString())
