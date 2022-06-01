@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("org.jetbrains.kotlin.plugin.serialization") version Versions.kotlinVersion
+    id(Plugins.androidLibrary)
+    kotlin(KotlinPlugins.android)
+    kotlin(KotlinPlugins.kapt)
+    kotlin(KotlinPlugins.serialization) version Kotlin.kotlinVersion
 }
 
 android {
@@ -31,10 +31,10 @@ dependencies {
     implementation(project(":core-common"))
     implementation(project(":core-model"))
 
-    kapt("com.google.dagger:hilt-compiler:${Versions.hiltVersion}")
+    kapt(Hilt.hiltCompiler)
 
-    implementation("io.ktor:ktor-client-core:${Versions.ktorVersion}")
-    implementation("io.ktor:ktor-client-content-negotiation:${Versions.ktorVersion}")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:${Versions.ktorVersion}")
-    implementation("io.ktor:ktor-client-android:${Versions.ktorVersion}")
+    implementation(Ktor.core)
+    implementation(Ktor.contentNegotiation)
+    implementation(Ktor.jsonSerialization)
+    implementation(Ktor.android)
 }

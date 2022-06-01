@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("com.google.devtools.ksp") version Versions.kspVersion
+    id(Plugins.androidLibrary)
+    kotlin(KotlinPlugins.android)
+    kotlin(KotlinPlugins.kapt)
+    id(Plugins.ksp) version Kotlin.kspVersion
 }
 
 android {
@@ -35,5 +35,5 @@ dependencies {
     implementation("androidx.room:room-ktx:${Versions.roomVersion}")
     ksp("androidx.room:room-compiler:${Versions.roomVersion}")
 
-    kapt("com.google.dagger:hilt-compiler:${Versions.hiltVersion}")
+    kapt(Hilt.hiltCompiler)
 }

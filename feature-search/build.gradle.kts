@@ -1,7 +1,7 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    id(Plugins.androidLibrary)
+    kotlin(KotlinPlugins.android)
+    kotlin(KotlinPlugins.kapt)
 }
 
 android {
@@ -35,9 +35,9 @@ dependencies {
     implementation("androidx.compose.material:material:${Versions.composeVersion}")
     implementation("androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}")
 
-    kapt("com.google.dagger:hilt-compiler:${Versions.hiltVersion}")
-    kapt("androidx.hilt:hilt-compiler:${Versions.hiltExtensionCompilerVersion}")
+    kapt(Hilt.hiltCompiler)
+    kapt(Hilt.hiltExtensionCompiler)
 
     implementation("androidx.work:work-runtime-ktx:${Versions.workVersion}")
-    implementation("androidx.hilt:hilt-work:${Versions.hiltWorkVersion}")
+    implementation(Hilt.hiltWork)
 }

@@ -1,7 +1,7 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    id(Plugins.androidLibrary)
+    kotlin(KotlinPlugins.android)
+    kotlin(KotlinPlugins.kapt)
 }
 
 android {
@@ -33,6 +33,6 @@ dependencies {
     implementation(project(":core-datastore"))
     implementation(project(":core-network"))
 
-    kapt("com.google.dagger:hilt-compiler:${Versions.hiltVersion}")
+    kapt(Hilt.hiltCompiler)
     implementation("androidx.datastore:datastore-preferences:${Versions.datastorePreferencesVersion}")
 }

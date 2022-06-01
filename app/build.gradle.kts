@@ -1,10 +1,10 @@
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
+    id(Plugins.androidApplication)
+    kotlin(KotlinPlugins.android)
+    kotlin(KotlinPlugins.kapt)
+    id(Plugins.hilt)
+    id(Plugins.googleServices)
+    id(Plugins.firebaseCrashlytics)
 }
 
 kapt {
@@ -69,15 +69,15 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleRuntimeKtxVersion}")
     implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanistSystemUiControllerVersion}")
 
-    implementation("com.google.dagger:hilt-android:${Versions.hiltVersion}")
-    kapt("com.google.dagger:hilt-compiler:${Versions.hiltVersion}")
+    implementation(Hilt.hiltAndroid)
+    kapt(Hilt.hiltCompiler)
 
     implementation("androidx.work:work-runtime-ktx:${Versions.workVersion}")
-    implementation("androidx.hilt:hilt-work:${Versions.hiltWorkVersion}")
+    implementation(Hilt.hiltWork)
 
-    implementation(platform("com.google.firebase:firebase-bom:${Versions.firebaseBomVersion}"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation(platform(Firebase.firebaseBom))
+    implementation(Firebase.firebaseCrashlyticsKtx)
+    implementation(Firebase.firebaseAnalyticsKtx)
 
     debugImplementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
 }

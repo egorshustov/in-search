@@ -1,7 +1,7 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    id(Plugins.androidLibrary)
+    kotlin(KotlinPlugins.android)
+    kotlin(KotlinPlugins.kapt)
 }
 
 android {
@@ -29,9 +29,9 @@ android {
 dependencies {
     api("androidx.compose.runtime:runtime:${Versions.composeVersion}")
     api("androidx.navigation:navigation-compose:${Versions.navigationComposeVersion}")
-    api("com.google.dagger:hilt-android:${Versions.hiltVersion}")
-    api("androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationComposeVersion}")
+    api(Hilt.hiltAndroid)
+    api(Hilt.hiltNavigationCompose)
     api("com.jakewharton.timber:timber:${Versions.timberVersion}")
 
-    kapt("com.google.dagger:hilt-compiler:${Versions.hiltVersion}")
+    kapt(Hilt.hiltCompiler)
 }

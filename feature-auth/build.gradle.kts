@@ -1,7 +1,7 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    id(Plugins.androidLibrary)
+    kotlin(KotlinPlugins.android)
+    kotlin(KotlinPlugins.kapt)
 }
 
 kapt {
@@ -35,7 +35,7 @@ dependencies {
     implementation(project(":core-common"))
     implementation(project(":core-domain"))
 
-    kapt("com.google.dagger:hilt-compiler:${Versions.hiltVersion}")
+    kapt(Hilt.hiltCompiler)
 
     implementation("androidx.compose.material:material:${Versions.composeVersion}")
     implementation("androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}")
