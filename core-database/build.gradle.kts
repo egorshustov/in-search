@@ -23,7 +23,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = Compose.composeVersion
     }
 }
 
@@ -31,9 +31,9 @@ dependencies {
     implementation(project(":core-common"))
     implementation(project(":core-model"))
 
-    implementation("androidx.room:room-runtime:${Versions.roomVersion}")
-    implementation("androidx.room:room-ktx:${Versions.roomVersion}")
-    ksp("androidx.room:room-compiler:${Versions.roomVersion}")
+    implementation(AndroidX.roomRuntime)
+    implementation(AndroidX.roomKtx)
+    ksp(AndroidX.roomCompiler)
 
     kapt(Hilt.hiltCompiler)
 }

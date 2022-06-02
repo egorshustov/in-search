@@ -26,7 +26,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = Compose.composeVersion
     }
 }
 
@@ -37,6 +37,6 @@ dependencies {
 
     kapt(Hilt.hiltCompiler)
 
-    implementation("androidx.compose.material:material:${Versions.composeVersion}")
-    implementation("androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}")
+    implementation(Compose.material)
+    implementation(Compose.uiToolingPreview)
 }

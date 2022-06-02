@@ -22,16 +22,16 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = Compose.composeVersion
     }
 }
 
 dependencies {
-    api("androidx.compose.runtime:runtime:${Versions.composeVersion}")
-    api("androidx.navigation:navigation-compose:${Versions.navigationComposeVersion}")
+    api(Compose.runtime)
+    api(Compose.navigationCompose)
     api(Hilt.hiltAndroid)
     api(Hilt.hiltNavigationCompose)
-    api("com.jakewharton.timber:timber:${Versions.timberVersion}")
+    api(Timber.timber)
 
     kapt(Hilt.hiltCompiler)
 }

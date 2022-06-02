@@ -45,7 +45,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = Compose.composeVersion
     }
     packagingOptions {
         resources {
@@ -60,24 +60,24 @@ dependencies {
     implementation(project(":feature-auth"))
     implementation(project(":feature-search"))
 
-    implementation("androidx.core:core-ktx:${Versions.coreKtxVersion}")
-    implementation("androidx.appcompat:appcompat:${Versions.appCompatVersion}")
-    implementation("com.google.android.material:material:${Versions.materialVersion}")
-    implementation("androidx.compose.material:material:${Versions.composeVersion}")
-    implementation("androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}")
-    implementation("androidx.activity:activity-compose:${Versions.activityComposeVersion}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleRuntimeKtxVersion}")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanistSystemUiControllerVersion}")
+    implementation(AndroidX.coreKtx)
+    implementation(AndroidX.appCompat)
+    implementation(Google.material)
+    implementation(Compose.material)
+    implementation(Compose.uiToolingPreview)
+    implementation(Compose.activity)
+    implementation(AndroidX.lifecycleRuntimeKtx)
+    implementation(Accompanist.systemUiController)
 
     implementation(Hilt.hiltAndroid)
     kapt(Hilt.hiltCompiler)
 
-    implementation("androidx.work:work-runtime-ktx:${Versions.workVersion}")
+    implementation(AndroidX.workRuntimeKtx)
     implementation(Hilt.hiltWork)
 
     implementation(platform(Firebase.firebaseBom))
     implementation(Firebase.firebaseCrashlyticsKtx)
     implementation(Firebase.firebaseAnalyticsKtx)
 
-    debugImplementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
+    debugImplementation(Compose.uiTooling)
 }

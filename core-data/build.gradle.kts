@@ -22,7 +22,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = Compose.composeVersion
     }
 }
 
@@ -34,5 +34,5 @@ dependencies {
     implementation(project(":core-network"))
 
     kapt(Hilt.hiltCompiler)
-    implementation("androidx.datastore:datastore-preferences:${Versions.datastorePreferencesVersion}")
+    implementation(AndroidX.datastorePreferences)
 }

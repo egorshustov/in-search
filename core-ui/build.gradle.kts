@@ -21,10 +21,10 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = Compose.composeVersion
     }
 }
 
 dependencies {
-    implementation("androidx.compose.runtime:runtime:${Versions.composeVersion}")
+    implementation(Compose.runtime)
 }

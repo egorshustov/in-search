@@ -22,7 +22,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = Compose.composeVersion
     }
 }
 
@@ -32,12 +32,12 @@ dependencies {
     implementation(project(":core-model"))
     implementation(project(":core-domain"))
 
-    implementation("androidx.compose.material:material:${Versions.composeVersion}")
-    implementation("androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}")
+    implementation(Compose.material)
+    implementation(Compose.uiToolingPreview)
 
     kapt(Hilt.hiltCompiler)
     kapt(Hilt.hiltExtensionCompiler)
 
-    implementation("androidx.work:work-runtime-ktx:${Versions.workVersion}")
+    implementation(AndroidX.workRuntimeKtx)
     implementation(Hilt.hiltWork)
 }
