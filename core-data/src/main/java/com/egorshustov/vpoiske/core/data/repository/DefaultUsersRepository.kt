@@ -3,6 +3,7 @@ package com.egorshustov.vpoiske.core.data.repository
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
+import com.egorshustov.vpoiske.core.database.datasource.UsersDatabaseDataSource
 import com.egorshustov.vpoiske.core.model.data.User
 import com.egorshustov.vpoiske.core.model.data.requestsparams.GetUserRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
@@ -20,6 +21,7 @@ import javax.inject.Singleton
 @Singleton
 internal class DefaultUsersRepository @Inject constructor(
     private val usersNetworkDataSource: UsersNetworkDataSource,
+    private val usersDatabaseDataSource: UsersDatabaseDataSource,
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : UsersRepository {
 
