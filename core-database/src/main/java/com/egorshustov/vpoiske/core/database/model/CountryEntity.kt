@@ -6,8 +6,10 @@ import com.egorshustov.vpoiske.core.model.data.Country
 
 @Entity(tableName = "countries")
 data class CountryEntity(
+
     @PrimaryKey
     val id: Int,
+
     val title: String
 )
 

@@ -3,12 +3,12 @@ package com.egorshustov.vpoiske.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
 
 @Entity(tableName = "users")
 data class UserEntity(
+
     @PrimaryKey
-    var id: Long,
+    val id: Long,
 
     @ColumnInfo(name = "first_name")
     val firstName: String,
@@ -18,7 +18,7 @@ data class UserEntity(
 
     val sex: Int,
 
-    @ColumnInfo(name = "b_date")
+    @ColumnInfo(name = "birth_date")
     val birthDate: String,
 
     @ColumnInfo(name = "city_id")
@@ -97,12 +97,11 @@ data class UserEntity(
     val userPhotos: Int,
 
     @ColumnInfo(name = "user_videos")
-    val userVideos: Int
-) {
+    val userVideos: Int,
 
     @ColumnInfo(name = "search_id")
-    var searchId: Long = NO_VALUE.toLong()
+    val searchId: Long,
 
     @ColumnInfo(name = "found_unix_millis")
-    var foundUnixMillis: Long = NO_VALUE.toLong()
-}
+    val foundUnixMillis: Long
+)
