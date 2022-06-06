@@ -1,10 +1,21 @@
 package com.egorshustov.vpoiske.core.database.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import com.egorshustov.vpoiske.core.model.data.City
+import com.egorshustov.vpoiske.core.model.data.Country
+import com.egorshustov.vpoiske.core.model.data.User
 
-@Entity(tableName = "users")
+@Entity(
+    tableName = "users",
+    foreignKeys = [
+        ForeignKey(
+            entity = SearchEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["search_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+    ]
+)
 data class UserEntity(
 
     @PrimaryKey
@@ -16,37 +27,22 @@ data class UserEntity(
     @ColumnInfo(name = "last_name")
     val lastName: String,
 
-    val sex: Int,
+    val sex: Int?,
 
     @ColumnInfo(name = "birth_date")
     val birthDate: String,
 
-    @ColumnInfo(name = "city_id")
-    val cityId: Int,
+    @Embedded(prefix = "city_")
+    val city: CityEmbedded,
 
-    @ColumnInfo(name = "city_title")
-    val cityTitle: String,
-
-    @ColumnInfo(name = "country_id")
-    val countryId: Int,
-
-    @ColumnInfo(name = "country_title")
-    val countryTitle: String,
+    @Embedded(prefix = "country_")
+    val country: CountryEmbedded,
 
     @ColumnInfo(name = "home_town")
-    val homeTown: String?,
+    val homeTown: String,
 
-    @ColumnInfo(name = "photo_id")
-    val photoId: String,
-
-    @ColumnInfo(name = "photo_50")
-    val photo50: String,
-
-    @ColumnInfo(name = "photo_max")
-    val photoMax: String,
-
-    @ColumnInfo(name = "photo_max_orig")
-    val photoMaxOrig: String,
+    @Embedded
+    val photosInfo: UserPhotosInfoEmbedded,
 
     @ColumnInfo(name = "mobile_phone")
     val mobilePhone: String,
@@ -54,54 +50,37 @@ data class UserEntity(
     @ColumnInfo(name = "home_phone")
     val homePhone: String,
 
-    val relation: Int,
+    val relation: Int?,
 
-    val albums: Int,
+    @Embedded
+    val counters: UserCountersEmbedded,
 
-    val videos: Int,
-
-    val audios: Int,
-
-    val photos: Int,
-
-    val notes: Int,
-
-    val gifts: Int,
-
-    val friends: Int,
-
-    val groups: Int,
-
-    val followers: Int,
-
-    val subscriptions: Int,
-
-    val pages: Int,
-
-    @ColumnInfo(name = "is_closed")
-    val isClosed: Boolean,
-
-    @ColumnInfo(name = "can_access_closed")
-    val canAccessClosed: Boolean,
-
-    @ColumnInfo(name = "can_write_private_message")
-    val canWritePrivateMessage: Int,
-
-    @ColumnInfo(name = "can_send_friend_request")
-    val canSendFriendRequest: Int,
-
-    @ColumnInfo(name = "mutual_friends")
-    val mutualFriends: Int,
-
-    @ColumnInfo(name = "user_photos")
-    val userPhotos: Int,
-
-    @ColumnInfo(name = "user_videos")
-    val userVideos: Int,
+    @Embedded
+    val permissions: UserPermissionsEmbedded,
 
     @ColumnInfo(name = "search_id")
     val searchId: Long,
 
     @ColumnInfo(name = "found_unix_millis")
     val foundUnixMillis: Long
+)
+
+fun UserEntity.asExternalModel() = User(
+    id = id,
+    firstName = firstName,
+    lastName = lastName,
+    sex = sex,
+    birthDate = birthDate,
+    city = city.id?.let { City(it, city.title, city.area, city.region) },
+    country = country.id?.let { Country(it, country.title) },
+    homeTown = homeTown,
+    photosInfo = photosInfo.asExternalModel(),
+    mobilePhone = mobilePhone,
+    homePhone = homePhone,
+    relation = relation,
+    lastSeen = null,
+    counters = counters.asExternalModel(),
+    permissions = permissions.asExternalModel(),
+    searchId = searchId,
+    foundUnixMillis = foundUnixMillis
 )

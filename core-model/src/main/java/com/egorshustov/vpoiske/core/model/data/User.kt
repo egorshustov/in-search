@@ -15,7 +15,7 @@ data class User(
     val relation: Int?,
     val lastSeen: UserLastSeen?,
     val counters: UserCounters?,
-    val usersPermissions: UserPermissions,
+    val permissions: UserPermissions,
     // custom fields:
     var searchId: Long?,
     var foundUnixMillis: Long?

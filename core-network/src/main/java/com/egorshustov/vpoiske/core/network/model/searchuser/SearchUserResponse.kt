@@ -94,7 +94,7 @@ fun SearchUserResponse.asExternalModel() = User(
     relation = relation,
     lastSeen = lastSeen.asExternalModel(),
     counters = getUserCounters(),
-    usersPermissions = getUserPermissions(),
+    permissions = getUserPermissions(),
     searchId = null,
     foundUnixMillis = null
 )
