@@ -1,6 +1,7 @@
 package com.egorshustov.vpoiske.core.database.model
 
 import androidx.room.*
+import com.egorshustov.vpoiske.core.common.utils.UnixMillis
 import com.egorshustov.vpoiske.core.model.data.City
 import com.egorshustov.vpoiske.core.model.data.Country
 import com.egorshustov.vpoiske.core.model.data.User
@@ -82,5 +83,5 @@ fun UserEntity.asExternalModel() = User(
     counters = counters.asExternalModel(),
     permissions = permissions.asExternalModel(),
     searchId = searchId,
-    foundUnixMillis = foundUnixMillis
+    foundTime = UnixMillis(foundUnixMillis)
 )

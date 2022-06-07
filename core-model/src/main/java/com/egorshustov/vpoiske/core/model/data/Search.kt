@@ -1,5 +1,7 @@
 package com.egorshustov.vpoiske.core.model.data
 
+import com.egorshustov.vpoiske.core.common.utils.UnixSeconds
+
 data class Search(
     val countryId: Int,
     val countryTitle: String,
@@ -17,5 +19,5 @@ data class Search(
     val friendsMaxCount: Int?,
     val followersMinCount: Int,
     val followersMaxCount: Int,
-    val startUnixSeconds: Int
+    val startTime: UnixSeconds
 )

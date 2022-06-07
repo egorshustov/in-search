@@ -26,5 +26,7 @@ android {
 
 
 dependencies {
+    implementation(project(":core-common"))
+    
     implementation(Compose.runtime)
 }

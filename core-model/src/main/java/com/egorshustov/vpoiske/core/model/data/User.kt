@@ -1,5 +1,7 @@
 package com.egorshustov.vpoiske.core.model.data
 
+import com.egorshustov.vpoiske.core.common.utils.UnixMillis
+
 data class User(
     val id: Long,
     val firstName: String,
@@ -18,5 +20,5 @@ data class User(
     val permissions: UserPermissions,
     // custom fields:
     var searchId: Long?,
-    var foundUnixMillis: Long?
+    var foundTime: UnixMillis?
 )

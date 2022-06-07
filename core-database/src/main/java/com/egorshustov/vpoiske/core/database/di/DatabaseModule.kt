@@ -40,7 +40,7 @@ internal interface DatabaseModule {
                 context,
                 AppDatabase::class.java,
                 "VPoiske.db"
-            ).build()
+            ).fallbackToDestructiveMigration().build() // TODO: check that fallback is working fine
 
         @Singleton
         @Provides

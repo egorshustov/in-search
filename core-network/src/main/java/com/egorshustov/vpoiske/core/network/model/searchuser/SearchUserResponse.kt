@@ -1,6 +1,7 @@
 package com.egorshustov.vpoiske.core.network.model.searchuser
 
 import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
+import com.egorshustov.vpoiske.core.common.utils.UrlString
 import com.egorshustov.vpoiske.core.model.data.User
 import com.egorshustov.vpoiske.core.model.data.UserCounters
 import com.egorshustov.vpoiske.core.model.data.UserPermissions
@@ -49,13 +50,13 @@ data class SearchUserResponse(
     val photoId: String? = null,
 
     @SerialName("photo_50")
-    val photo50Url: String? = null,
+    val photo50: UrlString? = null,
 
     @SerialName("photo_max")
-    val photoMaxUrl: String? = null,
+    val photoMax: UrlString? = null,
 
     @SerialName("photo_max_orig")
-    val photoMaxOrigUrl: String? = null,
+    val photoMaxOrig: UrlString? = null,
 
     @SerialName("can_write_private_message")
     val canWritePrivateMessage: Int? = null,
@@ -96,16 +97,16 @@ fun SearchUserResponse.asExternalModel() = User(
     counters = getUserCounters(),
     permissions = getUserPermissions(),
     searchId = null,
-    foundUnixMillis = null
+    foundTime = null
 )
 
 fun List<SearchUserResponse>.asExternalModelList(): List<User> = map { it.asExternalModel() }
 
 fun SearchUserResponse.getUserPhotosInfo() = UserPhotosInfo(
     photoId = photoId.orEmpty(),
-    photo50Url = photo50Url.orEmpty(),
-    photoMaxUrl = photoMaxUrl.orEmpty(),
-    photoMaxOrigUrl = photoMaxOrigUrl.orEmpty()
+    photo50 = photo50.orEmpty(),
+    photoMax = photoMax.orEmpty(),
+    photoMaxOrig = photoMaxOrig.orEmpty()
 )
 
 fun SearchUserResponse.getUserCounters() = UserCounters(

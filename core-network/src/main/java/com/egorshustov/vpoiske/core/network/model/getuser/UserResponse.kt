@@ -1,6 +1,7 @@
 package com.egorshustov.vpoiske.core.network.model.getuser
 
 import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
+import com.egorshustov.vpoiske.core.common.utils.UrlString
 import com.egorshustov.vpoiske.core.model.data.User
 import com.egorshustov.vpoiske.core.model.data.UserPermissions
 import com.egorshustov.vpoiske.core.model.data.UserPhotosInfo
@@ -30,7 +31,7 @@ data class UserResponse(
     val canAccessClosed: Boolean? = null,
 
     @SerialName("sex")
-    val sex: Int? = null,
+    val sexId: Int? = null,
 
     @SerialName("bdate")
     val birthDate: String? = null,
@@ -48,13 +49,13 @@ data class UserResponse(
     val photoId: String?,
 
     @SerialName("photo_50")
-    val photo50Url: String? = null,
+    val photo50: UrlString? = null,
 
     @SerialName("photo_max")
-    val photoMaxUrl: String? = null,
+    val photoMax: UrlString? = null,
 
     @SerialName("photo_max_orig")
-    val photoMaxOrigUrl: String? = null,
+    val photoMaxOrig: UrlString? = null,
 
     @SerialName("can_write_private_message")
     val canWritePrivateMessage: Int? = null,
@@ -69,7 +70,7 @@ data class UserResponse(
     val homePhone: String? = null,
 
     @SerialName("relation")
-    val relation: Int? = null,
+    val relationId: Int? = null,
 
     @SerialName("counters")
     val counters: UserCountersResponse? = null
@@ -79,7 +80,7 @@ fun UserResponse.asExternalModel() = User(
     id = id ?: NO_VALUE.toLong(),
     firstName = firstName.orEmpty(),
     lastName = lastName.orEmpty(),
-    sex = sex,
+    sex = sexId,
     birthDate = birthDate.orEmpty(),
     city = city.asExternalModel(),
     country = country.asExternalModel(),
@@ -87,19 +88,19 @@ fun UserResponse.asExternalModel() = User(
     photosInfo = getUserPhotosInfo(),
     mobilePhone = mobilePhone.orEmpty(),
     homePhone = homePhone.orEmpty(),
-    relation = relation,
+    relation = relationId,
     lastSeen = null,
     counters = counters.asExternalModel(),
     permissions = getUserPermissions(),
     searchId = null,
-    foundUnixMillis = null
+    foundTime = null
 )
 
 fun UserResponse.getUserPhotosInfo() = UserPhotosInfo(
     photoId = photoId.orEmpty(),
-    photo50Url = photo50Url.orEmpty(),
-    photoMaxUrl = photoMaxUrl.orEmpty(),
-    photoMaxOrigUrl = photoMaxOrigUrl.orEmpty()
+    photo50 = photo50.orEmpty(),
+    photoMax = photoMax.orEmpty(),
+    photoMaxOrig = photoMaxOrig.orEmpty()
 )
 
 fun UserResponse.getUserPermissions() = UserPermissions(

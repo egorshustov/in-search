@@ -1,6 +1,8 @@
 package com.egorshustov.vpoiske.core.model.data
 
+import com.egorshustov.vpoiske.core.common.utils.UnixSeconds
+
 data class UserLastSeen(
-    val timeUnixSeconds: Int? = null,
-    val platform: Int? = null
+    val time: UnixSeconds? = null,
+    val platformId: Int? = null
 )
