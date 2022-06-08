@@ -1,4 +1,4 @@
-package com.egorshustov.core.common.utils
+package com.egorshustov.vpoiske.core.common.utils
 
 import android.webkit.WebView
 import kotlinx.coroutines.CoroutineScope

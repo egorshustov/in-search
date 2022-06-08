@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import com.egorshustov.core.common.utils.showMessage
+import com.egorshustov.vpoiske.core.common.utils.showMessage
 import com.egorshustov.vpoiske.feature.auth.R
 
 @OptIn(ExperimentalComposeUiApi::class)

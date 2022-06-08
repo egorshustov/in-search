@@ -2,9 +2,8 @@ package com.egorshustov.vpoiske.core.database.model
 
 import androidx.room.*
 import com.egorshustov.vpoiske.core.common.utils.UnixMillis
-import com.egorshustov.vpoiske.core.model.data.City
-import com.egorshustov.vpoiske.core.model.data.Country
-import com.egorshustov.vpoiske.core.model.data.User
+import com.egorshustov.vpoiske.core.model.data.*
+import com.egorshustov.vpoiske.core.model.data.Relation
 
 @Entity(
     tableName = "users",
@@ -28,7 +27,7 @@ data class UserEntity(
     @ColumnInfo(name = "last_name")
     val lastName: String,
 
-    val sex: Int?,
+    val gender: Gender?,
 
     @ColumnInfo(name = "birth_date")
     val birthDate: String,
@@ -51,7 +50,7 @@ data class UserEntity(
     @ColumnInfo(name = "home_phone")
     val homePhone: String,
 
-    val relation: Int?,
+    val relation: Relation?,
 
     @Embedded
     val counters: UserCountersEmbedded,
@@ -70,7 +69,7 @@ fun UserEntity.asExternalModel() = User(
     id = id,
     firstName = firstName,
     lastName = lastName,
-    sex = sex,
+    gender = gender,
     birthDate = birthDate,
     city = city.id?.let { City(it, city.title, city.area, city.region) },
     country = country.id?.let { Country(it, country.title) },

@@ -7,9 +7,9 @@
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
 
-    <string name="sex_any">Любой</string>
-    <string name="sex_female">Женский</string>
-    <string name="sex_male">Мужской</string>
+    <string name="gender_any">Любой</string>
+    <string name="gender_female">Женский</string>
+    <string name="gender_male">Мужской</string>
 
     <string name="relation_female_any">Любое</string>
     <string name="relation_male_any">Любое</string>

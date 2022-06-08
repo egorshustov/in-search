@@ -2,10 +2,7 @@ package com.egorshustov.vpoiske.core.network.model.searchuser
 
 import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
 import com.egorshustov.vpoiske.core.common.utils.UrlString
-import com.egorshustov.vpoiske.core.model.data.User
-import com.egorshustov.vpoiske.core.model.data.UserCounters
-import com.egorshustov.vpoiske.core.model.data.UserPermissions
-import com.egorshustov.vpoiske.core.model.data.UserPhotosInfo
+import com.egorshustov.vpoiske.core.model.data.*
 import com.egorshustov.vpoiske.core.network.model.getcities.CityResponse
 import com.egorshustov.vpoiske.core.network.model.getcities.asExternalModel
 import com.egorshustov.vpoiske.core.network.model.getcountries.CountryResponse
@@ -32,7 +29,7 @@ data class SearchUserResponse(
     val canAccessClosed: Boolean? = null,
 
     @SerialName("sex")
-    val sex: Int? = null,
+    val genderId: Int? = null,
 
     @SerialName("bdate")
     val birthDate: String? = null,
@@ -71,7 +68,7 @@ data class SearchUserResponse(
     val homePhone: String? = null,
 
     @SerialName("relation")
-    val relation: Int? = null,
+    val relationId: Int? = null,
 
     @SerialName("last_seen")
     val lastSeen: UserLastSeenResponse? = null,
@@ -84,7 +81,7 @@ fun SearchUserResponse.asExternalModel() = User(
     id = id ?: NO_VALUE.toLong(),
     firstName = firstName.orEmpty(),
     lastName = lastName.orEmpty(),
-    sex = sex,
+    gender = Gender.getByIdOrNull(genderId),
     birthDate = birthDate.orEmpty(),
     city = city.asExternalModel(),
     country = country.asExternalModel(),
@@ -92,7 +89,7 @@ fun SearchUserResponse.asExternalModel() = User(
     photosInfo = getUserPhotosInfo(),
     mobilePhone = mobilePhone.orEmpty(),
     homePhone = homePhone.orEmpty(),
-    relation = relation,
+    relation = Relation.getByIdOrNull(relationId),
     lastSeen = lastSeen.asExternalModel(),
     counters = getUserCounters(),
     permissions = getUserPermissions(),

@@ -1,23 +1,17 @@
-package com.egorshustov.vpoiske.core.common.utils
+package com.egorshustov.vpoiske.core.model.data
 
 import android.content.Context
 import androidx.annotation.StringRes
-import com.egorshustov.vpoiske.core.common.R
-
-enum class Sex(val value: Int?, @StringRes private val descriptionRes: Int) {
-    ANY(null, R.string.sex_any),
-    FEMALE(1, R.string.sex_female),
-    MALE(2, R.string.sex_male);
-
-    fun getDescription(context: Context) = context.getString(descriptionRes)
-}
+import com.egorshustov.vpoiske.core.model.R
 
 enum class Relation(
-    val value: Int,
+    val id: Int,
     @StringRes private val descriptionFemaleRes: Int,
-    @StringRes private val descriptionMaleRes: Int
+    @StringRes private val descriptionMaleRes: Int,
+    val gender: Gender = Gender.FEMALE
 ) {
-    ANY(0, R.string.relation_female_any, R.string.relation_male_any),
+
+    NOT_DEFINED(0, R.string.relation_female_any, R.string.relation_male_any),
     NOT_MARRIED(1, R.string.relation_female_not_married, R.string.relation_male_not_married),
     HAS_FRIEND(2, R.string.relation_female_has_friend, R.string.relation_male_has_friend),
     ENGAGED(3, R.string.relation_female_engaged, R.string.relation_male_engaged),
@@ -28,9 +22,10 @@ enum class Relation(
     IN_CIVIL_MARRIAGE(8, R.string.relation_female_in_civil_marriage, R.string.relation_male_in_civil_marriage);
 
     fun getDescription(context: Context) =
-        context.getString(if (sex == Sex.FEMALE) descriptionFemaleRes else descriptionMaleRes)
+        context.getString(if (gender == Gender.FEMALE) descriptionFemaleRes else descriptionMaleRes)
 
     companion object {
-        var sex = Sex.FEMALE
+
+        fun getByIdOrNull(relationId: Int?): Relation? = values().find { it.id == relationId }
     }
 }

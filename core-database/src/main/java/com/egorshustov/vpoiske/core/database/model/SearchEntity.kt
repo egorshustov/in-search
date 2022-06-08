@@ -3,6 +3,8 @@ package com.egorshustov.vpoiske.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.egorshustov.vpoiske.core.model.data.Gender
+import com.egorshustov.vpoiske.core.model.data.Relation
 
 @Entity(tableName = "searches")
 data class SearchEntity(
@@ -22,7 +24,7 @@ data class SearchEntity(
     @ColumnInfo(name = "home_town")
     val homeTown: String?,
 
-    val sex: Int,
+    val gender: Gender,
 
     @ColumnInfo(name = "age_from")
     val ageFrom: Int?,
@@ -30,7 +32,7 @@ data class SearchEntity(
     @ColumnInfo(name = "age_to")
     val ageTo: Int?,
 
-    val relation: Int?,
+    val relation: Relation,
 
     @ColumnInfo(name = "with_phone_only")
     val withPhoneOnly: Boolean,

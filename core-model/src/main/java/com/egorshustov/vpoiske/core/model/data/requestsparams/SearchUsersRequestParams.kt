@@ -9,9 +9,9 @@ data class SearchUsersRequestParams(
     val birthMonth: Int,
     val fields: String,
     val homeTown: String?,
-    val relation: Int?,
-    val sex: Int,
-    val hasPhoto: Int,
+    val relationId: Int?,
+    val genderId: Int,
+    val hasPhoto: Boolean,
     val count: Int,
-    val sortType: Int
+    val sortTypeId: Int
 )

@@ -79,11 +79,11 @@ internal class MainSearchViewModel @Inject constructor(
                     birthMonth = 3,
                     fields = "last_seen,contacts,followers_count,photo_id,sex,bdate,city,country,home_town,photo_50,photo_max,photo_max_orig,contacts,relation,can_write_private_message,can_send_friend_request,can_write_private_message",
                     homeTown = null,
-                    relation = 1,
-                    sex = 1,
-                    hasPhoto = 1,
+                    relationId = 1,
+                    genderId = 1,
+                    hasPhoto = true,
                     count = 1000,
-                    sortType = 1
+                    sortTypeId = 1
                 ),
                 commonParams = VkCommonRequestParams(
                     accessToken = accessToken.orEmpty(),

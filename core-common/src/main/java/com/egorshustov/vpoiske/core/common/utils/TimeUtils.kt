@@ -1,7 +1,5 @@
 package com.egorshustov.vpoiske.core.common.utils
 
-typealias UrlString = String
-
 @JvmInline
 value class Seconds(val count: Int)
 typealias UnixSeconds = Seconds

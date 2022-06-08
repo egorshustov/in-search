@@ -7,13 +7,14 @@ import android.webkit.WebView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.viewinterop.AndroidView
+import com.egorshustov.vpoiske.core.common.network.AppJsInterface
+import com.egorshustov.vpoiske.core.common.utils.UrlString
+import com.egorshustov.vpoiske.core.common.utils.evaluateJavascriptInMainThread
+import com.egorshustov.vpoiske.core.common.utils.loadUrlInMainThread
+import com.egorshustov.vpoiske.core.common.utils.prepareUrlAndParseSafely
 import com.egorshustov.vpoiske.feature.auth.utils.AuthErrorType
 import com.egorshustov.vpoiske.feature.auth.utils.AuthHelper
 import com.egorshustov.vpoiske.feature.auth.utils.AuthRequestType
-import com.egorshustov.vpoiske.core.common.network.AppJsInterface
-import com.egorshustov.core.common.utils.evaluateJavascriptInMainThread
-import com.egorshustov.core.common.utils.loadUrlInMainThread
-import com.egorshustov.core.common.utils.prepareUrlAndParseSafely
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +52,7 @@ internal fun AuthProcessWebView(
         }
         appJsInterface.setObtainPageCallback(object : AppJsInterface.ObtainPageCallback {
 
-            override fun onPageObtained(url: String, html: String) {
+            override fun onPageObtained(url: UrlString, html: String) {
                 val uri = url.prepareUrlAndParseSafely() ?: return
                 when (currentRequestType) {
                     AuthRequestType.IMPLICIT_FLOW -> {
