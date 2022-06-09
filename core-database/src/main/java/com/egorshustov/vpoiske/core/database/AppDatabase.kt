@@ -22,7 +22,7 @@ import com.egorshustov.vpoiske.core.database.util.RelationConverter
 )
 @TypeConverters(
     GenderConverter::class,
-    RelationConverter::class,
+    RelationConverter::class
 )
 internal abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao

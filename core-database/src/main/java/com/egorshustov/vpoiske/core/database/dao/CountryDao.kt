@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface CountryDao {
 
-    @Query("select * from countries")
+    @Query("SELECT * FROM countries")
     fun getCountriesStream(): Flow<List<CountryEntity>>
 
     @Transaction
