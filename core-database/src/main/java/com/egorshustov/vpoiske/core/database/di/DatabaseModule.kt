@@ -4,11 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.egorshustov.vpoiske.core.database.AppDatabase
 import com.egorshustov.vpoiske.core.database.dao.CountryDao
+import com.egorshustov.vpoiske.core.database.dao.SearchDao
 import com.egorshustov.vpoiske.core.database.dao.UserDao
-import com.egorshustov.vpoiske.core.database.datasource.CountriesDatabaseDataSource
-import com.egorshustov.vpoiske.core.database.datasource.CountriesRoomDataSource
-import com.egorshustov.vpoiske.core.database.datasource.UsersDatabaseDataSource
-import com.egorshustov.vpoiske.core.database.datasource.UsersRoomDataSource
+import com.egorshustov.vpoiske.core.database.datasource.*
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -25,6 +23,11 @@ internal interface DatabaseModule {
     fun bindUsersDatabaseDataSource(
         usersRoomDataSource: UsersRoomDataSource
     ): UsersDatabaseDataSource
+
+    @Binds
+    fun bindSearchesDatabaseDataSource(
+        searchesRoomDataSource: SearchesRoomDataSource
+    ): SearchesDatabaseDataSource
 
     @Binds
     fun bindCountriesDatabaseDataSource(
@@ -46,6 +49,11 @@ internal interface DatabaseModule {
         @Provides
         internal fun provideUserDao(appDatabase: AppDatabase): UserDao =
             appDatabase.userDao()
+
+        @Singleton
+        @Provides
+        internal fun provideSearchDao(appDatabase: AppDatabase): SearchDao =
+            appDatabase.searchDao()
 
         @Singleton
         @Provides

@@ -16,6 +16,11 @@ internal interface DataModule {
     ): UsersRepository
 
     @Binds
+    fun bindsSearchesRepository(
+        defaultSearchesRepository: DefaultSearchesRepository
+    ): SearchesRepository
+
+    @Binds
     fun bindsCountriesRepository(
         defaultCountriesRepository: DefaultCountriesRepository
     ): CountriesRepository

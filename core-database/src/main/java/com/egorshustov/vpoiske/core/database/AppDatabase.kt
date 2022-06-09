@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.egorshustov.vpoiske.core.database.dao.CountryDao
+import com.egorshustov.vpoiske.core.database.dao.SearchDao
 import com.egorshustov.vpoiske.core.database.dao.UserDao
 import com.egorshustov.vpoiske.core.database.model.CountryEntity
 import com.egorshustov.vpoiske.core.database.model.SearchEntity
@@ -26,5 +27,6 @@ import com.egorshustov.vpoiske.core.database.util.RelationConverter
 )
 internal abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun searchDao(): SearchDao
     abstract fun countryDao(): CountryDao
 }
