@@ -11,4 +11,7 @@ object Compose {
 
     private const val composeNavigationVersion = "2.4.2"
     const val navigationCompose = "androidx.navigation:navigation-compose:$composeNavigationVersion"
+
+    private const val composePagingVersion = "1.0.0-alpha15"
+    const val pagingCompose = "androidx.paging:paging-compose:$composePagingVersion"
 }
