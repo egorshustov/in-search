@@ -84,3 +84,5 @@ fun UserEntity.asExternalModel() = User(
     searchId = searchId,
     foundTime = UnixMillis(foundUnixMillis)
 )
+
+fun List<UserEntity>.asExternalModelList() = mapNotNull { it.asExternalModel() }

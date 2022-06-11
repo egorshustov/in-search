@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":core-datastore"))
     implementation(project(":core-network"))
 
+    implementation(AndroidX.roomPaging)
+
     kapt(Hilt.hiltCompiler)
-    implementation(AndroidX.datastorePreferences)
 }

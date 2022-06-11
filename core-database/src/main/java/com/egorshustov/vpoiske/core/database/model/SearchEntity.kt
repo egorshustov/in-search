@@ -3,8 +3,8 @@ package com.egorshustov.vpoiske.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.egorshustov.vpoiske.core.model.data.Gender
-import com.egorshustov.vpoiske.core.model.data.Relation
+import com.egorshustov.vpoiske.core.common.utils.UnixSeconds
+import com.egorshustov.vpoiske.core.model.data.*
 
 @Entity(tableName = "searches")
 data class SearchEntity(
@@ -61,3 +61,21 @@ data class SearchEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 }
+
+fun SearchEntity.asExternalModel() = Search(
+    country = Country(countryId, countryTitle),
+    city = City(cityId, cityTitle, "", ""),
+    homeTown = homeTown,
+    gender = gender,
+    ageFrom = ageFrom,
+    ageTo = ageTo,
+    relation = relation,
+    withPhoneOnly = withPhoneOnly,
+    foundUsersLimit = foundUsersLimit,
+    daysInterval = daysInterval,
+    friendsMinCount = friendsMinCount,
+    friendsMaxCount = friendsMaxCount,
+    followersMinCount = followersMinCount,
+    followersMaxCount = followersMaxCount,
+    startTime = UnixSeconds(startUnixSeconds)
+)
