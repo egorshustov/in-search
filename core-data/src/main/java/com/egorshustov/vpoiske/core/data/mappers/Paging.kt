@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
  * @param params - parameters for [PagingConfig] class of [Pager]
  * @param transform - data transformation function
  */
-inline fun <
+internal inline fun <
         reified SourceKeyType : Any,
         reified SourceValueType : Any,
         reified ReturnValueType : Any>

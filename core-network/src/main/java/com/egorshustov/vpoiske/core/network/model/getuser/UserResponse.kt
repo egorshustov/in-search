@@ -1,6 +1,6 @@
 package com.egorshustov.vpoiske.core.network.model.getuser
 
-import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
+import com.egorshustov.vpoiske.core.common.utils.NO_VALUE_L
 import com.egorshustov.vpoiske.core.common.utils.UrlString
 import com.egorshustov.vpoiske.core.model.data.*
 import com.egorshustov.vpoiske.core.network.model.getcities.CityResponse
@@ -75,7 +75,7 @@ data class UserResponse(
 )
 
 fun UserResponse.asExternalModel() = User(
-    id = id ?: NO_VALUE.toLong(),
+    id = id ?: NO_VALUE_L,
     firstName = firstName.orEmpty(),
     lastName = lastName.orEmpty(),
     gender = Gender.getByIdOrNull(genderId),

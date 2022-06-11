@@ -1,25 +1,21 @@
 package com.egorshustov.vpoiske.core.database.model
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
 import com.egorshustov.vpoiske.core.common.utils.UnixSeconds
 import com.egorshustov.vpoiske.core.model.data.*
 
 @Entity(tableName = "searches")
 data class SearchEntity(
 
-    @ColumnInfo(name = "country_id")
-    val countryId: Int,
+    @Embedded(prefix = "country_")
+    val country: CountryEmbedded,
 
-    @ColumnInfo(name = "country_title")
-    val countryTitle: String,
-
-    @ColumnInfo(name = "city_id")
-    val cityId: Int,
-
-    @ColumnInfo(name = "city_title")
-    val cityTitle: String,
+    @Embedded(prefix = "city_")
+    val city: CityEmbedded,
 
     @ColumnInfo(name = "home_town")
     val homeTown: String?,
@@ -63,8 +59,8 @@ data class SearchEntity(
 }
 
 fun SearchEntity.asExternalModel() = Search(
-    country = Country(countryId, countryTitle),
-    city = City(cityId, cityTitle, "", ""),
+    country = Country(country.id ?: NO_VALUE, country.title),
+    city = City(city.id ?: NO_VALUE, city.title, "", ""),
     homeTown = homeTown,
     gender = gender,
     ageFrom = ageFrom,

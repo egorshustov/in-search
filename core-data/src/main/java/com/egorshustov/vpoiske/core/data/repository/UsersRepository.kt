@@ -2,12 +2,18 @@ package com.egorshustov.vpoiske.core.data.repository
 
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.model.data.User
-import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.GetUserRequestParams
+import com.egorshustov.vpoiske.core.model.data.requestsparams.SearchUsersRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import kotlinx.coroutines.flow.Flow
 
 interface UsersRepository {
+
+    fun getUsersStream(searchId: Long): Flow<List<User>>
+
+    suspend fun saveUser(user: User): Result<Long>
+
+    suspend fun saveUsers(users: List<User>): Result<List<Long>>
 
     fun searchUsers(
         searchUsersParams: SearchUsersRequestParams,

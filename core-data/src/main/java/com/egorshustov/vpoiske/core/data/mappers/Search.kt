@@ -3,11 +3,9 @@ package com.egorshustov.vpoiske.core.data.mappers
 import com.egorshustov.vpoiske.core.database.model.SearchEntity
 import com.egorshustov.vpoiske.core.model.data.Search
 
-fun Search.asEntity() = SearchEntity(
-    countryId = country.id,
-    countryTitle = country.title,
-    cityId = city.id,
-    cityTitle = city.title,
+internal fun Search.asEntity() = SearchEntity(
+    country = country.asEmbedded(),
+    city = city.asEmbedded(),
     homeTown = homeTown,
     gender = gender,
     ageFrom = ageFrom,

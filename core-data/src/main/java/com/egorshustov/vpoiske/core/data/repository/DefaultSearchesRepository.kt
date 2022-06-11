@@ -27,7 +27,7 @@ internal class DefaultSearchesRepository @Inject constructor(
     override fun getSearchesWithUsers(params: PagingConfigParams): Flow<PagingData<SearchWithUsers>> =
         searchesDatabaseDataSource.getSearchesWithUsers().asPagingDataStream(params) {
             it.asExternalModel()
-        }
+        }.flowOn(ioDispatcher)
 
     override fun getLastSearchIdStream(): Flow<Long?> = searchesDatabaseDataSource
         .getLastSearchIdStream()
