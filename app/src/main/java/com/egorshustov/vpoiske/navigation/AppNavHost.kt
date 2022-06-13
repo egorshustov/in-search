@@ -19,7 +19,7 @@ import com.egorshustov.vpoiske.feature.search.navigation.searchGraph
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = AuthDestination.graphDestination
+    startDestination: String = SearchDestination.graphDestination
 ) {
 
     NavHost(
@@ -28,21 +28,22 @@ fun AppNavHost(
         modifier = modifier
     ) {
 
-        authGraph(
-            navigateToSearch = {
-                navController.navigate(SearchDestination.graphDestination) {
-                    launchSingleTop = true
-                    popUpTo(AuthDestination.graphDestination) { inclusive = true }
-                }
-            },
-            modifier = modifier
-        )
-
         searchGraph(
             navigateToAuth = {
                 navController.navigate(AuthDestination.graphDestination) {
                     launchSingleTop = true
                     popUpTo(SearchDestination.graphDestination) { inclusive = true }
+                }
+            },
+            modifier = modifier
+        )
+
+        authGraph(
+            navigateToSearch = {
+                navController.navigateUp()
+                navController.navigate(SearchDestination.graphDestination) {
+                    launchSingleTop = true
+                    popUpTo(AuthDestination.graphDestination) { inclusive = true }
                 }
             },
             modifier = modifier
