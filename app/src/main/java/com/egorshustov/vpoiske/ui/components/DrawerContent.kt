@@ -11,12 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.egorshustov.vpoiske.R
 import com.egorshustov.vpoiske.feature.search.navigation.SearchFeatureScreens
-import com.egorshustov.vpoiske.ui.models.ClickedDrawerItem
+import com.egorshustov.vpoiske.navigation.TopLevelDestination
 
 @Composable
 fun drawerContent(
     currentRoute: String,
-    onItemClick: (item: ClickedDrawerItem) -> Unit,
+    onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
+    onChangeThemeClick: () -> Unit,
     modifier: Modifier = Modifier
 ): @Composable (ColumnScope.() -> Unit)? {
     val routesWithDrawer = remember { SearchFeatureScreens.values().map { it.screenRoute } }
@@ -27,30 +28,21 @@ fun drawerContent(
                     .fillMaxSize()
                     .padding(start = 24.dp, top = 120.dp, end = 24.dp)
             ) {
-                DrawerItem(
-                    textResId = R.string.last_search,
-                    drawableResId = R.drawable.ic_baseline_format_list_bulleted_24,
-                    onClick = { onItemClick(ClickedDrawerItem.LAST_SEARCH) }
-                )
 
-                DrawerItem(
-                    textResId = R.string.new_search,
-                    drawableResId = R.drawable.ic_baseline_person_search_24,
-                    onClick = { onItemClick(ClickedDrawerItem.NEW_SEARCH) }
-                )
-
-                DrawerItem(
-                    textResId = R.string.search_history,
-                    drawableResId = R.drawable.ic_baseline_history_24,
-                    onClick = { onItemClick(ClickedDrawerItem.SEARCH_HISTORY) }
-                )
+                TopLevelDestination.values().forEach { destination ->
+                    DrawerItem(
+                        textResId = destination.titleResId,
+                        drawableResId = destination.drawableResId,
+                        onClick = { onNavigateToTopLevelDestination(destination) }
+                    )
+                }
 
                 Divider(modifier = Modifier.padding(8.dp))
 
                 DrawerItem(
                     textResId = R.string.change_theme,
                     drawableResId = R.drawable.ic_baseline_wb_sunny_24,
-                    onClick = { onItemClick(ClickedDrawerItem.CHANGE_THEME) }
+                    onClick = { onChangeThemeClick() }
                 )
             }
         }

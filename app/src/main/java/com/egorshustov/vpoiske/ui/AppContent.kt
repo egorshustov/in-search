@@ -12,11 +12,10 @@ import com.egorshustov.vpoiske.core.navigation.getCurrentRoute
 import com.egorshustov.vpoiske.feature.search.navigation.SearchFeatureScreens
 import com.egorshustov.vpoiske.navigation.AppNavHost
 import com.egorshustov.vpoiske.navigation.AppTopLevelNavigation
-import com.egorshustov.vpoiske.navigation.TopLevelDestinations
+import com.egorshustov.vpoiske.navigation.TopLevelDestination
 import com.egorshustov.vpoiske.ui.components.drawerContent
 import com.egorshustov.vpoiske.ui.components.navigationIconButton
 import com.egorshustov.vpoiske.ui.components.topAppBarTitle
-import com.egorshustov.vpoiske.ui.models.ClickedDrawerItem
 import com.egorshustov.vpoiske.ui.theme.VPoiskeTheme
 import com.egorshustov.vpoiske.utils.BackPressHandler
 import kotlinx.coroutines.launch
@@ -58,21 +57,15 @@ fun AppContent() {
             },
             drawerContent = drawerContent(
                 currentRoute = navController.getCurrentRoute(),
-                onItemClick = { item ->
+                onNavigateToTopLevelDestination = { destination ->
                     coroutineScope.launch { scaffoldState.drawerState.close() }
-                    when (item) {
-                        ClickedDrawerItem.LAST_SEARCH -> {
-                            // No need to navigate to last search screen,
-                            // because if we're able to click on this, we're already in here
-                        }
-                        ClickedDrawerItem.NEW_SEARCH ->
-                            appTopLevelNavigation.navigateTo(TopLevelDestinations.NEW_SEARCH)
-                        ClickedDrawerItem.SEARCH_HISTORY -> {
-                        }
-                        ClickedDrawerItem.CHANGE_THEME -> {
-                        }
+                    if (destination != TopLevelDestination.LAST_SEARCH) {
+                        // (No need to navigate to last search screen,
+                        // because if we're able to click on this, we're already in here)
+                        appTopLevelNavigation.navigateTo(destination)
                     }
                 },
+                onChangeThemeClick = {}
             )
         ) { innerPaddingModifier ->
             AppNavHost(

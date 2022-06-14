@@ -39,13 +39,7 @@ fun AppNavHost(
         )
 
         authGraph(
-            navigateToSearch = {
-                navController.navigateUp()
-                navController.navigate(SearchDestination.graphDestination) {
-                    launchSingleTop = true
-                    popUpTo(AuthDestination.graphDestination) { inclusive = true }
-                }
-            },
+            returnToPreviousScreen = { navController.popBackStack() },
             modifier = modifier
         )
     }

@@ -1,5 +1,6 @@
 package com.egorshustov.vpoiske.navigation
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -17,7 +18,7 @@ import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
  */
 class AppTopLevelNavigation(private val navController: NavHostController) {
 
-    fun navigateTo(destination: TopLevelDestinations) {
+    fun navigateTo(destination: TopLevelDestination) {
         navController.navigate(destination.route) {
             // Pop up to the start destination of the graph to
             // avoid building up a large stack of destinations
@@ -34,10 +35,26 @@ class AppTopLevelNavigation(private val navController: NavHostController) {
     }
 }
 
-enum class TopLevelDestinations(
+enum class TopLevelDestination(
     val route: String,
-    @StringRes val titleResId: Int
+    @StringRes val titleResId: Int,
+    @DrawableRes val drawableResId: Int
 ) {
-    LAST_SEARCH(SearchDestination.graphDestination, R.string.search_main_title),
-    NEW_SEARCH(SearchDestination.screenRoute, R.string.search_params_title)
+    LAST_SEARCH(
+        route = SearchDestination.graphDestination,
+        titleResId = R.string.search_main_title,
+        drawableResId = R.drawable.ic_baseline_format_list_bulleted_24
+    ),
+
+    NEW_SEARCH(
+        route = SearchDestination.screenRoute,
+        titleResId = R.string.search_params_title,
+        drawableResId = R.drawable.ic_baseline_person_search_24
+    ),
+
+    SEARCH_HISTORY(
+        "", // TODO: add route from search history feature
+        titleResId = R.string.search_history,
+        drawableResId = R.drawable.ic_baseline_history_24
+    )
 }

@@ -15,7 +15,7 @@ object AuthDestination : AppNavigationDestination {
 }
 
 fun NavGraphBuilder.authGraph(
-    navigateToSearch: () -> Unit,
+    returnToPreviousScreen: () -> Unit,
     modifier: Modifier
 ) {
     navigation(
@@ -29,7 +29,7 @@ fun NavGraphBuilder.authGraph(
             LoginAuthScreen(
                 state = viewModel.state.value,
                 onTriggerEvent = viewModel::onTriggerEvent,
-                onAuthFinished = navigateToSearch,
+                onAuthFinished = returnToPreviousScreen,
                 modifier = modifier
             )
         }
