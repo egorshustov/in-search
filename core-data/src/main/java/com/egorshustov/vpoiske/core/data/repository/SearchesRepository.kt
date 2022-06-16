@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SearchesRepository {
 
-    fun getSearchesWithUsers(params: PagingConfigParams): Flow<PagingData<SearchWithUsers>>
+    fun getSearchesWithUsersStream(params: PagingConfigParams): Flow<PagingData<SearchWithUsers>>
 
     fun getLastSearchIdStream(): Flow<Long?>
 

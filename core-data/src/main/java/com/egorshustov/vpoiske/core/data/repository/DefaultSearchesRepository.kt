@@ -24,7 +24,7 @@ internal class DefaultSearchesRepository @Inject constructor(
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : SearchesRepository {
 
-    override fun getSearchesWithUsers(params: PagingConfigParams): Flow<PagingData<SearchWithUsers>> =
+    override fun getSearchesWithUsersStream(params: PagingConfigParams): Flow<PagingData<SearchWithUsers>> =
         searchesDatabaseDataSource.getSearchesWithUsers().asPagingDataStream(params) {
             it.asExternalModel()
         }.flowOn(ioDispatcher)
