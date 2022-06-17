@@ -2,6 +2,7 @@ package com.egorshustov.vpoiske.core.database.datasource
 
 import androidx.paging.PagingSource
 import com.egorshustov.vpoiske.core.common.model.DbEntriesNotAddedException
+import com.egorshustov.vpoiske.core.common.model.DbEntriesNotFoundException
 import com.egorshustov.vpoiske.core.common.model.DbRequestException
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
@@ -35,7 +36,7 @@ internal class SearchesRoomDataSource @Inject constructor(
                 if (searchEntity != null) {
                     return@withContext Result.Success(searchEntity)
                 } else {
-                    return@withContext Result.Error(DbEntriesNotAddedException())
+                    return@withContext Result.Error(DbEntriesNotFoundException())
                 }
             } catch (e: Exception) {
                 return@withContext Result.Error(DbRequestException(e))

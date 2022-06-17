@@ -10,4 +10,6 @@ open class AppException( // TODO:  This one probably should be VkNetworkExceptio
 
 class DbEntriesNotAddedException : AppException()
 
+class DbEntriesNotFoundException : AppException()
+
 class DbRequestException(cause: Throwable) : AppException(cause = cause)
