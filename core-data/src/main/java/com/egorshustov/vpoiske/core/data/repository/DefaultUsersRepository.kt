@@ -1,6 +1,7 @@
 package com.egorshustov.vpoiske.core.data.repository
 
 import com.egorshustov.vpoiske.core.common.model.Result
+import com.egorshustov.vpoiske.core.common.model.mapResult
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.data.mappers.asEntity
@@ -46,24 +47,14 @@ internal class DefaultUsersRepository @Inject constructor(
         commonParams: VkCommonRequestParams
     ): Flow<Result<List<User>>> = usersNetworkDataSource
         .searchUsers(searchUsersParams, commonParams)
-        .map {
-            when (it) {
-                is Result.Success -> Result.Success(it.data.asExternalModelList())
-                is Result.Error -> Result.Error(it.exception)
-                Result.Loading -> Result.Loading
-            }
-        }.flowOn(ioDispatcher)
+        .mapResult { it.asExternalModelList() }
+        .flowOn(ioDispatcher)
 
     override fun getUser(
         getUserParams: GetUserRequestParams,
         commonParams: VkCommonRequestParams
     ): Flow<Result<User>> = usersNetworkDataSource
         .getUser(getUserParams, commonParams)
-        .map {
-            when (it) {
-                is Result.Success -> Result.Success(it.data.asExternalModel())
-                is Result.Error -> Result.Error(it.exception)
-                Result.Loading -> Result.Loading
-            }
-        }.flowOn(ioDispatcher)
+        .mapResult { it.asExternalModel() }
+        .flowOn(ioDispatcher)
 }

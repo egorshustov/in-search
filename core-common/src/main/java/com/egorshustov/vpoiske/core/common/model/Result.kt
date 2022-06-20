@@ -21,6 +21,21 @@ fun <T> Flow<T>.asResult(): Flow<Result<T>> {
         .catch { emit(Result.Error(AppException(it))) }
 }
 
+suspend inline fun <T, R> Result<T>.map(crossinline transform: suspend (value: T) -> R): Result<R> =
+    when (this) {
+        is Result.Success ->
+            try {
+                Result.Success(transform(data))
+            } catch (e: Throwable) {
+                Result.Error(AppException(e))
+            }
+        is Result.Loading -> Result.Loading
+        is Result.Error -> this
+    }
+
+inline fun <T, R> Flow<Result<T>>.mapResult(crossinline transform: suspend (value: T) -> R): Flow<Result<R>> =
+    map { it.map(transform) }
+
 /**
  * `true` if [Result] is of type [Result.Success] & holds non-null [Result.Success.data].
  */

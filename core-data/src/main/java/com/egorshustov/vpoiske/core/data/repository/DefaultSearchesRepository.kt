@@ -2,6 +2,7 @@ package com.egorshustov.vpoiske.core.data.repository
 
 import androidx.paging.PagingData
 import com.egorshustov.vpoiske.core.common.model.Result
+import com.egorshustov.vpoiske.core.common.model.map
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.data.mappers.asEntity
@@ -34,11 +35,7 @@ internal class DefaultSearchesRepository @Inject constructor(
         .flowOn(ioDispatcher)
 
     override suspend fun getSearch(id: Long): Result<Search> = withContext(ioDispatcher) {
-        when (val result = searchesDatabaseDataSource.getSearch(id)) {
-            is Result.Success -> Result.Success(result.data.asExternalModel())
-            is Result.Error -> Result.Error(result.exception)
-            Result.Loading -> Result.Loading
-        }
+        searchesDatabaseDataSource.getSearch(id).map { it.asExternalModel() }
     }
 
     override suspend fun saveSearch(search: Search): Result<Long> = withContext(ioDispatcher) {

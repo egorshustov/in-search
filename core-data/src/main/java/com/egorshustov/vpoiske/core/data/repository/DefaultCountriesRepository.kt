@@ -1,6 +1,7 @@
 package com.egorshustov.vpoiske.core.data.repository
 
 import com.egorshustov.vpoiske.core.common.model.Result
+import com.egorshustov.vpoiske.core.common.model.mapResult
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.data.mappers.asEntityList
@@ -34,14 +35,6 @@ internal class DefaultCountriesRepository @Inject constructor(
         commonParams: VkCommonRequestParams
     ): Flow<Result<Unit>> = countriesNetworkDataSource
         .getCountries(getCountriesParams, commonParams)
-        .map {
-            when (it) {
-                is Result.Success -> {
-                    countriesDatabaseDataSource.upsertCountries(it.data.asEntityList())
-                    Result.Success(Unit)
-                }
-                is Result.Error -> Result.Error(it.exception)
-                Result.Loading -> Result.Loading
-            }
-        }.flowOn(ioDispatcher)
+        .mapResult { countriesDatabaseDataSource.upsertCountries(it.asEntityList()) }
+        .flowOn(ioDispatcher)
 }
