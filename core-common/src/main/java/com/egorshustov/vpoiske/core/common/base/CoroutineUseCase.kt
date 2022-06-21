@@ -1,6 +1,5 @@
 package com.egorshustov.vpoiske.core.common.base
 
-import com.egorshustov.vpoiske.core.common.model.AppException
 import com.egorshustov.vpoiske.core.common.model.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -26,7 +25,7 @@ abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispat
         }
     } catch (e: Exception) {
         Timber.d(e)
-        Result.Error(AppException(e))
+        Result.Error(e)
     }
 
     /**

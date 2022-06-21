@@ -1,9 +1,7 @@
 package com.egorshustov.vpoiske.core.database.datasource
 
 import androidx.paging.PagingSource
-import com.egorshustov.vpoiske.core.common.model.DbEntriesNotAddedException
-import com.egorshustov.vpoiske.core.common.model.DbEntriesNotFoundException
-import com.egorshustov.vpoiske.core.common.model.DbRequestException
+import com.egorshustov.vpoiske.core.common.exceptions.DatabaseException
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
@@ -36,10 +34,10 @@ internal class SearchesRoomDataSource @Inject constructor(
                 if (searchEntity != null) {
                     return@withContext Result.Success(searchEntity)
                 } else {
-                    return@withContext Result.Error(DbEntriesNotFoundException())
+                    return@withContext Result.Error(DatabaseException.EntriesNotFoundException())
                 }
             } catch (e: Exception) {
-                return@withContext Result.Error(DbRequestException(e))
+                return@withContext Result.Error(DatabaseException.RequestException(e))
             }
         }
 
@@ -50,10 +48,10 @@ internal class SearchesRoomDataSource @Inject constructor(
                 if (searchId != -1L) {
                     return@withContext Result.Success(searchId)
                 } else {
-                    return@withContext Result.Error(DbEntriesNotAddedException())
+                    return@withContext Result.Error(DatabaseException.EntriesNotAddedException())
                 }
             } catch (e: Exception) {
-                return@withContext Result.Error(DbRequestException(e))
+                return@withContext Result.Error(DatabaseException.RequestException(e))
             }
         }
 

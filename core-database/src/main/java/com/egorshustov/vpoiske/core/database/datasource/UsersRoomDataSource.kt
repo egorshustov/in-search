@@ -1,7 +1,6 @@
 package com.egorshustov.vpoiske.core.database.datasource
 
-import com.egorshustov.vpoiske.core.common.model.DbEntriesNotAddedException
-import com.egorshustov.vpoiske.core.common.model.DbRequestException
+import com.egorshustov.vpoiske.core.common.exceptions.DatabaseException
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
@@ -29,10 +28,10 @@ internal class UsersRoomDataSource @Inject constructor(
             if (userId != -1L) {
                 return@withContext Result.Success(userId)
             } else {
-                return@withContext Result.Error(DbEntriesNotAddedException())
+                return@withContext Result.Error(DatabaseException.EntriesNotAddedException())
             }
         } catch (e: Exception) {
-            return@withContext Result.Error(DbRequestException(e))
+            return@withContext Result.Error(DatabaseException.RequestException(e))
         }
     }
 
@@ -43,10 +42,10 @@ internal class UsersRoomDataSource @Inject constructor(
                 if (usersIds.isNotEmpty()) {
                     return@withContext Result.Success(usersIds)
                 } else {
-                    return@withContext Result.Error(DbEntriesNotAddedException())
+                    return@withContext Result.Error(DatabaseException.EntriesNotAddedException())
                 }
             } catch (e: Exception) {
-                return@withContext Result.Error(DbRequestException(e))
+                return@withContext Result.Error(DatabaseException.RequestException(e))
             }
         }
 }

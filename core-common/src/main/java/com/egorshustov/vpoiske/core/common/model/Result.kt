@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.*
  */
 sealed interface Result<out R> {
     data class Success<out T>(val data: T) : Result<T>
-    data class Error(val exception: AppException? = null) : Result<Nothing>
+    data class Error(val exception: Throwable? = null) : Result<Nothing>
     object Loading : Result<Nothing>
 }
 
@@ -18,7 +18,7 @@ fun <T> Flow<T>.asResult(): Flow<Result<T>> {
             Result.Success(it)
         }
         .onStart { emit(Result.Loading) }
-        .catch { emit(Result.Error(AppException(it))) }
+        .catch { emit(Result.Error(it)) }
 }
 
 suspend inline fun <T, R> Result<T>.map(crossinline transform: suspend (value: T) -> R): Result<R> =
@@ -27,7 +27,7 @@ suspend inline fun <T, R> Result<T>.map(crossinline transform: suspend (value: T
             try {
                 Result.Success(transform(data))
             } catch (e: Throwable) {
-                Result.Error(AppException(e))
+                Result.Error(e)
             }
         is Result.Loading -> Result.Loading
         is Result.Error -> this

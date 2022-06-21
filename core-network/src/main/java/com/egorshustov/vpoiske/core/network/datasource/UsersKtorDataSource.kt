@@ -1,6 +1,6 @@
 package com.egorshustov.vpoiske.core.network.datasource
 
-import com.egorshustov.vpoiske.core.common.model.AppException
+import com.egorshustov.vpoiske.core.common.exceptions.NetworkException
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
@@ -63,7 +63,7 @@ internal class UsersKtorDataSource @Inject constructor(
             } else {
                 emit(
                     Result.Error(
-                        AppException(
+                        NetworkException.VkException(
                             message = responseBody.error?.errorMessage,
                             vkErrorCode = responseBody.error?.errorCode
                         )
@@ -71,7 +71,7 @@ internal class UsersKtorDataSource @Inject constructor(
                 )
             }
         } catch (e: Throwable) {
-            emit(Result.Error(AppException(e)))
+            emit(Result.Error(NetworkException.VkException(e)))
         }
     }.flowOn(ioDispatcher)
 
@@ -98,7 +98,7 @@ internal class UsersKtorDataSource @Inject constructor(
             } else {
                 emit(
                     Result.Error(
-                        AppException(
+                        NetworkException.VkException(
                             message = responseBody.error?.errorMessage,
                             vkErrorCode = responseBody.error?.errorCode
                         )
@@ -106,7 +106,7 @@ internal class UsersKtorDataSource @Inject constructor(
                 )
             }
         } catch (e: Throwable) {
-            emit(Result.Error(AppException(e)))
+            emit(Result.Error(NetworkException.VkException(e)))
         }
     }.flowOn(ioDispatcher)
 }
