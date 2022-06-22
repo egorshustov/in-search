@@ -27,4 +27,5 @@ android {
 
 dependencies {
     implementation(Compose.runtime)
+    implementation(Compose.ui)
 }

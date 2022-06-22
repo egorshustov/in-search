@@ -57,6 +57,7 @@ android {
 dependencies {
     implementation(project(":core-common"))
     implementation(project(":core-navigation"))
+    implementation(project(":core-ui"))
     implementation(project(":feature-auth"))
     implementation(project(":feature-search"))
 
