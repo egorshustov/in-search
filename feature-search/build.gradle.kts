@@ -32,7 +32,7 @@ dependencies {
     implementation(project(":core-model"))
     implementation(project(":core-domain"))
 
-    implementation(Compose.material)
+    implementation(Compose.material3)
     implementation(Compose.uiToolingPreview)
 
     kapt(Hilt.hiltCompiler)

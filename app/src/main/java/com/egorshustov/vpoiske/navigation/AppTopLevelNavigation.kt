@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.egorshustov.vpoiske.R
+import com.egorshustov.vpoiske.feature.auth.navigation.AuthDestination
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
 
 /**
@@ -42,7 +43,7 @@ enum class TopLevelDestination(
 ) {
     LAST_SEARCH(
         route = SearchDestination.graphDestination,
-        titleResId = R.string.search_main_title,
+        titleResId = R.string.last_search,
         drawableResId = R.drawable.ic_baseline_format_list_bulleted_24
     ),
 
@@ -53,7 +54,7 @@ enum class TopLevelDestination(
     ),
 
     SEARCH_HISTORY(
-        "", // TODO: add route from search history feature
+        route = AuthDestination.graphDestination, // TODO: add route from search history feature
         titleResId = R.string.search_history,
         drawableResId = R.drawable.ic_baseline_history_24
     )

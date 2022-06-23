@@ -1,14 +1,14 @@
 package com.egorshustov.vpoiske.ui.components
 
 import androidx.annotation.StringRes
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.egorshustov.vpoiske.feature.search.navigation.SearchFeatureScreens
 import com.egorshustov.vpoiske.R
 import com.egorshustov.vpoiske.feature.auth.navigation.AuthFeatureScreens
+import com.egorshustov.vpoiske.feature.search.navigation.SearchFeatureScreens
 
 @Composable
 fun topAppBarTitle(
@@ -25,7 +25,7 @@ fun topAppBarTitle(
 
     Text(
         text = screenTitle,
-        style = MaterialTheme.typography.h3,
+        style = MaterialTheme.typography.headlineLarge,
         modifier = modifier
     )
 }

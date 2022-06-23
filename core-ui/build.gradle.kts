@@ -26,6 +26,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":core-navigation"))
+
     implementation(Compose.runtime)
     implementation(Compose.ui)
+    implementation(Compose.material3)
+    implementation(Accompanist.systemUiController)
 }

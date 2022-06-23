@@ -37,6 +37,6 @@ dependencies {
 
     kapt(Hilt.hiltCompiler)
 
-    implementation(Compose.material)
+    implementation(Compose.material3)
     implementation(Compose.uiToolingPreview)
 }

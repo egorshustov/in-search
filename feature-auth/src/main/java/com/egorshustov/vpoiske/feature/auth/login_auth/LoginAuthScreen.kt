@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -50,8 +50,8 @@ internal fun LoginAuthScreen(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
-            //textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface)
+            //textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
+            colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.surface)
         )
         TextField(
             modifier = modifier.fillMaxWidth(),
@@ -70,7 +70,7 @@ internal fun LoginAuthScreen(
                 }
             ),
             //textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface)
+            colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.surface)
         )
         Button(
             modifier = modifier.fillMaxWidth(),

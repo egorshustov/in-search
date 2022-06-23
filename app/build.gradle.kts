@@ -64,11 +64,10 @@ dependencies {
     implementation(AndroidX.coreKtx)
     implementation(AndroidX.appCompat)
     implementation(Google.material)
-    implementation(Compose.material)
+    implementation(Compose.material3)
     implementation(Compose.uiToolingPreview)
     implementation(Compose.activity)
     implementation(AndroidX.lifecycleRuntimeKtx)
-    implementation(Accompanist.systemUiController)
 
     implementation(Hilt.hiltAndroid)
     kapt(Hilt.hiltCompiler)

@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -19,7 +19,7 @@ fun drawerContent(
     onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
     onChangeThemeClick: () -> Unit,
     modifier: Modifier = Modifier
-): @Composable (ColumnScope.() -> Unit)? {
+): @Composable ColumnScope.() -> Unit {
     val routesWithDrawer = remember { SearchFeatureScreens.values().map { it.screenRoute } }
     return if (currentRoute in routesWithDrawer) {
         {
@@ -46,5 +46,7 @@ fun drawerContent(
                 )
             }
         }
-    } else null
+    } else {
+        {}
+    }
 }

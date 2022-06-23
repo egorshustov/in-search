@@ -3,6 +3,6 @@ object AppConfig {
     const val versionCode = 8
     const val versionName = "2.0"
     const val minSdk = 21
-    const val compileSdk = 31
-    const val targetSdk = 31
+    const val compileSdk = 32
+    const val targetSdk = 32
 }

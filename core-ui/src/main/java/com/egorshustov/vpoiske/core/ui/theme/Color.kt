@@ -3,7 +3,7 @@ package com.egorshustov.vpoiske.core.ui.theme
 import androidx.compose.ui.graphics.Color
 
 /**
- * VPoiske colors.
+ * VPoiske app colors.
  */
 val ColorSolitude = Color(0xFFECEDF1)
 val ColorSolitude2 = Color(0xFFE2E3E5)
