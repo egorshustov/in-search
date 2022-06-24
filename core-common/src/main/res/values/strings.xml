@@ -1,5 +1,8 @@
 <resources>
     <string name="search_main_title">ВПоиске</string>
+    <string name="search_main_no_searches">Поиски отсутствуют</string>
+    <string name="search_main_start_new_search">Начать новый поиск</string>
+
     <string name="search_params_title">Новый поиск</string>
     <string name="auth_login_title">Авторизация</string>
 

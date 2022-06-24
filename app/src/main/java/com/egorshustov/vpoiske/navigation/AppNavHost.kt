@@ -35,6 +35,9 @@ fun AppNavHost(
                     popUpTo(SearchDestination.graphDestination) { inclusive = true }
                 }
             },
+            navigateToSearchParams = {
+                navController.navigate(SearchDestination.screenRoute)
+            },
             modifier = modifier
         )
 

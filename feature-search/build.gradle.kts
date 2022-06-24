@@ -31,8 +31,10 @@ dependencies {
     implementation(project(":core-navigation"))
     implementation(project(":core-model"))
     implementation(project(":core-domain"))
+    implementation(project(":core-ui"))
 
     implementation(Compose.material3)
+    debugImplementation(Compose.uiTooling)
     implementation(Compose.uiToolingPreview)
 
     kapt(Hilt.hiltCompiler)

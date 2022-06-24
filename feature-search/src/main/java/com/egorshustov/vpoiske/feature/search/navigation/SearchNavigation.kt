@@ -17,6 +17,7 @@ object SearchDestination : AppNavigationDestination {
 
 fun NavGraphBuilder.searchGraph(
     navigateToAuth: () -> Unit,
+    navigateToSearchParams: () -> Unit,
     modifier: Modifier
 ) {
     navigation(
@@ -31,6 +32,7 @@ fun NavGraphBuilder.searchGraph(
                 state = viewModel.state.value,
                 onTriggerEvent = viewModel::onTriggerEvent,
                 requireAuth = navigateToAuth,
+                onStartNewSearchClick = navigateToSearchParams,
                 modifier = modifier
             )
         }

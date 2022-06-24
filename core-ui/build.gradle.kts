@@ -28,6 +28,11 @@ android {
 dependencies {
     implementation(project(":core-navigation"))
 
+    // https://stackoverflow.com/questions/71812710/can-no-longer-view-jetpack-compose-previews-failed-to-instantiate-one-or-more-c
+    // https://issuetracker.google.com/issues/227767363
+    debugApi(AndroidX.customView) // TODO: remove after Google preview bug will be fixed
+    debugApi(AndroidX.customViewPoolingContainer) // TODO: remove after Google preview bug will be fixed
+
     implementation(Compose.runtime)
     implementation(Compose.ui)
     implementation(Compose.material3)

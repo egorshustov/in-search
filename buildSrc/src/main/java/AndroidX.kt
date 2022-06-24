@@ -26,4 +26,10 @@ object AndroidX {
     const val datastorePreferences =
         "androidx.datastore:datastore-preferences:$datastorePreferencesVersion"
 
+    private const val customViewVersion = "1.2.0-alpha01"
+    const val customView = "androidx.customview:customview:$customViewVersion"
+
+    private const val customViewPoolingContainerVersion = "1.0.0-rc01"
+    const val customViewPoolingContainer = "androidx.customview:customview-poolingcontainer:$customViewPoolingContainerVersion"
+
 }
