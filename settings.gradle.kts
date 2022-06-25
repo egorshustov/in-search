@@ -20,5 +20,6 @@ include(
     ":core-ui",
 
     ":feature-auth",
-    ":feature-search"
+    ":feature-search",
+    ":feature-params"
 )
