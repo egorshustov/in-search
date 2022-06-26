@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.egorshustov.vpoiske.R
+import com.egorshustov.vpoiske.feature.params.navigation.ParamsFeatureScreens
 import com.egorshustov.vpoiske.feature.search.navigation.SearchFeatureScreens
 
 @Composable
@@ -24,7 +25,7 @@ fun navigationIconButton(
             iconImageVector = Icons.Filled.Menu
             iconContentDescriptionRes = R.string.open_drawer
         }
-        SearchFeatureScreens.PARAMS.screenRoute -> {
+        ParamsFeatureScreens.PARAMS.screenRoute -> {
             iconImageVector = Icons.Filled.ArrowBack
             iconContentDescriptionRes = R.string.return_back
         }

@@ -6,6 +6,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.egorshustov.vpoiske.R
 import com.egorshustov.vpoiske.feature.auth.navigation.AuthDestination
+import com.egorshustov.vpoiske.feature.params.navigation.ParamsDestination
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
 
 /**
@@ -48,7 +49,7 @@ enum class TopLevelDestination(
     ),
 
     NEW_SEARCH(
-        route = SearchDestination.screenRoute,
+        route = ParamsDestination.graphDestination,
         titleResId = R.string.search_params_title,
         drawableResId = R.drawable.ic_baseline_person_search_24
     ),

@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.egorshustov.vpoiske.feature.auth.navigation.AuthDestination
 import com.egorshustov.vpoiske.feature.auth.navigation.authGraph
+import com.egorshustov.vpoiske.feature.params.navigation.ParamsDestination
+import com.egorshustov.vpoiske.feature.params.navigation.paramsGraph
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
 import com.egorshustov.vpoiske.feature.search.navigation.searchGraph
 
@@ -35,11 +37,13 @@ fun AppNavHost(
                     popUpTo(SearchDestination.graphDestination) { inclusive = true }
                 }
             },
-            navigateToSearchParams = {
-                navController.navigate(SearchDestination.screenRoute)
+            navigateToParams = {
+                navController.navigate(ParamsDestination.screenRoute)
             },
             modifier = modifier
         )
+
+        paramsGraph(modifier = modifier)
 
         authGraph(
             returnToPreviousScreen = { navController.popBackStack() },

@@ -8,16 +8,15 @@ import androidx.navigation.compose.navigation
 import com.egorshustov.vpoiske.core.navigation.AppNavigationDestination
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchScreen
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchViewModel
-import com.egorshustov.vpoiske.feature.search.params_search.ParamsSearchScreen
 
 object SearchDestination : AppNavigationDestination {
-    override val screenRoute = SearchFeatureScreens.PARAMS.screenRoute
+    override val screenRoute = SearchFeatureScreens.MAIN.screenRoute
     override val graphDestination = "search_destination"
 }
 
 fun NavGraphBuilder.searchGraph(
     navigateToAuth: () -> Unit,
-    navigateToSearchParams: () -> Unit,
+    navigateToParams: () -> Unit,
     modifier: Modifier
 ) {
     navigation(
@@ -32,14 +31,9 @@ fun NavGraphBuilder.searchGraph(
                 state = viewModel.state.value,
                 onTriggerEvent = viewModel::onTriggerEvent,
                 requireAuth = navigateToAuth,
-                onStartNewSearchClick = navigateToSearchParams,
+                onStartNewSearchClick = navigateToParams,
                 modifier = modifier
             )
-        }
-        composable(
-            route = SearchDestination.screenRoute
-        ) { navBackStackEntry ->
-            ParamsSearchScreen()
         }
     }
 }
