@@ -10,8 +10,8 @@ import com.egorshustov.vpoiske.feature.search.main_search.MainSearchScreen
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchViewModel
 
 object SearchDestination : AppNavigationDestination {
-    override val screenRoute = SearchFeatureScreens.MAIN.screenRoute
-    override val graphDestination = "search_destination"
+    override val route = "search_route"
+    override val destination = "search_destination"
 }
 
 fun NavGraphBuilder.searchGraph(
@@ -20,13 +20,11 @@ fun NavGraphBuilder.searchGraph(
     modifier: Modifier
 ) {
     navigation(
-        startDestination = SearchFeatureScreens.MAIN.screenRoute,
-        route = SearchDestination.graphDestination
+        route = SearchDestination.route,
+        startDestination = SearchDestination.destination,
     ) {
-        composable(
-            route = SearchFeatureScreens.MAIN.screenRoute
-        ) {
-            val viewModel = hiltViewModel<MainSearchViewModel>()
+        composable(route = SearchDestination.destination) {
+            val viewModel: MainSearchViewModel = hiltViewModel()
             MainSearchScreen(
                 state = viewModel.state.value,
                 onTriggerEvent = viewModel::onTriggerEvent,

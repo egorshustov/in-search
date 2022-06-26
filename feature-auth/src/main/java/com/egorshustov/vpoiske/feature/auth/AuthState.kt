@@ -1,6 +1,6 @@
-package com.egorshustov.vpoiske.feature.auth.login_auth
+package com.egorshustov.vpoiske.feature.auth
 
-internal data class LoginAuthState(
+internal data class AuthState(
     val needToFinishAuth: Boolean = false,
     val isLoading: Boolean = false,
     val typedLoginText: String = "",

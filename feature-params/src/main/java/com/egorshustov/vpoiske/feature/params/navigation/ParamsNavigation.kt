@@ -10,21 +10,19 @@ import com.egorshustov.vpoiske.feature.params.ParamsSearchScreen
 import com.egorshustov.vpoiske.feature.params.ParamsViewModel
 
 object ParamsDestination : AppNavigationDestination {
-    override val screenRoute = ParamsFeatureScreens.PARAMS.screenRoute
-    override val graphDestination = "params_destination"
+    override val route = "params_route"
+    override val destination = "params_destination"
 }
 
 fun NavGraphBuilder.paramsGraph(
     modifier: Modifier
 ) {
     navigation(
-        startDestination = ParamsDestination.screenRoute,
-        route = ParamsDestination.graphDestination
+        route = ParamsDestination.route,
+        startDestination = ParamsDestination.destination
     ) {
-        composable(
-            route = ParamsDestination.screenRoute
-        ) {
-            val viewModel = hiltViewModel<ParamsViewModel>()
+        composable(route = ParamsDestination.destination) {
+            val viewModel: ParamsViewModel = hiltViewModel()
             ParamsSearchScreen(
                 state = viewModel.state.value,
                 onTriggerEvent = viewModel::onTriggerEvent,

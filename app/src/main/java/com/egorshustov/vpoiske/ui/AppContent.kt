@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.egorshustov.vpoiske.core.navigation.getCurrentRoute
 import com.egorshustov.vpoiske.core.ui.theme.VPoiskeTheme
-import com.egorshustov.vpoiske.feature.search.navigation.SearchFeatureScreens
 import com.egorshustov.vpoiske.navigation.AppNavHost
 import com.egorshustov.vpoiske.navigation.AppTopLevelNavigation
 import com.egorshustov.vpoiske.navigation.TopLevelDestination
@@ -60,7 +59,7 @@ fun AppContent() {
                             currentRoute = navController.getCurrentRoute(),
                             onClick = { route ->
                                 when (route) {
-                                    SearchFeatureScreens.MAIN.screenRoute ->
+                                    TopLevelDestination.LAST_SEARCH.destination ->
                                         coroutineScope.launch { drawerState.open() }
                                     else -> navController.popBackStack()
                                 }

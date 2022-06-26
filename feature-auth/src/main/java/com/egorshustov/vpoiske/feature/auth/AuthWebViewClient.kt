@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.auth.login_auth
+package com.egorshustov.vpoiske.feature.auth
 
 import android.net.http.SslError
 import android.os.Build

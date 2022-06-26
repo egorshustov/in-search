@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.auth.login_auth
+package com.egorshustov.vpoiske.feature.auth
 
 import android.annotation.SuppressLint
 import android.view.View

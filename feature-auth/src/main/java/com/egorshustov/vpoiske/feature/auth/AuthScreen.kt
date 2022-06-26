@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.auth.login_auth
+package com.egorshustov.vpoiske.feature.auth
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,19 +17,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.egorshustov.vpoiske.core.common.utils.showMessage
-import com.egorshustov.vpoiske.feature.auth.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun LoginAuthScreen(
-    state: LoginAuthState,
-    onTriggerEvent: (LoginAuthEvent) -> Unit,
+internal fun AuthScreen(
+    state: AuthState,
+    onTriggerEvent: (AuthEvent) -> Unit,
     onAuthFinished: () -> Unit,
     modifier: Modifier
 ) {
     if (state.needToFinishAuth) {
         onAuthFinished()
-        onTriggerEvent(LoginAuthEvent.OnNeedToFinishAuthProcessed)
+        onTriggerEvent(AuthEvent.OnNeedToFinishAuthProcessed)
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -44,7 +43,7 @@ internal fun LoginAuthScreen(
             modifier = modifier.fillMaxWidth(),
             enabled = !state.isLoading,
             value = state.typedLoginText,
-            onValueChange = { onTriggerEvent(LoginAuthEvent.OnUpdateLogin(it)) },
+            onValueChange = { onTriggerEvent(AuthEvent.OnUpdateLogin(it)) },
             label = { Text(text = stringResource(R.string.email_or_phone)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -57,7 +56,7 @@ internal fun LoginAuthScreen(
             modifier = modifier.fillMaxWidth(),
             enabled = !state.isLoading,
             value = state.typedPasswordText,
-            onValueChange = { onTriggerEvent(LoginAuthEvent.OnUpdatePassword(it)) },
+            onValueChange = { onTriggerEvent(AuthEvent.OnUpdatePassword(it)) },
             label = { Text(text = stringResource(R.string.password)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
@@ -65,7 +64,7 @@ internal fun LoginAuthScreen(
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    onTriggerEvent(LoginAuthEvent.OnStartAuthProcess)
+                    onTriggerEvent(AuthEvent.OnStartAuthProcess)
                     keyboardController?.hide()
                 }
             ),
@@ -75,7 +74,7 @@ internal fun LoginAuthScreen(
         Button(
             modifier = modifier.fillMaxWidth(),
             enabled = !state.isLoading,
-            onClick = { onTriggerEvent(LoginAuthEvent.OnStartAuthProcess) }
+            onClick = { onTriggerEvent(AuthEvent.OnStartAuthProcess) }
         ) {
             Text(stringResource(R.string.login))
         }
@@ -87,11 +86,11 @@ internal fun LoginAuthScreen(
             login = state.typedLoginText,
             password = state.typedPasswordText,
             onAuthDataObtained = { userId, accessToken ->
-                onTriggerEvent(LoginAuthEvent.OnAuthDataObtained(userId, accessToken))
+                onTriggerEvent(AuthEvent.OnAuthDataObtained(userId, accessToken))
             },
             onError = {
                 context.run { showMessage(getString(it.errorResId)) }
-                onTriggerEvent(LoginAuthEvent.OnAuthError)
+                onTriggerEvent(AuthEvent.OnAuthError)
             }
         )
     }

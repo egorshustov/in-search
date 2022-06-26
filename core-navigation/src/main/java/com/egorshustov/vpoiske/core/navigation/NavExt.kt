@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 /**
- * Starts recomposition when back stack changes
+ * Gets the current navigation back stack entry unique route.
  * @return current route of navigation back stack
  */
 @Composable

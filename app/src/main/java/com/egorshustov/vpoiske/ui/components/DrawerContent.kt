@@ -10,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.egorshustov.vpoiske.R
-import com.egorshustov.vpoiske.feature.search.navigation.SearchFeatureScreens
 import com.egorshustov.vpoiske.navigation.TopLevelDestination
 
 @Composable
@@ -20,7 +19,7 @@ fun drawerContent(
     onChangeThemeClick: () -> Unit,
     modifier: Modifier = Modifier
 ): @Composable ColumnScope.() -> Unit {
-    val routesWithDrawer = remember { SearchFeatureScreens.values().map { it.screenRoute } }
+    val routesWithDrawer = remember { TopLevelDestination.values().map { it.destination } }
     return if (currentRoute in routesWithDrawer) {
         {
             Column(

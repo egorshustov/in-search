@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.auth.login_auth
+package com.egorshustov.vpoiske.feature.auth
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -16,13 +16,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class LoginAuthViewModel @Inject constructor(
+internal class AuthViewModel @Inject constructor(
     getAccessTokenUseCase: GetAccessTokenUseCase,
     private val saveAccessTokenUseCase: SaveAccessTokenUseCase
 ) : ViewModel() {
 
-    private val _state: MutableState<LoginAuthState> = mutableStateOf(LoginAuthState())
-    val state: State<LoginAuthState> = _state
+    private val _state: MutableState<AuthState> = mutableStateOf(AuthState())
+    val state: State<AuthState> = _state
 
     init {
         getAccessTokenUseCase(Unit).onEach {
@@ -31,17 +31,17 @@ internal class LoginAuthViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun onTriggerEvent(event: LoginAuthEvent) {
+    fun onTriggerEvent(event: AuthEvent) {
         when (event) {
-            is LoginAuthEvent.OnUpdateLogin -> onUpdateLogin(event.login)
-            is LoginAuthEvent.OnUpdatePassword -> onUpdatePassword(event.password)
-            LoginAuthEvent.OnStartAuthProcess -> onStartAuthProcess()
-            is LoginAuthEvent.OnAuthDataObtained -> onAuthDataObtained(
+            is AuthEvent.OnUpdateLogin -> onUpdateLogin(event.login)
+            is AuthEvent.OnUpdatePassword -> onUpdatePassword(event.password)
+            AuthEvent.OnStartAuthProcess -> onStartAuthProcess()
+            is AuthEvent.OnAuthDataObtained -> onAuthDataObtained(
                 event.userId,
                 event.accessToken
             )
-            LoginAuthEvent.OnNeedToFinishAuthProcessed -> onNeedToFinishAuthProcessed()
-            LoginAuthEvent.OnAuthError -> onAuthError()
+            AuthEvent.OnNeedToFinishAuthProcessed -> onNeedToFinishAuthProcessed()
+            AuthEvent.OnAuthError -> onAuthError()
         }
     }
 

@@ -6,12 +6,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.egorshustov.vpoiske.core.navigation.AppNavigationDestination
-import com.egorshustov.vpoiske.feature.auth.login_auth.LoginAuthScreen
-import com.egorshustov.vpoiske.feature.auth.login_auth.LoginAuthViewModel
+import com.egorshustov.vpoiske.feature.auth.AuthScreen
+import com.egorshustov.vpoiske.feature.auth.AuthViewModel
 
 object AuthDestination : AppNavigationDestination {
-    override val screenRoute = AuthFeatureScreens.LOGIN.screenRoute
-    override val graphDestination = "auth_destination"
+    override val route = "auth_route"
+    override val destination = "auth_destination"
 }
 
 fun NavGraphBuilder.authGraph(
@@ -19,14 +19,12 @@ fun NavGraphBuilder.authGraph(
     modifier: Modifier
 ) {
     navigation(
-        startDestination = AuthDestination.screenRoute,
-        route = AuthDestination.graphDestination
+        route = AuthDestination.route,
+        startDestination = AuthDestination.destination
     ) {
-        composable(
-            route = AuthDestination.screenRoute
-        ) {
-            val viewModel = hiltViewModel<LoginAuthViewModel>()
-            LoginAuthScreen(
+        composable(route = AuthDestination.destination) {
+            val viewModel: AuthViewModel = hiltViewModel()
+            AuthScreen(
                 state = viewModel.state.value,
                 onTriggerEvent = viewModel::onTriggerEvent,
                 onAuthFinished = returnToPreviousScreen,

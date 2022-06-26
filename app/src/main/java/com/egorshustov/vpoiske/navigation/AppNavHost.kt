@@ -21,7 +21,7 @@ import com.egorshustov.vpoiske.feature.search.navigation.searchGraph
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = SearchDestination.graphDestination
+    startDestination: String = SearchDestination.route
 ) {
 
     NavHost(
@@ -32,13 +32,13 @@ fun AppNavHost(
 
         searchGraph(
             navigateToAuth = {
-                navController.navigate(AuthDestination.graphDestination) {
+                navController.navigate(AuthDestination.route) {
                     launchSingleTop = true
-                    popUpTo(SearchDestination.graphDestination) { inclusive = true }
+                    popUpTo(SearchDestination.route) { inclusive = true }
                 }
             },
             navigateToParams = {
-                navController.navigate(ParamsDestination.screenRoute)
+                navController.navigate(ParamsDestination.route)
             },
             modifier = modifier
         )
