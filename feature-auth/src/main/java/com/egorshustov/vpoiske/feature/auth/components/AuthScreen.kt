@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.auth
+package com.egorshustov.vpoiske.feature.auth.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.egorshustov.vpoiske.core.common.utils.showMessage
+import com.egorshustov.vpoiske.feature.auth.AuthEvent
+import com.egorshustov.vpoiske.feature.auth.AuthProcessWebView
+import com.egorshustov.vpoiske.feature.auth.AuthState
+import com.egorshustov.vpoiske.feature.auth.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -24,7 +28,7 @@ internal fun AuthScreen(
     state: AuthState,
     onTriggerEvent: (AuthEvent) -> Unit,
     onAuthFinished: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     if (state.needToFinishAuth) {
         onAuthFinished()

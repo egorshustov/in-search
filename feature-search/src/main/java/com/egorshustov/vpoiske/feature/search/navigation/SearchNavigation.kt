@@ -1,13 +1,11 @@
 package com.egorshustov.vpoiske.feature.search.navigation
 
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.egorshustov.vpoiske.core.navigation.AppNavigationDestination
-import com.egorshustov.vpoiske.feature.search.main_search.MainSearchScreen
-import com.egorshustov.vpoiske.feature.search.main_search.MainSearchViewModel
+import com.egorshustov.vpoiske.feature.search.main_search.MainSearchRoute
 
 object SearchDestination : AppNavigationDestination {
     override val route = "search_route"
@@ -24,13 +22,10 @@ fun NavGraphBuilder.searchGraph(
         startDestination = SearchDestination.destination,
     ) {
         composable(route = SearchDestination.destination) {
-            val viewModel: MainSearchViewModel = hiltViewModel()
-            MainSearchScreen(
-                state = viewModel.state.value,
-                onTriggerEvent = viewModel::onTriggerEvent,
+            MainSearchRoute(
+                modifier = modifier,
                 requireAuth = navigateToAuth,
-                onStartNewSearchClick = navigateToParams,
-                modifier = modifier
+                onStartNewSearchClick = navigateToParams
             )
         }
     }

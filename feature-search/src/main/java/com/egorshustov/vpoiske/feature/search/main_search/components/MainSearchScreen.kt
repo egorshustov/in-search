@@ -1,9 +1,10 @@
-package com.egorshustov.vpoiske.feature.search.main_search
+package com.egorshustov.vpoiske.feature.search.main_search.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.egorshustov.vpoiske.feature.search.main_search.components.NoSearchesStub
+import com.egorshustov.vpoiske.feature.search.main_search.MainSearchEvent
+import com.egorshustov.vpoiske.feature.search.main_search.MainSearchState
 
 @Composable
 internal fun MainSearchScreen(
@@ -11,7 +12,7 @@ internal fun MainSearchScreen(
     onTriggerEvent: (MainSearchEvent) -> Unit,
     requireAuth: () -> Unit,
     onStartNewSearchClick: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     if (state.isAuthRequired) {
         requireAuth()

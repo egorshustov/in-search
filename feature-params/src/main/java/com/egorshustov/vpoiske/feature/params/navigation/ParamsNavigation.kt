@@ -1,13 +1,11 @@
 package com.egorshustov.vpoiske.feature.params.navigation
 
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.egorshustov.vpoiske.core.navigation.AppNavigationDestination
-import com.egorshustov.vpoiske.feature.params.ParamsSearchScreen
-import com.egorshustov.vpoiske.feature.params.ParamsViewModel
+import com.egorshustov.vpoiske.feature.params.ParamsRoute
 
 object ParamsDestination : AppNavigationDestination {
     override val route = "params_route"
@@ -22,12 +20,7 @@ fun NavGraphBuilder.paramsGraph(
         startDestination = ParamsDestination.destination
     ) {
         composable(route = ParamsDestination.destination) {
-            val viewModel: ParamsViewModel = hiltViewModel()
-            ParamsSearchScreen(
-                state = viewModel.state.value,
-                onTriggerEvent = viewModel::onTriggerEvent,
-                modifier = modifier
-            )
+            ParamsRoute(modifier = modifier)
         }
     }
 }
