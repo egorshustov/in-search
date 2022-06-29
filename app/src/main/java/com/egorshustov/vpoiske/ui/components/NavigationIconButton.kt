@@ -24,7 +24,8 @@ fun navigationIconButton(
             iconImageVector = Icons.Filled.Menu
             iconContentDescriptionRes = R.string.open_drawer
         }
-        TopLevelDestination.NEW_SEARCH.destination, TopLevelDestination.SEARCH_HISTORY.destination -> {
+        TopLevelDestination.NEW_SEARCH.destination,
+        TopLevelDestination.SEARCH_HISTORY.destination -> {
             iconImageVector = Icons.Filled.ArrowBack
             iconContentDescriptionRes = R.string.return_back
         }

@@ -55,7 +55,7 @@ enum class TopLevelDestination(
     ),
 
     SEARCH_HISTORY(
-        destination = AuthDestination.destination, // TODO: add destination from search history feature
+        destination = "search_history", // TODO: add destination from search history feature
         titleResId = R.string.search_history,
         drawableResId = R.drawable.ic_baseline_history_24
     )

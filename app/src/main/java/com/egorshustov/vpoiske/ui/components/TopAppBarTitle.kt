@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.egorshustov.vpoiske.R
+import com.egorshustov.vpoiske.feature.auth.navigation.AuthDestination
 import com.egorshustov.vpoiske.navigation.TopLevelDestination
 
 @Composable
@@ -15,13 +16,14 @@ fun topAppBarTitle(
     modifier: Modifier = Modifier
 ): @Composable () -> Unit = {
 
-    @StringRes val screenTitleRes: Int =
-        if (currentRoute == TopLevelDestination.LAST_SEARCH.destination) {
-            R.string.app_name
-        } else {
+    @StringRes val screenTitleRes: Int = when (currentRoute) {
+        AuthDestination.destination -> R.string.auth_login_title
+        TopLevelDestination.LAST_SEARCH.destination -> R.string.app_name
+        else -> {
             TopLevelDestination.values().find { it.destination == currentRoute }?.titleResId
                 ?: R.string.app_name
         }
+    }
 
     val screenTitle = stringResource(screenTitleRes)
 

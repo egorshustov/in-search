@@ -43,7 +43,15 @@ fun AppNavHost(
             modifier = modifier
         )
 
-        paramsGraph(modifier = modifier)
+        paramsGraph(
+            navigateToAuth = {
+                navController.navigate(AuthDestination.route) {
+                    launchSingleTop = true
+                    popUpTo(ParamsDestination.route) { inclusive = true }
+                }
+            },
+            modifier = modifier
+        )
 
         authGraph(
             returnToPreviousScreen = { navController.popBackStack() },

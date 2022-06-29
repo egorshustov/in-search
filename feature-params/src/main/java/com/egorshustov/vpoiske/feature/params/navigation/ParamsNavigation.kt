@@ -13,6 +13,7 @@ object ParamsDestination : AppNavigationDestination {
 }
 
 fun NavGraphBuilder.paramsGraph(
+    navigateToAuth: () -> Unit,
     modifier: Modifier
 ) {
     navigation(
@@ -20,7 +21,10 @@ fun NavGraphBuilder.paramsGraph(
         startDestination = ParamsDestination.destination
     ) {
         composable(route = ParamsDestination.destination) {
-            ParamsRoute(modifier = modifier)
+            ParamsRoute(
+                modifier = modifier,
+                requireAuth = navigateToAuth
+            )
         }
     }
 }

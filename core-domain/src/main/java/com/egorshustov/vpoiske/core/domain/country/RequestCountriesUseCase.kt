@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 data class RequestCountriesUseCaseParams(
-    val getCountriesParams: GetCountriesRequestParams,
-    val commonParams: VkCommonRequestParams
+    val commonParams: VkCommonRequestParams,
+    val getCountriesParams: GetCountriesRequestParams = GetCountriesRequestParams()
 )
 
 class RequestCountriesUseCase @Inject constructor(

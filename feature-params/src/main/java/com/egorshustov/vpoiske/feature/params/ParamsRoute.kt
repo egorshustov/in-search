@@ -8,6 +8,7 @@ import com.egorshustov.vpoiske.feature.params.components.ParamsScreen
 @Composable
 internal fun ParamsRoute(
     modifier: Modifier = Modifier,
+    requireAuth: () -> Unit,
     viewModel: ParamsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
@@ -16,6 +17,7 @@ internal fun ParamsRoute(
     ParamsScreen(
         state = state,
         onTriggerEvent = onTriggerEvent,
+        requireAuth = requireAuth,
         modifier = modifier
     )
 }
