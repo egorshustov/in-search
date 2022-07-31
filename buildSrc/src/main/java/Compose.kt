@@ -1,6 +1,6 @@
 object Compose {
 
-    const val composeVersion = "1.1.1"
+    const val composeVersion = "1.2.0"
     const val runtime = "androidx.compose.runtime:runtime:$composeVersion"
 
     const val ui = "androidx.compose.ui:ui:$composeVersion"
@@ -10,10 +10,10 @@ object Compose {
     private const val composeMaterial3Version = "1.0.0-alpha15"
     const val material3 = "androidx.compose.material3:material3:$composeMaterial3Version"
 
-    private const val composeActivitiesVersion = "1.4.0"
+    private const val composeActivitiesVersion = "1.5.1"
     const val activity = "androidx.activity:activity-compose:$composeActivitiesVersion"
 
-    private const val composeNavigationVersion = "2.4.2"
+    private const val composeNavigationVersion = "2.5.1"
     const val navigationCompose = "androidx.navigation:navigation-compose:$composeNavigationVersion"
 
     private const val composePagingVersion = "1.0.0-alpha15"
