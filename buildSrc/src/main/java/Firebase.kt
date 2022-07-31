@@ -1,6 +1,6 @@
 object Firebase {
 
-    private const val firebaseBomVersion = "30.1.0"
+    private const val firebaseBomVersion = "30.3.1"
 
     const val firebaseBom = "com.google.firebase:firebase-bom:$firebaseBomVersion"
     const val firebaseCrashlyticsKtx = "com.google.firebase:firebase-crashlytics-ktx"

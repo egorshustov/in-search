@@ -9,11 +9,13 @@ import com.egorshustov.vpoiske.core.data.repository.SearchesRepository
 import com.egorshustov.vpoiske.core.data.repository.UsersRepository
 import com.egorshustov.vpoiske.core.model.data.User
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapMerge
 import javax.inject.Inject
 
+@OptIn(FlowPreview::class)
 class GetLastSearchUsersUseCase @Inject constructor(
     private val searchesRepository: SearchesRepository,
     private val usersRepository: UsersRepository,

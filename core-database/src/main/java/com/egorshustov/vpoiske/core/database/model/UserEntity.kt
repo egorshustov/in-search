@@ -7,6 +7,7 @@ import com.egorshustov.vpoiske.core.model.data.Relation
 
 @Entity(
     tableName = "users",
+    indices = [Index(value = ["search_id"])],
     foreignKeys = [
         ForeignKey(
             entity = SearchEntity::class,

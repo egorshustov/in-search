@@ -1,6 +1,6 @@
 object Build {
 
-    private const val gradleBuildToolsPluginVersion = "7.1.3"
+    private const val gradleBuildToolsPluginVersion = "7.2.1"
     const val gradleBuildTools = "com.android.tools.build:gradle:$gradleBuildToolsPluginVersion"
 
     const val kotlinGradlePlugin =
@@ -8,10 +8,10 @@ object Build {
 
     const val hiltGradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:${Hilt.hiltVersion}"
 
-    private const val googleServicesPluginVersion = "4.3.10"
+    private const val googleServicesPluginVersion = "4.3.13"
     const val googleServicesPlugin = "com.google.gms:google-services:$googleServicesPluginVersion"
 
-    private const val firebaseCrashlyticsPluginVersion = "2.9.0"
+    private const val firebaseCrashlyticsPluginVersion = "2.9.1"
     const val firebaseCrashlyticsPlugin =
         "com.google.firebase:firebase-crashlytics-gradle:$firebaseCrashlyticsPluginVersion"
 }
