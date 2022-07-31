@@ -3,6 +3,7 @@ package com.egorshustov.vpoiske.feature.params.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,13 +18,15 @@ internal fun AgeRangeLayout(
     onAgeFromItemClick: (ageFrom: Int?) -> Unit,
     onAgeToItemClick: (ageTo: Int?) -> Unit
 ) {
+    val menuItems = remember { listOf<Int?>(null) + ageRangeState.commonAgeRange.toList() }
+
     Column {
         Text(text = stringResource(R.string.search_params_age))
         Spacer(modifier = Modifier.height(4.dp))
         Row {
             AppDropdownMenu(
                 modifier = Modifier.weight(0.5f),
-                items = listOf<Int?>(null) + ageRangeState.commonAgeRange.toList(),
+                items = menuItems,
                 onItemClick = { onAgeFromItemClick(it) },
                 itemText = { item -> Text(getAgeFromText(item)) },
                 selectedItemValue = getAgeFromText(ageRangeState.selectedAgeFrom)
@@ -31,7 +34,7 @@ internal fun AgeRangeLayout(
             Spacer(modifier = Modifier.padding(8.dp))
             AppDropdownMenu(
                 modifier = Modifier.weight(0.5f),
-                items = listOf<Int?>(null) + ageRangeState.commonAgeRange.toList(),
+                items = menuItems,
                 onItemClick = { onAgeToItemClick(it) },
                 itemText = { item -> Text(getAgeToText(item)) },
                 selectedItemValue = getAgeToText(ageRangeState.selectedAgeTo)

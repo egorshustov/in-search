@@ -22,7 +22,10 @@ internal fun FollowersRangeLayout(
     followersRangeState: FollowersRangeState,
     onSelectedFollowersRangeChanged: (minCount: Int, maxCount: Int) -> Unit,
 ) {
-    var followersRangeSliderPosition by remember {
+    var followersRangeSliderPosition by remember(
+        followersRangeState.selectedFollowersMinCount,
+        followersRangeState.selectedFollowersMaxCount
+    ) {
         mutableStateOf(
             followersRangeState.selectedFollowersMinCount.toFloat()
                     ..followersRangeState.selectedFollowersMaxCount.toFloat()

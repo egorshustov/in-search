@@ -22,7 +22,10 @@ internal fun FriendsRangeLayout(
     onNeedToSetFriendsRangeChanged: (Boolean) -> Unit,
     onSelectedFriendsRangeChanged: (minCount: Int, maxCount: Int) -> Unit,
 ) {
-    var friendsRangeSliderPosition by remember {
+    var friendsRangeSliderPosition by remember(
+        friendsRangeState.selectedFriendsMinCount,
+        friendsRangeState.selectedFriendsMaxCount
+    ) {
         mutableStateOf(
             friendsRangeState.selectedFriendsMinCount.toFloat()
                     ..friendsRangeState.selectedFriendsMaxCount.toFloat()

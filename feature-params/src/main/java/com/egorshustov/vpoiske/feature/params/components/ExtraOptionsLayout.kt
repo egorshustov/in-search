@@ -24,8 +24,13 @@ internal fun ExtraOptionsLayout(
     onFoundUsersLimitChanged: (Int) -> Unit,
     onDaysIntervalChanged: (Int) -> Unit
 ) {
-    var foundUsersLimitSliderPosition by remember { mutableStateOf(extraOptionsState.foundUsersLimit.toFloat()) }
-    var daysIntervalSliderPosition by remember { mutableStateOf(extraOptionsState.daysInterval.toFloat()) }
+    var foundUsersLimitSliderPosition by remember(extraOptionsState.foundUsersLimit) {
+        mutableStateOf(extraOptionsState.foundUsersLimit.toFloat())
+    }
+
+    var daysIntervalSliderPosition by remember(extraOptionsState.daysInterval) {
+        mutableStateOf(extraOptionsState.daysInterval.toFloat())
+    }
 
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {

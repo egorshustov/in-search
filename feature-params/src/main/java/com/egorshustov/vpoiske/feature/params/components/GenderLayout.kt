@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -21,12 +22,14 @@ internal fun GenderLayout(
     genderState: GenderState,
     onGenderItemClick: (gender: Gender) -> Unit
 ) {
+    val genderValues = remember { Gender.values().toList() }
+
     Column {
         Text(text = stringResource(R.string.search_params_gender))
         Spacer(modifier = Modifier.height(4.dp))
         AppDropdownMenu(
             modifier = Modifier.fillMaxWidth(),
-            items = Gender.values().toList(),
+            items = genderValues,
             onItemClick = { onGenderItemClick(it) },
             itemText = { item -> Text(item.getDescription(LocalContext.current)) },
             selectedItemValue = genderState.selectedGender.getDescription(LocalContext.current)
