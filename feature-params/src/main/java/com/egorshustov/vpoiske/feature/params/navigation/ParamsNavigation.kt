@@ -1,6 +1,5 @@
 package com.egorshustov.vpoiske.feature.params.navigation
 
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -13,8 +12,7 @@ object ParamsDestination : AppNavigationDestination {
 }
 
 fun NavGraphBuilder.paramsGraph(
-    navigateToAuth: () -> Unit,
-    modifier: Modifier
+    navigateToAuth: () -> Unit
 ) {
     navigation(
         route = ParamsDestination.route,
@@ -22,7 +20,6 @@ fun NavGraphBuilder.paramsGraph(
     ) {
         composable(route = ParamsDestination.destination) {
             ParamsRoute(
-                modifier = modifier,
                 requireAuth = navigateToAuth
             )
         }

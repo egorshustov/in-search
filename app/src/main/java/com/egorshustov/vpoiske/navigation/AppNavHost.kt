@@ -39,8 +39,7 @@ fun AppNavHost(
             },
             navigateToParams = {
                 navController.navigate(ParamsDestination.route)
-            },
-            modifier = modifier
+            }
         )
 
         paramsGraph(
@@ -49,13 +48,11 @@ fun AppNavHost(
                     launchSingleTop = true
                     popUpTo(ParamsDestination.route) { inclusive = true }
                 }
-            },
-            modifier = modifier
+            }
         )
 
         authGraph(
-            returnToPreviousScreen = { navController.popBackStack() },
-            modifier = modifier
+            returnToPreviousScreen = { navController.popBackStack() }
         )
     }
 }

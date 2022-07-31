@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.*
+
 plugins {
     id(Plugins.androidApplication)
     kotlin(KotlinPlugins.android)
@@ -12,6 +15,22 @@ kapt {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            val localProps = Properties()
+            val keyProps = Properties()
+            try {
+                localProps.load(FileInputStream(file("../local.properties")))
+                keyProps.load(FileInputStream(file(localProps["keystore.props.file"]!!)))
+
+                storeFile = file("$rootDir/egorshustov.jks")
+                storePassword = keyProps["KEYSTORE_PASSWORD"].toString()
+                keyAlias = keyProps["KEY_ALIAS"].toString()
+                keyPassword = keyProps["KEY_PASSWORD"].toString()
+            } catch (ignored: Exception) {
+            }
+        }
+    }
     compileSdk = AppConfig.compileSdk
     defaultConfig {
         applicationId = AppConfig.appId
@@ -32,6 +51,7 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

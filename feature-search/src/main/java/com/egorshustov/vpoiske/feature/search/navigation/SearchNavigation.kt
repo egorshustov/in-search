@@ -1,6 +1,5 @@
 package com.egorshustov.vpoiske.feature.search.navigation
 
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -14,8 +13,7 @@ object SearchDestination : AppNavigationDestination {
 
 fun NavGraphBuilder.searchGraph(
     navigateToAuth: () -> Unit,
-    navigateToParams: () -> Unit,
-    modifier: Modifier
+    navigateToParams: () -> Unit
 ) {
     navigation(
         route = SearchDestination.route,
@@ -23,7 +21,6 @@ fun NavGraphBuilder.searchGraph(
     ) {
         composable(route = SearchDestination.destination) {
             MainSearchRoute(
-                modifier = modifier,
                 requireAuth = navigateToAuth,
                 onStartNewSearchClick = navigateToParams
             )

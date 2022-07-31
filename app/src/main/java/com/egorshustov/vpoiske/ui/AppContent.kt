@@ -67,11 +67,11 @@ fun AppContent() {
                         ),
                     )
                 },
-            ) { innerPaddingModifier ->
+            ) { padding ->
 
                 AppNavHost(
                     navController = navController,
-                    modifier = Modifier.padding(innerPaddingModifier)
+                    modifier = Modifier.padding(padding)
                 )
             }
         }

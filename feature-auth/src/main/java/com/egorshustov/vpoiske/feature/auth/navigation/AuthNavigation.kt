@@ -1,6 +1,5 @@
 package com.egorshustov.vpoiske.feature.auth.navigation
 
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -13,8 +12,7 @@ object AuthDestination : AppNavigationDestination {
 }
 
 fun NavGraphBuilder.authGraph(
-    returnToPreviousScreen: () -> Unit,
-    modifier: Modifier
+    returnToPreviousScreen: () -> Unit
 ) {
     navigation(
         route = AuthDestination.route,
@@ -22,7 +20,6 @@ fun NavGraphBuilder.authGraph(
     ) {
         composable(route = AuthDestination.destination) {
             AuthRoute(
-                modifier = modifier,
                 onAuthFinished = returnToPreviousScreen
             )
         }

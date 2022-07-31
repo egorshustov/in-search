@@ -1,13 +1,95 @@
 package com.egorshustov.vpoiske.feature.params
 
+import com.egorshustov.vpoiske.core.model.data.City
 import com.egorshustov.vpoiske.core.model.data.Country
+import com.egorshustov.vpoiske.core.model.data.Gender
+import com.egorshustov.vpoiske.core.model.data.Relation
+
+private const val DEFAULT_WITH_PHONE_ONLY = false
+private const val DEFAULT_FOUND_USERS_LIMIT = 100
+private const val DEFAULT_DAYS_INTERVAL = 3
+
+private const val DEFAULT_NEED_TO_SET_FRIENDS_RANGE = true
+private const val DEFAULT_SELECTED_FRIENDS_MIN_COUNT = 50
+private const val DEFAULT_SELECTED_FRIENDS_MAX_COUNT = 250
+
+private const val DEFAULT_SELECTED_FOLLOWERS_MIN_COUNT = 0
+private const val DEFAULT_SELECTED_FOLLOWERS_MAX_COUNT = 150
 
 internal data class ParamsState(
-    val isAuthRequired: Boolean = false,
-    val countriesState: CountriesState = CountriesState()
+    val authState: AuthState = AuthState(),
+    val countriesState: CountriesState = CountriesState(),
+    val citiesState: CitiesState = CitiesState(),
+    val genderState: GenderState = GenderState(),
+    val ageRangeState: AgeRangeState = AgeRangeState(),
+    val relationState: RelationState = RelationState(),
+    val extraOptionsState: ExtraOptionsState = ExtraOptionsState(),
+    val friendsRangeState: FriendsRangeState = FriendsRangeState(),
+    val followersRangeState: FollowersRangeState = FollowersRangeState()
+)
+
+internal data class AuthState(
+    val isAuthRequired: Boolean = false
 )
 
 internal data class CountriesState(
     val countries: List<Country> = emptyList(),
     val selectedCountry: Country? = null
 )
+
+internal data class CitiesState(
+    val cities: List<City> = emptyList(),
+    val selectedCity: City? = null
+)
+
+internal data class GenderState(
+    val selectedGender: Gender = Gender.NOT_DEFINED
+)
+
+internal data class AgeRangeState(
+    val commonAgeRange: IntRange = 18..50,
+    val selectedAgeFrom: Int? = null,
+    val selectedAgeTo: Int? = null
+)
+
+internal data class RelationState(
+    val selectedRelation: Relation = Relation.NOT_DEFINED
+)
+
+internal data class ExtraOptionsState(
+    val withPhoneOnly: Boolean = DEFAULT_WITH_PHONE_ONLY,
+    val foundUsersLimit: Int = DEFAULT_FOUND_USERS_LIMIT,
+    val daysInterval: Int = DEFAULT_DAYS_INTERVAL
+)
+
+internal data class FriendsRangeState(
+    val needToSetFriendsRange: Boolean = DEFAULT_NEED_TO_SET_FRIENDS_RANGE,
+    val selectedFriendsMinCount: Int = DEFAULT_SELECTED_FRIENDS_MIN_COUNT,
+    val selectedFriendsMaxCount: Int = DEFAULT_SELECTED_FRIENDS_MAX_COUNT
+)
+
+internal data class FollowersRangeState(
+    val selectedFollowersMinCount: Int = DEFAULT_SELECTED_FOLLOWERS_MIN_COUNT,
+    val selectedFollowersMaxCount: Int = DEFAULT_SELECTED_FOLLOWERS_MAX_COUNT
+)
+
+internal val ParamsState.areSelectionParamsDefault
+    get() = countriesState.selectedCountry == null
+            && citiesState.selectedCity == null
+            && genderState.selectedGender == Gender.NOT_DEFINED
+            && ageRangeState.selectedAgeFrom == null
+            && ageRangeState.selectedAgeTo == null
+            && relationState.selectedRelation == Relation.NOT_DEFINED
+            && extraOptionsState.withPhoneOnly == DEFAULT_WITH_PHONE_ONLY
+            && extraOptionsState.foundUsersLimit == DEFAULT_FOUND_USERS_LIMIT
+            && extraOptionsState.daysInterval == DEFAULT_DAYS_INTERVAL
+            && friendsRangeState.needToSetFriendsRange == DEFAULT_NEED_TO_SET_FRIENDS_RANGE
+            && friendsRangeState.selectedFriendsMinCount == DEFAULT_SELECTED_FRIENDS_MIN_COUNT
+            && friendsRangeState.selectedFriendsMaxCount == DEFAULT_SELECTED_FRIENDS_MAX_COUNT
+            && followersRangeState.selectedFollowersMinCount == DEFAULT_SELECTED_FOLLOWERS_MIN_COUNT
+            && followersRangeState.selectedFollowersMaxCount == DEFAULT_SELECTED_FOLLOWERS_MAX_COUNT
+
+internal val ParamsState.isNewSearchCanBeStarted
+    get() = !authState.isAuthRequired
+            && countriesState.selectedCountry != null
+            && citiesState.selectedCity != null

@@ -27,14 +27,8 @@ import com.egorshustov.vpoiske.feature.auth.R
 internal fun AuthScreen(
     state: AuthState,
     onTriggerEvent: (AuthEvent) -> Unit,
-    onAuthFinished: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (state.needToFinishAuth) {
-        onAuthFinished()
-        onTriggerEvent(AuthEvent.OnNeedToFinishAuthProcessed)
-    }
-
     val keyboardController = LocalSoftwareKeyboardController.current
     Column(
         modifier = modifier

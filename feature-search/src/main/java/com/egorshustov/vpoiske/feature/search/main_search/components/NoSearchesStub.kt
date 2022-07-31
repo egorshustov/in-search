@@ -36,7 +36,7 @@ internal fun NoSearchesStub(
         ) {
             Text(
                 text = stringResource(R.string.search_main_start_new_search),
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.titleMedium
             )
         }
     }

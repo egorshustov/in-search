@@ -15,10 +15,14 @@ internal fun MainSearchRoute(
     val state = viewModel.state.value
     val onTriggerEvent = viewModel::onTriggerEvent
 
+    if (state.isAuthRequired) {
+        requireAuth()
+        onTriggerEvent(MainSearchEvent.OnAuthRequested)
+    }
+
     MainSearchScreen(
         state = state,
         onTriggerEvent = onTriggerEvent,
-        requireAuth = requireAuth,
         onStartNewSearchClick = onStartNewSearchClick,
         modifier = modifier
     )

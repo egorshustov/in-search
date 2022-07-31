@@ -14,10 +14,14 @@ internal fun AuthRoute(
     val state = viewModel.state.value
     val onTriggerEvent = viewModel::onTriggerEvent
 
+    if (state.needToFinishAuth) {
+        onAuthFinished()
+        onTriggerEvent(AuthEvent.OnNeedToFinishAuthProcessed)
+    }
+
     AuthScreen(
         state = state,
         onTriggerEvent = onTriggerEvent,
-        onAuthFinished = onAuthFinished,
         modifier = modifier
     )
 }

@@ -10,14 +10,9 @@ import com.egorshustov.vpoiske.feature.search.main_search.MainSearchState
 internal fun MainSearchScreen(
     state: MainSearchState,
     onTriggerEvent: (MainSearchEvent) -> Unit,
-    requireAuth: () -> Unit,
     onStartNewSearchClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (state.isAuthRequired) {
-        requireAuth()
-        onTriggerEvent(MainSearchEvent.OnAuthRequested)
-    }
 
     if (state.users.isEmpty()) {
         NoSearchesStub(onStartNewSearchClick = onStartNewSearchClick)
@@ -30,7 +25,6 @@ internal fun MainSearchScreenPreview() {
     MainSearchScreen(
         state = MainSearchState(),
         onTriggerEvent = {},
-        requireAuth = {},
         onStartNewSearchClick = {},
         modifier = Modifier
     )

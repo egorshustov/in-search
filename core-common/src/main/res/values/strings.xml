@@ -4,6 +4,26 @@
     <string name="search_main_start_new_search">Начать новый поиск</string>
 
     <string name="search_params_title">Новый поиск</string>
+    <string name="search_params">Параметры поиска</string>
+    <string name="search_params_reset">Сбросить</string>
+    <string name="search_params_country_and_city">Страна и город</string>
+    <string name="search_params_country">Страна</string>
+    <string name="search_params_city">Город</string>
+    <string name="search_params_gender">Пол</string>
+    <string name="search_params_age">Возраст</string>
+    <string name="search_params_from">от %s</string>
+    <string name="search_params_to">до %s</string>
+    <string name="search_params_from_any">от любого</string>
+    <string name="search_params_to_any">до любого</string>
+    <string name="search_params_relation">Семейное положение</string>
+    <string name="search_params_with_phone_only">Только с телефоном</string>
+    <string name="search_params_users_to_find">Сколько людей найти?</string>
+    <string name="search_params_were_online_during">Были в сети в течение дней:</string>
+    <string name="search_params_set_friends_limit">Ограничить количество друзей</string>
+    <string name="search_params_from_to">от %1$s до %2$s</string>
+    <string name="search_params_set_followers_limit">Ограничить количество подписчиков</string>
+    <string name="search_params_start_search">Начать поиск</string>
+
     <string name="auth_login_title">Авторизация</string>
 
     <string name="email_or_phone">Email или телефон</string>

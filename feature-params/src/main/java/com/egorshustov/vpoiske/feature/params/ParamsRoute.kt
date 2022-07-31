@@ -14,10 +14,14 @@ internal fun ParamsRoute(
     val state = viewModel.state.value
     val onTriggerEvent = viewModel::onTriggerEvent
 
+    if (state.authState.isAuthRequired) {
+        requireAuth()
+        onTriggerEvent(ParamsEvent.OnAuthRequested)
+    }
+
     ParamsScreen(
         state = state,
         onTriggerEvent = onTriggerEvent,
-        requireAuth = requireAuth,
         modifier = modifier
     )
 }

@@ -36,5 +36,7 @@ dependencies {
     implementation(Compose.runtime)
     implementation(Compose.ui)
     implementation(Compose.material3)
+    debugImplementation(Compose.uiTooling)
+    implementation(Compose.uiToolingPreview)
     implementation(Accompanist.systemUiController)
 }
