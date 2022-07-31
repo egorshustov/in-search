@@ -2,7 +2,6 @@ package com.egorshustov.vpoiske.feature.params.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -16,7 +15,6 @@ import com.egorshustov.vpoiske.feature.params.ExtraOptionsState
 import com.egorshustov.vpoiske.feature.params.R
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ExtraOptionsLayout(
     extraOptionsState: ExtraOptionsState,

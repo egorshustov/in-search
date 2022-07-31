@@ -51,7 +51,7 @@ internal fun FriendsRangeLayout(
                 fontWeight = FontWeight.Bold
             )
             RangeSlider(
-                values = friendsRangeSliderPosition,
+                value = friendsRangeSliderPosition,
                 onValueChange = { range ->
                     friendsRangeSliderPosition = if (range.start > range.endInclusive) {
                         // somehow RangeSlider allows this situation to occur

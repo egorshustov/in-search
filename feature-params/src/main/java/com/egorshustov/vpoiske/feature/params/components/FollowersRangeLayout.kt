@@ -44,7 +44,7 @@ internal fun FollowersRangeLayout(
             fontWeight = FontWeight.Bold
         )
         RangeSlider(
-            values = followersRangeSliderPosition,
+            value = followersRangeSliderPosition,
             onValueChange = { range ->
                 followersRangeSliderPosition = if (range.start > range.endInclusive) {
                     // somehow RangeSlider allows this situation to occur

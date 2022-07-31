@@ -7,7 +7,7 @@ object Compose {
     const val uiTooling = "androidx.compose.ui:ui-tooling:$composeVersion"
     const val uiToolingPreview = "androidx.compose.ui:ui-tooling-preview:$composeVersion"
 
-    private const val composeMaterial3Version = "1.0.0-alpha13"
+    private const val composeMaterial3Version = "1.0.0-alpha15"
     const val material3 = "androidx.compose.material3:material3:$composeMaterial3Version"
 
     private const val composeActivitiesVersion = "1.4.0"

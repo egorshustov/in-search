@@ -22,7 +22,7 @@ import com.egorshustov.vpoiske.feature.auth.AuthProcessWebView
 import com.egorshustov.vpoiske.feature.auth.AuthState
 import com.egorshustov.vpoiske.feature.auth.R
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 internal fun AuthScreen(
     state: AuthState,
