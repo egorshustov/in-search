@@ -9,6 +9,8 @@ internal sealed interface ParamsEvent {
 
     object OnAuthRequested : ParamsEvent
 
+    object OnSearchProcessInitiated : ParamsEvent
+
     object RequestCountries : ParamsEvent
 
     object OnClickResetParamsToDefault : ParamsEvent

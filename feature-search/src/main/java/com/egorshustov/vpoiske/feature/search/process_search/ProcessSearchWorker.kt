@@ -15,7 +15,14 @@ internal class ProcessSearchWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
+        val searchId = inputData.getLong(SEARCH_ID_ARG, 0)
+
         Timber.d("doWork() at thread ${Thread.currentThread().name}")
+        Timber.d("doWork() searchId $searchId")
         return Result.success()
+    }
+
+    companion object {
+        const val SEARCH_ID_ARG = "SEARCH_ID_ARG"
     }
 }

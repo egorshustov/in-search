@@ -7,20 +7,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.model.data
+import com.egorshustov.vpoiske.core.common.utils.currentTime
+import com.egorshustov.vpoiske.core.common.utils.toSeconds
 import com.egorshustov.vpoiske.core.domain.city.GetCitiesUseCase
 import com.egorshustov.vpoiske.core.domain.city.GetCitiesUseCaseParams
 import com.egorshustov.vpoiske.core.domain.country.GetCountriesStreamUseCase
 import com.egorshustov.vpoiske.core.domain.country.RequestCountriesUseCase
 import com.egorshustov.vpoiske.core.domain.country.RequestCountriesUseCaseParams
+import com.egorshustov.vpoiske.core.domain.search.SaveSearchUseCase
+import com.egorshustov.vpoiske.core.domain.search.SaveSearchUseCaseParams
 import com.egorshustov.vpoiske.core.domain.token.GetAccessTokenUseCase
-import com.egorshustov.vpoiske.core.model.data.City
-import com.egorshustov.vpoiske.core.model.data.Country
-import com.egorshustov.vpoiske.core.model.data.Gender
-import com.egorshustov.vpoiske.core.model.data.Relation
+import com.egorshustov.vpoiske.core.model.data.*
 import com.egorshustov.vpoiske.core.model.data.requestsparams.GetCitiesRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +30,8 @@ internal class ParamsViewModel @Inject constructor(
     getAccessTokenUseCase: GetAccessTokenUseCase,
     private val requestCountriesUseCase: RequestCountriesUseCase,
     private val getCountriesStreamUseCase: GetCountriesStreamUseCase,
-    private val getCitiesUseCase: GetCitiesUseCase
+    private val getCitiesUseCase: GetCitiesUseCase,
+    private val saveSearchUseCase: SaveSearchUseCase
 ) : ViewModel() {
 
     private val _state: MutableState<ParamsState> = mutableStateOf(ParamsState())
@@ -57,6 +60,7 @@ internal class ParamsViewModel @Inject constructor(
     fun onTriggerEvent(event: ParamsEvent) {
         when (event) {
             ParamsEvent.OnAuthRequested -> onAuthRequested()
+            ParamsEvent.OnSearchProcessInitiated -> onSearchProcessInitiated()
             ParamsEvent.RequestCountries -> requestCountries()
             ParamsEvent.OnClickResetParamsToDefault -> onClickResetParamsToDefault()
             is ParamsEvent.OnSelectCountry -> onSelectCountry(event.country)
@@ -84,6 +88,12 @@ internal class ParamsViewModel @Inject constructor(
     private fun onAuthRequested() {
         _state.value = state.value.copy(
             authState = state.value.authState.copy(isAuthRequired = false)
+        )
+    }
+
+    private fun onSearchProcessInitiated() {
+        _state.value = state.value.copy(
+            searchState = state.value.searchState.copy(searchId = null)
         )
     }
 
@@ -233,7 +243,59 @@ internal class ParamsViewModel @Inject constructor(
     }
 
     private fun onClickStartSearch() {
-        // TODO: save search to DB and obtain searchId
+        createSearchModelFromParamsState(state.value)?.let { search ->
+            viewModelScope.launch {
+                when (val searchIdResult = saveSearchUseCase(SaveSearchUseCaseParams(search))) {
+                    Result.Loading -> {}
+                    is Result.Success -> {
+                        _state.value = state.value.copy(
+                            searchState = state.value.searchState.copy(
+                                searchId = searchIdResult.data
+                            )
+                        )
+                    }
+                    is Result.Error -> {}
+                }
+            }
+        }
+    }
+
+    private fun createSearchModelFromParamsState(state: ParamsState): Search? {
+        val country = state.countriesState.selectedCountry
+        val city = state.citiesState.selectedCity
+        if (country == null || city == null) return null
+
+        val homeTown: String? = null // todo: add homeTown input functionality
+        val gender = state.genderState.selectedGender
+        val ageFrom = state.ageRangeState.selectedAgeFrom
+        val ageTo = state.ageRangeState.selectedAgeTo
+        val relation = state.relationState.selectedRelation
+        val withPhoneOnly = state.extraOptionsState.withPhoneOnly
+        val foundUsersLimit = state.extraOptionsState.foundUsersLimit
+        val daysInterval = state.extraOptionsState.daysInterval
+        val friendsMinCount = state.friendsRangeState.selectedFriendsMinCount
+        val friendsMaxCount = state.friendsRangeState.selectedFriendsMaxCount
+        val followersMinCount = state.followersRangeState.selectedFollowersMinCount
+        val followersMaxCount = state.followersRangeState.selectedFollowersMaxCount
+        val startTime = currentTime.toSeconds()
+
+        return Search(
+            country = country,
+            city = city,
+            homeTown = homeTown,
+            gender = gender,
+            ageFrom = ageFrom,
+            ageTo = ageTo,
+            relation = relation,
+            withPhoneOnly = withPhoneOnly,
+            foundUsersLimit = foundUsersLimit,
+            daysInterval = daysInterval,
+            friendsMinCount = friendsMinCount,
+            friendsMaxCount = friendsMaxCount,
+            followersMinCount = followersMinCount,
+            followersMaxCount = followersMaxCount,
+            startTime = startTime
+        )
     }
 
     private fun subscribeCountriesStream() {

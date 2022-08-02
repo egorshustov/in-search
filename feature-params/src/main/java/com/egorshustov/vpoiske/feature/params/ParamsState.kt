@@ -17,6 +17,7 @@ private const val DEFAULT_SELECTED_FOLLOWERS_MIN_COUNT = 0
 private const val DEFAULT_SELECTED_FOLLOWERS_MAX_COUNT = 150
 
 internal data class ParamsState(
+    val searchState: SearchState = SearchState(),
     val authState: AuthState = AuthState(),
     val countriesState: CountriesState = CountriesState(),
     val citiesState: CitiesState = CitiesState(),
@@ -26,6 +27,10 @@ internal data class ParamsState(
     val extraOptionsState: ExtraOptionsState = ExtraOptionsState(),
     val friendsRangeState: FriendsRangeState = FriendsRangeState(),
     val followersRangeState: FollowersRangeState = FollowersRangeState()
+)
+
+internal data class SearchState(
+    val searchId: Long? = null
 )
 
 internal data class AuthState(

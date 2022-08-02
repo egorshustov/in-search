@@ -11,3 +11,6 @@ value class Millis(val count: Long)
 typealias UnixMillis = Millis
 
 fun Millis.toSeconds() = Seconds((count / MILLIS_IN_SECOND).toInt())
+
+val currentTime: UnixMillis
+    get() = UnixMillis(System.currentTimeMillis())

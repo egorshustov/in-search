@@ -12,6 +12,7 @@ object ParamsDestination : AppNavigationDestination {
 }
 
 fun NavGraphBuilder.paramsGraph(
+    startSearchProcess: (searchId: Long) -> Unit,
     navigateToAuth: () -> Unit
 ) {
     navigation(
@@ -20,7 +21,8 @@ fun NavGraphBuilder.paramsGraph(
     ) {
         composable(route = ParamsDestination.destination) {
             ParamsRoute(
-                requireAuth = navigateToAuth
+                startSearchProcess = startSearchProcess,
+                requireAuth = navigateToAuth,
             )
         }
     }

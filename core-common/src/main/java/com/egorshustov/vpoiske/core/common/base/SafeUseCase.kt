@@ -8,9 +8,9 @@ import timber.log.Timber
 /**
  * Executes business logic synchronously or asynchronously using Coroutines.
  */
-abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher) {
+abstract class SafeUseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher) {
 
-    /** Executes the use case asynchronously and returns a [Result].
+    /** Executes the use case asynchronously and wrap it with [Result].
      *
      * @return a [Result].
      *

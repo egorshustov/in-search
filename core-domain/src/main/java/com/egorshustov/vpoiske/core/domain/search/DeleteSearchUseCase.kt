@@ -1,6 +1,6 @@
 package com.egorshustov.vpoiske.core.domain.search
 
-import com.egorshustov.vpoiske.core.common.base.UseCase
+import com.egorshustov.vpoiske.core.common.base.SafeUseCase
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.data.repository.SearchesRepository
@@ -12,7 +12,7 @@ data class DeleteSearchUseCaseParams(val searchId: Long)
 class DeleteSearchUseCase @Inject constructor(
     private val searchesRepository: SearchesRepository,
     @Dispatcher(IO) ioDispatcher: CoroutineDispatcher
-) : UseCase<DeleteSearchUseCaseParams, Unit>(ioDispatcher) {
+) : SafeUseCase<DeleteSearchUseCaseParams, Unit>(ioDispatcher) {
 
     override suspend fun execute(parameters: DeleteSearchUseCaseParams) =
         searchesRepository.deleteSearch(parameters.searchId)

@@ -1,6 +1,6 @@
 package com.egorshustov.vpoiske.core.domain.token
 
-import com.egorshustov.vpoiske.core.common.base.UseCase
+import com.egorshustov.vpoiske.core.common.base.SafeUseCase
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.datastore.PreferenceStorage
@@ -14,7 +14,7 @@ data class SaveAccessTokenUseCaseParams(
 class SaveAccessTokenUseCase @Inject constructor(
     private val preferenceStorage: PreferenceStorage,
     @Dispatcher(IO) ioDispatcher: CoroutineDispatcher
-) : UseCase<SaveAccessTokenUseCaseParams, Unit>(ioDispatcher) {
+) : SafeUseCase<SaveAccessTokenUseCaseParams, Unit>(ioDispatcher) {
 
     override suspend fun execute(parameters: SaveAccessTokenUseCaseParams) {
         preferenceStorage.saveAccessToken(parameters.accessToken)
