@@ -10,30 +10,46 @@ import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
+import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.common.utils.NOTIFICATION_CHANNEL_ID
+import com.egorshustov.vpoiske.core.domain.search.ProcessSearchInteractor
 import com.egorshustov.vpoiske.core.ui.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 @HiltWorker
 internal class ProcessSearchWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val interactor: ProcessSearchInteractor
+    private val interactor: ProcessSearchInteractor,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val notificationBuilder =
         NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
 
-    override suspend fun doWork(): Result {
+    // This exception handler allows to catch non-cancellation exceptions
+    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Timber.d("Caught exceptionHandler $exception")
+    }
+
+    override suspend fun doWork(): Result = withContext(ioDispatcher) {
         setForeground(createForegroundInfo())
 
-        val searchId = inputData.getLong(SEARCH_ID_ARG, 0)
-        interactor.onWorkStarted(searchId)
+        CoroutineScope(exceptionHandler).launch {
+            val searchId = inputData.getLong(SEARCH_ID_ARG, 0)
+            interactor.startSearch(searchId)
+        }.apply {
+            invokeOnCompletion {
+                Timber.d("Caught invokeOnCompletion $it")
+            }
+            join()
+        }
 
-        return Result.success()
+        return@withContext Result.success()
     }
 
     private fun createForegroundInfo(): ForegroundInfo {

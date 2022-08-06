@@ -1,6 +1,7 @@
 plugins {
     id(Plugins.androidLibrary)
     kotlin(KotlinPlugins.android)
+    kotlin(KotlinPlugins.kapt)
 }
 
 android {
@@ -32,4 +33,5 @@ dependencies {
     implementation(project(":core-datastore"))
 
     implementation(AndroidX.roomPaging)
+    kapt(Hilt.hiltCompiler)
 }

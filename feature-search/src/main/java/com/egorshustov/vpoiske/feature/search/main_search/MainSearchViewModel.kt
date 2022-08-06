@@ -34,6 +34,7 @@ internal class MainSearchViewModel @Inject constructor(
 
     init {
         getLastSearchUsers()
+        onStartSearchProcess(1, appContext) // TODO: remove after testing
     }
 
     fun onTriggerEvent(event: MainSearchEvent) {
@@ -61,7 +62,11 @@ internal class MainSearchViewModel @Inject constructor(
             .setInputData(data)
             .build()
 
-        WorkManager.getInstance(appContext).enqueue(request)
+        WorkManager.getInstance(appContext).enqueueUniqueWork(
+            "ProcessSearchWorker",
+            ExistingWorkPolicy.KEEP,
+            request
+        )
     }
 
     private fun getLastSearchUsers() {
