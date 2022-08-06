@@ -36,13 +36,13 @@ internal fun ExtraOptionsLayout(
                 checked = extraOptionsState.withPhoneOnly,
                 onCheckedChange = onWithPhoneOnlyChanged
             )
-            Text(text = stringResource(R.string.search_params_with_phone_only))
+            Text(text = stringResource(R.string.params_with_phone_only))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Row {
-            Text(text = stringResource(R.string.search_params_users_to_find))
+            Text(text = stringResource(R.string.params_users_to_find))
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = foundUsersLimitSliderPosition.roundToInt().toString(),
@@ -62,7 +62,7 @@ internal fun ExtraOptionsLayout(
         Spacer(modifier = Modifier.height(16.dp))
 
         Row {
-            Text(text = stringResource(R.string.search_params_were_online_during))
+            Text(text = stringResource(R.string.params_were_online_during))
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = daysIntervalSliderPosition.roundToInt().toString(),

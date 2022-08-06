@@ -17,7 +17,7 @@ fun topAppBarTitle(
 ): @Composable () -> Unit = {
 
     @StringRes val screenTitleRes: Int = when (currentRoute) {
-        AuthDestination.destination -> R.string.auth_login_title
+        AuthDestination.destination -> R.string.auth_title
         TopLevelDestination.LAST_SEARCH.destination -> R.string.app_name
         else -> {
             TopLevelDestination.values().find { it.destination == currentRoute }?.titleResId

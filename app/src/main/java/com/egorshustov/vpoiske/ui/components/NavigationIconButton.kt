@@ -22,12 +22,12 @@ fun navigationIconButton(
     when (currentRoute) {
         TopLevelDestination.LAST_SEARCH.destination -> {
             iconImageVector = Icons.Filled.Menu
-            iconContentDescriptionRes = R.string.open_drawer
+            iconContentDescriptionRes = R.string.app_open_drawer
         }
         TopLevelDestination.NEW_SEARCH.destination,
         TopLevelDestination.SEARCH_HISTORY.destination -> {
             iconImageVector = Icons.Filled.ArrowBack
-            iconContentDescriptionRes = R.string.return_back
+            iconContentDescriptionRes = R.string.app_return_back
         }
         else -> return { }
     }

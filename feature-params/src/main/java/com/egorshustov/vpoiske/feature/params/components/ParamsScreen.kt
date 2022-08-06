@@ -107,7 +107,7 @@ internal fun ParamsScreen(
             onClick = { onTriggerEvent(ParamsEvent.OnClickStartSearch) }
         ) {
             Text(
-                text = stringResource(R.string.search_params_start_search),
+                text = stringResource(R.string.params_start_search),
                 style = MaterialTheme.typography.titleMedium
             )
         }

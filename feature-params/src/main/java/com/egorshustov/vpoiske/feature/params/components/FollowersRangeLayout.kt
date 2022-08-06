@@ -33,11 +33,11 @@ internal fun FollowersRangeLayout(
     }
 
     Column {
-        Text(text = stringResource(R.string.search_params_set_followers_limit))
+        Text(text = stringResource(R.string.params_set_followers_limit))
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(
-                R.string.search_params_from_to,
+                R.string.params_from_to,
                 followersRangeSliderPosition.start.roundToInt().toString(),
                 followersRangeSliderPosition.endInclusive.roundToInt().toString()
             ),

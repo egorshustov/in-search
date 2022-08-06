@@ -30,7 +30,7 @@ internal fun CountryAndCityLayout(
     }
 
     Column {
-        Text(text = stringResource(R.string.search_params_country_and_city))
+        Text(text = stringResource(R.string.params_country_and_city))
         Spacer(modifier = Modifier.height(4.dp))
         Row {
             AppDropdownMenu(
@@ -56,11 +56,11 @@ internal fun CountryAndCityLayout(
 
 @Composable
 private fun getCountryText(country: Country?): String =
-    country?.title ?: stringResource(R.string.search_params_country)
+    country?.title ?: stringResource(R.string.params_country)
 
 @Composable
 private fun getCityText(city: City?): String =
-    city?.title ?: stringResource(R.string.search_params_city)
+    city?.title ?: stringResource(R.string.params_city)
 
 
 @Preview

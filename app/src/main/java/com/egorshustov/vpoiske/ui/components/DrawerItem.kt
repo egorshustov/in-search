@@ -52,7 +52,7 @@ fun DrawerItem(
 @Composable
 fun DrawerItemPreview() {
     DrawerItem(
-        textResId = R.string.new_search,
+        textResId = R.string.app_new_search,
         drawableResId = R.drawable.ic_baseline_person_search_24,
         onClick = {}
     )

@@ -26,7 +26,7 @@ internal fun ResetParamsLayout(
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = stringResource(com.egorshustov.vpoiske.core.common.R.string.search_params),
+            text = stringResource(R.string.params_search_params),
             style = MaterialTheme.typography.titleMedium
         )
         TextButton(
@@ -38,7 +38,7 @@ internal fun ResetParamsLayout(
             onClick = onResetParamsClick
         ) {
             Text(
-                text = stringResource(R.string.search_params_reset),
+                text = stringResource(R.string.params_reset),
                 style = MaterialTheme.typography.titleMedium
             )
         }

@@ -25,7 +25,7 @@ internal fun RelationLayout(
     val relationValues = remember { Relation.values().toList() }
 
     Column {
-        Text(text = stringResource(R.string.search_params_relation))
+        Text(text = stringResource(R.string.params_relation))
         Spacer(modifier = Modifier.height(4.dp))
         AppDropdownMenu(
             modifier = Modifier.fillMaxWidth(),

@@ -25,7 +25,7 @@ internal fun GenderLayout(
     val genderValues = remember { Gender.values().toList() }
 
     Column {
-        Text(text = stringResource(R.string.search_params_gender))
+        Text(text = stringResource(R.string.params_gender))
         Spacer(modifier = Modifier.height(4.dp))
         AppDropdownMenu(
             modifier = Modifier.fillMaxWidth(),

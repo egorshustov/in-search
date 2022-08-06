@@ -39,7 +39,7 @@ fun drawerContent(
                 Divider(modifier = Modifier.padding(8.dp))
 
                 DrawerItem(
-                    textResId = R.string.change_theme,
+                    textResId = R.string.app_change_theme,
                     drawableResId = R.drawable.ic_baseline_wb_sunny_24,
                     onClick = { onChangeThemeClick() }
                 )

@@ -21,7 +21,7 @@ internal fun AgeRangeLayout(
     val menuItems = remember { listOf<Int?>(null) + ageRangeState.commonAgeRange.toList() }
 
     Column {
-        Text(text = stringResource(R.string.search_params_age))
+        Text(text = stringResource(R.string.params_age))
         Spacer(modifier = Modifier.height(4.dp))
         Row {
             AppDropdownMenu(
@@ -45,16 +45,16 @@ internal fun AgeRangeLayout(
 
 @Composable
 private fun getAgeFromText(ageFrom: Int?): String = if (ageFrom == null) {
-    stringResource(R.string.search_params_from_any)
+    stringResource(R.string.params_from_any)
 } else {
-    stringResource(R.string.search_params_from, ageFrom)
+    stringResource(R.string.params_from, ageFrom)
 }
 
 @Composable
 private fun getAgeToText(ageTo: Int?): String = if (ageTo == null) {
-    stringResource(R.string.search_params_to_any)
+    stringResource(R.string.params_to_any)
 } else {
-    stringResource(R.string.search_params_to, ageTo)
+    stringResource(R.string.params_to, ageTo)
 }
 
 @Preview

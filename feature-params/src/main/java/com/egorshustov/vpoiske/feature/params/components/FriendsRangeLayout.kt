@@ -38,13 +38,13 @@ internal fun FriendsRangeLayout(
                 checked = friendsRangeState.needToSetFriendsRange,
                 onCheckedChange = onNeedToSetFriendsRangeChanged
             )
-            Text(text = stringResource(R.string.search_params_set_friends_limit))
+            Text(text = stringResource(R.string.params_set_friends_limit))
         }
 
         if (friendsRangeState.needToSetFriendsRange) {
             Text(
                 text = stringResource(
-                    R.string.search_params_from_to,
+                    R.string.params_from_to,
                     friendsRangeSliderPosition.start.roundToInt().toString(),
                     friendsRangeSliderPosition.endInclusive.roundToInt().toString()
                 ),

@@ -42,7 +42,7 @@ internal fun AuthScreen(
             enabled = !state.isLoading,
             value = state.typedLoginText,
             onValueChange = { onTriggerEvent(AuthEvent.OnUpdateLogin(it)) },
-            label = { Text(text = stringResource(R.string.email_or_phone)) },
+            label = { Text(text = stringResource(R.string.auth_email_or_phone)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
@@ -55,7 +55,7 @@ internal fun AuthScreen(
             enabled = !state.isLoading,
             value = state.typedPasswordText,
             onValueChange = { onTriggerEvent(AuthEvent.OnUpdatePassword(it)) },
-            label = { Text(text = stringResource(R.string.password)) },
+            label = { Text(text = stringResource(R.string.auth_password)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
@@ -74,7 +74,7 @@ internal fun AuthScreen(
             enabled = !state.isLoading,
             onClick = { onTriggerEvent(AuthEvent.OnStartAuthProcess) }
         ) {
-            Text(stringResource(R.string.login))
+            Text(stringResource(R.string.auth_login))
         }
     }
 
