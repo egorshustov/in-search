@@ -13,42 +13,37 @@ import androidx.work.WorkerParameters
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.common.utils.NOTIFICATION_CHANNEL_ID
-import com.egorshustov.vpoiske.core.domain.search.ProcessSearchInteractor
 import com.egorshustov.vpoiske.core.ui.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @HiltWorker
 internal class ProcessSearchWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val interactor: ProcessSearchInteractor,
+    private val presenter: ProcessSearchPresenter,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val notificationBuilder =
         NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
 
-    // This exception handler allows to catch non-cancellation exceptions
-    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Timber.d("Caught exceptionHandler $exception")
-    }
-
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         setForeground(createForegroundInfo())
 
-        CoroutineScope(exceptionHandler).launch {
-            val searchId = inputData.getLong(SEARCH_ID_ARG, 0)
-            interactor.startSearch(searchId)
-        }.apply {
-            invokeOnCompletion {
-                Timber.d("Caught invokeOnCompletion $it")
-            }
-            join()
-        }
+        observeProcessSearchState()
+        val searchId = inputData.getLong(SEARCH_ID_ARG, 0)
+        val job = presenter.startSearch(searchId)
+        job.join()
 
+        Timber.d("Result.success()")
         return@withContext Result.success()
     }
 
@@ -83,6 +78,12 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         )
     } catch (e: ClassNotFoundException) {
         null
+    }
+
+    private suspend fun CoroutineScope.observeProcessSearchState() {
+        presenter.state.onEach {
+            Timber.d(it.toString())
+        }.stateIn(this)
     }
 
     private fun sendProgressNotification(foundUsersCount: Int, foundUsersLimit: Int) {
