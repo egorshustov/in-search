@@ -49,6 +49,7 @@ internal class ProcessSearchPresenterImpl @Inject constructor(
     }
 
     private suspend fun doDummyWork() {
+        Timber.d("doDummyWork started")
         foundUsersCountFlow.emit(132)
         delay(1000)
         foundUsersCountFlow.emit(133)
@@ -57,6 +58,7 @@ internal class ProcessSearchPresenterImpl @Inject constructor(
         delay(1000)
         foundUsersCountFlow.emit(135)
         delay(1000)
+        Timber.d("doDummyWork completed")
     }
 
     override fun clearUiMessage(id: Long) {

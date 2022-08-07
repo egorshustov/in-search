@@ -16,13 +16,11 @@ import com.egorshustov.vpoiske.core.common.utils.NOTIFICATION_CHANNEL_ID
 import com.egorshustov.vpoiske.core.ui.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
+import kotlin.coroutines.CoroutineContext
 
 @HiltWorker
 internal class ProcessSearchWorker @AssistedInject constructor(
@@ -38,10 +36,12 @@ internal class ProcessSearchWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         setForeground(createForegroundInfo())
 
-        observeProcessSearchState()
+        val observeJob = coroutineContext.observeProcessSearchState()
+
         val searchId = inputData.getLong(SEARCH_ID_ARG, 0)
-        val job = presenter.startSearch(searchId)
-        job.join()
+        presenter.startSearch(searchId).join()
+
+        observeJob.cancelAndJoin()
 
         Timber.d("Result.success()")
         return@withContext Result.success()
@@ -80,11 +80,13 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         null
     }
 
-    private suspend fun CoroutineScope.observeProcessSearchState() {
-        presenter.state.onEach {
-            Timber.d(it.toString())
-        }.stateIn(this)
-    }
+    private suspend fun CoroutineContext.observeProcessSearchState(): Job =
+        CoroutineScope(this).launch {
+            presenter.state.onEach {
+                Timber.d(it.toString())
+            }.stateIn(this)
+        }
+
 
     private fun sendProgressNotification(foundUsersCount: Int, foundUsersLimit: Int) {
         val contentText = applicationContext.getString(
