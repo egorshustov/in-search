@@ -26,9 +26,12 @@ import kotlin.coroutines.CoroutineContext
 internal class ProcessSearchWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val presenter: ProcessSearchPresenter,
+    presenterFactory: ProcessSearchPresenterImpl.Factory,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : CoroutineWorker(appContext, workerParams) {
+
+    private val presenter: ProcessSearchPresenter =
+        presenterFactory.create(inputData.getLong(SEARCH_ID_ARG, 0))
 
     private val notificationBuilder =
         NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
@@ -37,10 +40,7 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         setForeground(createForegroundInfo())
 
         val observeJob = coroutineContext.observeProcessSearchState()
-
-        val searchId = inputData.getLong(SEARCH_ID_ARG, 0)
-        presenter.startSearch(searchId).join()
-
+        presenter.startSearch().join()
         observeJob.cancelAndJoin()
 
         Timber.d("Result.success()")

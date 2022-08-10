@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.egorshustov.vpoiske.core.common.model.Result
+import com.egorshustov.vpoiske.core.common.model.data
 import com.egorshustov.vpoiske.core.domain.user.GetLastSearchUsersUseCase
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
 import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
@@ -16,12 +17,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 internal class MainSearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    val getLastSearchUsersUseCase: GetLastSearchUsersUseCase,
+    private val getLastSearchUsersUseCase: GetLastSearchUsersUseCase,
     @ApplicationContext appContext: Context
 ) : ViewModel() {
 
@@ -34,7 +36,7 @@ internal class MainSearchViewModel @Inject constructor(
 
     init {
         getLastSearchUsers()
-        onStartSearchProcess(1, appContext) // TODO: remove after testing
+        //onStartSearchProcess(2, appContext) // TODO: remove after testing
     }
 
     fun onTriggerEvent(event: MainSearchEvent) {
@@ -64,13 +66,14 @@ internal class MainSearchViewModel @Inject constructor(
 
         WorkManager.getInstance(appContext).enqueueUniqueWork(
             "ProcessSearchWorker",
-            ExistingWorkPolicy.KEEP,
+            ExistingWorkPolicy.REPLACE, // todo replace with KEEP after testing
             request
         )
     }
 
     private fun getLastSearchUsers() {
         getLastSearchUsersUseCase(Unit).onEach {
+            Timber.d(it.data.toString())
             if (it is Result.Success) {
                 _state.value = state.value.copy(users = it.data)
             }

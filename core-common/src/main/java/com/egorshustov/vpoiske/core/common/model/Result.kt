@@ -1,6 +1,7 @@
 package com.egorshustov.vpoiske.core.common.model
 
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 
 /**
  * A generic interface that holds a value with its loading status.
@@ -27,6 +28,7 @@ suspend inline fun <T, R> Result<T>.map(crossinline transform: suspend (value: T
             try {
                 Result.Success(transform(data))
             } catch (e: Throwable) {
+                Timber.e(e)
                 Result.Error(e)
             }
         is Result.Loading -> Result.Loading

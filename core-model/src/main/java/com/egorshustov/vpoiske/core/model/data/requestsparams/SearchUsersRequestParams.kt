@@ -1,5 +1,10 @@
 package com.egorshustov.vpoiske.core.model.data.requestsparams
 
+const val SEARCH_USERS_FRIENDS_LIMIT_SET_FIELDS = "last_seen,contacts,followers_count"
+const val SEARCH_USERS_FRIENDS_LIMIT_NOT_SET_FIELDS =
+    "last_seen,contacts,followers_count,photo_id,sex,bdate,city,country,home_town,photo_50,photo_max,photo_max_orig,contacts,relation,can_write_private_message,can_send_friend_request"
+const val MAX_POSSIBLE_USERS_COUNT = 1000
+
 data class SearchUsersRequestParams(
     val countryId: Int,
     val cityId: Int,

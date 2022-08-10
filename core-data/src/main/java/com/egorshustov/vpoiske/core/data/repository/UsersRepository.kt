@@ -11,6 +11,8 @@ interface UsersRepository {
 
     fun getUsersStream(searchId: Long): Flow<List<User>>
 
+    fun getUsersCountStream(searchId: Long): Flow<Int>
+
     suspend fun saveUser(user: User): Result<Long>
 
     suspend fun saveUsers(users: List<User>): Result<List<Long>>

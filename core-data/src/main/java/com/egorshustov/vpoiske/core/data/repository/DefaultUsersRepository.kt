@@ -35,6 +35,10 @@ internal class DefaultUsersRepository @Inject constructor(
         .map { it.asExternalModelList() }
         .flowOn(ioDispatcher)
 
+    override fun getUsersCountStream(searchId: Long): Flow<Int> = usersDatabaseDataSource
+        .getUsersCountStream(searchId)
+        .flowOn(ioDispatcher)
+
     override suspend fun saveUser(user: User): Result<Long> = withContext(ioDispatcher) {
         usersDatabaseDataSource.saveUser(user.asEntity())
     }

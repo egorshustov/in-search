@@ -11,3 +11,7 @@ sealed class NetworkException(
         val vkErrorCode: Int? = null
     ) : NetworkException(message, cause)
 }
+
+val NetworkException.VkException.needToWait: Boolean
+    get() = vkErrorCode == VkApiError.TOO_MANY_REQUESTS_PER_SECOND.code
+            || vkErrorCode == VkApiError.FLOOD_CONTROL.code

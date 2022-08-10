@@ -17,5 +17,9 @@ data class Search(
     val friendsMaxCount: Int?,
     val followersMinCount: Int,
     val followersMaxCount: Int,
-    val startTime: UnixSeconds
+    val startTime: UnixSeconds,
+    val id: Long? = null
 )
+
+val Search.isFriendsLimitSet: Boolean
+    get() = friendsMinCount != null || friendsMaxCount != null

@@ -9,3 +9,5 @@ fun UrlString.prepareUrlAndParseSafely(): Uri? = try {
 } catch (e: Exception) {
     null
 }
+
+fun String.extractDigits(): String = replace("\\D+".toRegex(), "")

@@ -73,5 +73,6 @@ fun SearchEntity.asExternalModel() = Search(
     friendsMaxCount = friendsMaxCount,
     followersMinCount = followersMinCount,
     followersMaxCount = followersMaxCount,
-    startTime = UnixSeconds(startUnixSeconds)
+    startTime = UnixSeconds(startUnixSeconds),
+    id = id
 )

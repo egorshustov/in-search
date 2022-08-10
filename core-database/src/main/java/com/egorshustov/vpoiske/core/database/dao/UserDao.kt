@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface UserDao {
 
-    @Query("SELECT * FROM users WHERE id = :searchId ORDER BY found_unix_millis")
+    @Query("SELECT * FROM users WHERE search_id = :searchId ORDER BY found_unix_millis")
     fun getUsersStream(searchId: Long): Flow<List<UserEntity>>
+
+    @Query("SELECT COUNT(*) FROM users WHERE search_id = :searchId")
+    fun getUsersCountStream(searchId: Long): Flow<Int>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreUser(entity: UserEntity): Long

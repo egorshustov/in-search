@@ -22,6 +22,9 @@ internal class UsersRoomDataSource @Inject constructor(
     override fun getUsersStream(searchId: Long): Flow<List<UserEntity>> =
         userDao.getUsersStream(searchId).flowOn(ioDispatcher)
 
+    override fun getUsersCountStream(searchId: Long): Flow<Int> =
+        userDao.getUsersCountStream(searchId).flowOn(ioDispatcher)
+
     override suspend fun saveUser(entity: UserEntity): Result<Long> = withContext(ioDispatcher) {
         try {
             val userId = userDao.insertOrIgnoreUser(entity)

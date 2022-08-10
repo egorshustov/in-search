@@ -37,7 +37,7 @@ internal class ParamsViewModel @Inject constructor(
     private val _state: MutableState<ParamsState> = mutableStateOf(ParamsState())
     val state: State<ParamsState> = _state
 
-    private val accessTokenFlow: SharedFlow<String> = getAccessTokenUseCase(Unit)
+    private val accessTokenFlow: StateFlow<String> = getAccessTokenUseCase(Unit)
         .mapNotNull {
             if (it.data?.isBlank() == true) {
                 _state.value = state.value.copy(
@@ -46,10 +46,10 @@ internal class ParamsViewModel @Inject constructor(
             }
             it.data
         }
-        .shareIn(
+        .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            replay = 1
+            started = SharingStarted.Lazily,
+            initialValue = ""
         )
 
     init {
@@ -274,7 +274,9 @@ internal class ParamsViewModel @Inject constructor(
         val foundUsersLimit = state.extraOptionsState.foundUsersLimit
         val daysInterval = state.extraOptionsState.daysInterval
         val friendsMinCount = state.friendsRangeState.selectedFriendsMinCount
+            .takeIf { state.friendsRangeState.needToSetFriendsRange }
         val friendsMaxCount = state.friendsRangeState.selectedFriendsMaxCount
+            .takeIf { state.friendsRangeState.needToSetFriendsRange }
         val followersMinCount = state.followersRangeState.selectedFollowersMinCount
         val followersMaxCount = state.followersRangeState.selectedFollowersMaxCount
         val startTime = currentTime.toSeconds()
