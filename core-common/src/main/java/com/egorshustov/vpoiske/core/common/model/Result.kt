@@ -13,14 +13,10 @@ sealed interface Result<out R> {
     object Loading : Result<Nothing>
 }
 
-fun <T> Flow<T>.asResult(): Flow<Result<T>> {
-    return this
-        .map<T, Result<T>> {
-            Result.Success(it)
-        }
+fun <T> Flow<T>.asResult(): Flow<Result<T>> =
+    map<T, Result<T>> { Result.Success(it) }
         .onStart { emit(Result.Loading) }
         .catch { emit(Result.Error(it)) }
-}
 
 suspend inline fun <T, R> Result<T>.map(crossinline transform: suspend (value: T) -> R): Result<R> =
     when (this) {
@@ -38,6 +34,12 @@ suspend inline fun <T, R> Result<T>.map(crossinline transform: suspend (value: T
 inline fun <T, R> Flow<Result<T>>.mapResult(crossinline transform: suspend (value: T) -> R): Flow<Result<R>> =
     map { it.map(transform) }
 
+inline fun <T> Flow<Result<T>>.doOnError(crossinline action: suspend (value: Result.Error) -> Unit): Flow<Result<T>> =
+    onEach { if (it is Result.Error) action(it) }
+
+fun <T> Flow<Result<T>>.ignoreResultData(): Flow<Result<Unit>> =
+    map { it.map { } }
+
 /**
  * `true` if [Result] is of type [Result.Success] & holds non-null [Result.Success.data].
  */
@@ -48,6 +50,9 @@ fun <T> Result<T>.successOr(fallback: T): T = (this as? Result.Success<T>)?.data
 
 val <T> Result<T>.data: T?
     get() = (this as? Result.Success)?.data
+
+val <T> Result<T>.exception: Throwable?
+    get() = (this as? Result.Error)?.exception
 
 /**
  * Updates value of [MutableStateFlow] if [Result] is of type [Result.Success]

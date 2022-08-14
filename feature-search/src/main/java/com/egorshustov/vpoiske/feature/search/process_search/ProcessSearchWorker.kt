@@ -39,9 +39,9 @@ internal class ProcessSearchWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         setForeground(createForegroundInfo())
 
-        val observeJob = coroutineContext.observeProcessSearchState()
+        val collectStateJob = coroutineContext.collectProcessSearchState()
         presenter.startSearch().join()
-        observeJob.cancelAndJoin()
+        collectStateJob.cancelAndJoin()
 
         Timber.d("Result.success()")
         return@withContext Result.success()
@@ -80,7 +80,7 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         null
     }
 
-    private suspend fun CoroutineContext.observeProcessSearchState(): Job =
+    private suspend fun CoroutineContext.collectProcessSearchState(): Job =
         CoroutineScope(this).launch {
             presenter.state.onEach {
                 Timber.d(it.toString())

@@ -7,7 +7,7 @@ import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.model.data.requestsparams.GetCitiesRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
-import com.egorshustov.vpoiske.core.network.ktor.isSuccessful
+import com.egorshustov.vpoiske.core.network.isSuccessful
 import com.egorshustov.vpoiske.core.network.model.getcities.CityResponse
 import com.egorshustov.vpoiske.core.network.model.getcities.GetCitiesResponse
 import io.ktor.client.*

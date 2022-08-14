@@ -36,5 +36,6 @@ dependencies {
     implementation(Ktor.core)
     implementation(Ktor.contentNegotiation)
     implementation(Ktor.jsonSerialization)
+    implementation(Ktor.logging)
     implementation(Ktor.android)
 }

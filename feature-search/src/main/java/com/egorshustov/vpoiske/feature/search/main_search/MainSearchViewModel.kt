@@ -73,7 +73,7 @@ internal class MainSearchViewModel @Inject constructor(
 
     private fun getLastSearchUsers() {
         getLastSearchUsersUseCase(Unit).onEach {
-            Timber.d(it.data.toString())
+            //Timber.d(it.data.toString())
             if (it is Result.Success) {
                 _state.value = state.value.copy(users = it.data)
             }

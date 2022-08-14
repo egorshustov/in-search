@@ -1,8 +1,6 @@
 package com.egorshustov.vpoiske.feature.search.process_search
 
-import com.egorshustov.vpoiske.core.common.model.data
-import com.egorshustov.vpoiske.core.common.model.mapResult
-import com.egorshustov.vpoiske.core.common.model.succeeded
+import com.egorshustov.vpoiske.core.common.model.*
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.common.utils.*
@@ -37,13 +35,13 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         Timber.d("Caught exceptionHandler $exception")
     }
 
-    private val coroutineScope = CoroutineScope(ioDispatcher + exceptionHandler)
+    private val presenterScope = CoroutineScope(ioDispatcher + exceptionHandler)
 
     private val accessTokenFlow: StateFlow<String> = getAccessTokenUseCase(Unit)
         .mapNotNull { it.data }
         .log("accessTokenFlow")
         .stateIn(
-            scope = coroutineScope,
+            scope = presenterScope,
             started = SharingStarted.Lazily,
             initialValue = ""
         )
@@ -53,7 +51,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     ).mapNotNull { it.data }
         .log("foundUsersCountFlow")
         .stateIn(
-            scope = coroutineScope,
+            scope = presenterScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = 0
         )
@@ -67,7 +65,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         foundUsersLimit != null && foundUsersCount >= foundUsersLimit
     }.log("isSearchCompletedFlow")
         .stateIn(
-            scope = coroutineScope,
+            scope = presenterScope,
             started = SharingStarted.Lazily,
             initialValue = false
         )
@@ -82,21 +80,16 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     }.distinctUntilChanged()
         .log("ProcessSearchState")
         .stateIn(
-            scope = coroutineScope,
+            scope = presenterScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = ProcessSearchState.Empty
         )
 
     init {
-        coroutineScope.launch {
-            isSearchCompletedFlow.collectLatest { isSearchCompleted ->
-                Timber.d("isSearchCompleted $isSearchCompleted")
-                if (isSearchCompleted) cancel()
-            }
-        }
+        collectIsSearchCompleted()
     }
 
-    override suspend fun startSearch(): Job = coroutineScope.launch {
+    override suspend fun startSearch(): Job = presenterScope.launch {
         Timber.d("startSearch with id: $searchId")
         val search = getSearchUseCase(GetSearchUseCaseParams(searchId)).data ?: return@launch
         Timber.d("Search obtained from DB: $search")
@@ -111,7 +104,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
 
     private suspend fun Search.init() {
         Timber.d("Current isSearchCompletedFlow.value: ${isSearchCompletedFlow.value}")
-        while (!isSearchCompletedFlow.value) {
+        while (true) {
             val randomDay = (1..MAX_DAYS_IN_MONTH).random()
             val randomMonth = (1..MONTHS_IN_YEAR).random()
             Timber.d("Search users with birthday: $randomDay.$randomMonth")
@@ -128,37 +121,17 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         search: Search,
         birthDay: Int,
         birthMonth: Int
-    ): Job = CoroutineScope(coroutineScope.coroutineContext).launch {
+    ): Job = CoroutineScope(presenterScope.coroutineContext).launch {
+        // todo check if: presenterScope.launch { gonna work
         accessTokenFlow
-            .filterNot { it.isBlank() }
-            .flatMapMerge { accessToken ->
-                searchUsersUseCase(
-                    SearchUsersUseCaseParams(
-                        searchUsersParams = SearchUsersRequestParams(
-                            countryId = search.country.id,
-                            cityId = search.city.id,
-                            ageFrom = search.ageFrom,
-                            ageTo = search.ageTo,
-                            birthDay = birthDay,
-                            birthMonth = birthMonth,
-                            fields = if (search.isFriendsLimitSet) {
-                                SEARCH_USERS_FRIENDS_LIMIT_SET_FIELDS
-                            } else {
-                                SEARCH_USERS_FRIENDS_LIMIT_NOT_SET_FIELDS
-                            },
-                            homeTown = search.homeTown?.takeUnless { it.isBlank() },
-                            relationId = search.relation.id,
-                            genderId = search.gender.id,
-                            hasPhoto = true,
-                            count = MAX_POSSIBLE_USERS_COUNT,
-                            sortTypeId = UsersSortType.BY_REGISTRATION_DATE.id
-                        ),
-                        commonParams = VkCommonRequestParams(accessToken)
-                    )
-                )
-            }.mapResult { searchUsers ->
-                searchUsers.filterSearchUsers(search)
-            }.mapResult { filteredSearchUsers ->
+            .filterNot { accessToken -> accessToken.isBlank() }
+            .getUsersWithSearchRequest(
+                search = search,
+                birthDay = birthDay,
+                birthMonth = birthMonth
+            )
+            .filterUsersObtainedWithSearchRequest(search)
+            .mapResult { filteredSearchUsers ->
                 if (search.isFriendsLimitSet) {
                     // TODO sendGetUserRequest for every filteredSearchUsersList user
                 } else {
@@ -168,34 +141,82 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
                             it.searchId = search.id
                             it.foundTime = time
                         }
-                        val saved = saveUsersUseCase(SaveUsersUseCaseParams(filteredSearchUsers))
-                        Timber.d("Saved users count: ${saved.data?.size}")
+                    }
+                    saveUsersUseCase(SaveUsersUseCaseParams(filteredSearchUsers)).also {
+                        Timber.d("Saved users count: ${it.data?.size}")
                     }
                 }
-                //Unit
             }
+            .ignoreResultData()
             .onEach {
-                Timber.d("onEach succeeded ${it.succeeded}")
+                Timber.d("onEach $it")
                 if (it.succeeded) currentCoroutineContext().cancel()
-            }
-            .launchIn(this)
+            }.launchIn(this)
 
         Timber.d("Search users return")
     }
 
-    private fun List<User>.filterSearchUsers(search: Search): List<User> = with(search) {
-        Timber.d("Search users count initial: $size")
-        filter { user ->
-            val isNotClosed = user.permissions.isClosed == false
-            val isFollowersCountAcceptable =
-                user.counters?.followers in followersMinCount..followersMaxCount
-            val isInDaysInterval = startTime - (user.lastSeen?.time ?: UnixSeconds.Zero) <
-                    UnixSeconds(daysInterval * SECONDS_IN_DAY)
-            val phoneCheckPassed = if (withPhoneOnly) user.hasValidPhone else true
+    private fun Flow<String>.getUsersWithSearchRequest(
+        search: Search,
+        birthDay: Int,
+        birthMonth: Int
+    ): Flow<Result<List<User>>> = flatMapMerge { accessToken ->
+        searchUsersUseCase(
+            SearchUsersUseCaseParams(
+                searchUsersParams = SearchUsersRequestParams(
+                    countryId = search.country.id,
+                    cityId = search.city.id,
+                    ageFrom = search.ageFrom,
+                    ageTo = search.ageTo,
+                    birthDay = birthDay,
+                    birthMonth = birthMonth,
+                    fields = if (search.isFriendsLimitSet) {
+                        SEARCH_USERS_FRIENDS_LIMIT_SET_FIELDS
+                    } else {
+                        SEARCH_USERS_FRIENDS_LIMIT_NOT_SET_FIELDS
+                    },
+                    homeTown = search.homeTown?.takeUnless { it.isBlank() },
+                    relationId = search.relation.id,
+                    genderId = search.gender.id,
+                    hasPhoto = true,
+                    count = MAX_POSSIBLE_USERS_COUNT,
+                    sortTypeId = UsersSortType.BY_REGISTRATION_DATE.id
+                ),
+                commonParams = VkCommonRequestParams(accessToken)
+            )
+        ).also {
+            Timber.d("Let's wait for a ${pauseDelay.count} millis to prevent API flood block")
+            delay(pauseDelay.toDuration())
+        }
+    }
 
-            isNotClosed && isFollowersCountAcceptable && isInDaysInterval && phoneCheckPassed
-        }.also {
-            Timber.d("Search users count filtered: ${it.size}")
+    private fun Flow<Result<List<User>>>.filterUsersObtainedWithSearchRequest(search: Search): Flow<Result<List<User>>> =
+        mapResult { users ->
+            Timber.d(
+                "Filter users obtained with search request\n" +
+                        "Search users count initial: ${users.size}"
+            )
+            users.filter { user ->
+                val isNotClosed = user.permissions.isClosed == false
+                val isFollowersCountAcceptable =
+                    user.counters?.followers in search.followersMinCount..search.followersMaxCount
+                val isInDaysInterval =
+                    search.startTime - (user.lastSeen?.time ?: UnixSeconds.Zero) <
+                            UnixSeconds(search.daysInterval * SECONDS_IN_DAY)
+                val phoneCheckPassed = if (search.withPhoneOnly) user.hasValidPhone else true
+
+                isNotClosed && isFollowersCountAcceptable && isInDaysInterval && phoneCheckPassed
+            }.also {
+                Timber.d("Search users count filtered: ${it.size}")
+            }
+        }
+
+    private fun collectIsSearchCompleted() {
+        presenterScope.launch {
+            isSearchCompletedFlow.collectLatest { isSearchCompleted ->
+                Timber.d("isSearchCompleted $isSearchCompleted")
+                if (isSearchCompleted) cancel()
+            }
         }
     }
 
@@ -207,5 +228,10 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     interface Factory {
 
         fun create(@Assisted("searchId") searchId: Long): ProcessSearchPresenterImpl
+    }
+
+    private companion object {
+
+        private val pauseDelay: Millis = Millis(500)
     }
 }

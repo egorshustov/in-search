@@ -1,5 +1,9 @@
 package com.egorshustov.vpoiske.core.common.utils
 
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
+
 @JvmInline
 value class Seconds(val count: Int) : Comparable<Seconds> {
 
@@ -13,13 +17,17 @@ value class Seconds(val count: Int) : Comparable<Seconds> {
 }
 typealias UnixSeconds = Seconds
 
-fun Seconds.toMillis() = Millis(count.toLong() * MILLIS_IN_SECOND)
+fun Seconds.toMillis(): Millis = Millis(count.toLong() * MILLIS_IN_SECOND)
+
+fun Seconds.toDuration(): Duration = count.toDuration(DurationUnit.SECONDS)
 
 @JvmInline
 value class Millis(val count: Long)
 typealias UnixMillis = Millis
 
-fun Millis.toSeconds() = Seconds((count / MILLIS_IN_SECOND).toInt())
+fun Millis.toSeconds(): Seconds = Seconds((count / MILLIS_IN_SECOND).toInt())
+
+fun Millis.toDuration(): Duration = count.toDuration(DurationUnit.MILLISECONDS)
 
 val currentTime: UnixMillis
     get() = UnixMillis(System.currentTimeMillis())
