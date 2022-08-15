@@ -1,0 +1,24 @@
+[versions]
+firebaseBom = "30.3.1"
+
+ktor = "2.0.3"
+
+coil = "2.1.0"
+timber = "5.0.1"
+
+[libraries]
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlyticsKtx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-analyticsKtx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+[plugins]
+

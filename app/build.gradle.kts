@@ -96,9 +96,9 @@ dependencies {
     implementation(AndroidX.workRuntimeKtx)
     implementation(Hilt.hiltWork)
 
-    implementation(platform(Firebase.firebaseBom))
-    implementation(Firebase.firebaseCrashlyticsKtx)
-    implementation(Firebase.firebaseAnalyticsKtx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlyticsKtx)
+    implementation(libs.firebase.analyticsKtx)
 
     debugImplementation(Compose.uiTooling)
 }

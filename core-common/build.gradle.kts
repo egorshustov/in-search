@@ -31,7 +31,7 @@ dependencies {
     api(Compose.navigationCompose)
     api(Hilt.hiltAndroid)
     api(Hilt.hiltNavigationCompose)
-    api(Timber.timber)
+    api(libs.timber)
 
     kapt(Hilt.hiltCompiler)
 }

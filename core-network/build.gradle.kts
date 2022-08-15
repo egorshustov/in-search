@@ -33,9 +33,9 @@ dependencies {
 
     kapt(Hilt.hiltCompiler)
 
-    implementation(Ktor.core)
-    implementation(Ktor.contentNegotiation)
-    implementation(Ktor.jsonSerialization)
-    implementation(Ktor.logging)
-    implementation(Ktor.android)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 }
