@@ -16,6 +16,7 @@
     <string name="search_main_title">ВПоиске</string>
     <string name="search_main_no_searches">Поиски отсутствуют</string>
     <string name="search_main_start_new_search">Начать новый поиск</string>
+    <string name="search_main_user_description">Изображение пользователя %s</string>
 
     <string name="search_process_in_progress">Выполняется поиск</string>
     <string name="search_process_cancel">Отмена</string>

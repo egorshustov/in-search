@@ -46,3 +46,33 @@ private val User.isHomePhoneValid: Boolean
         // maybe should add additional logical conditions here (depending on the final output)
         else -> true
     }
+
+val mockUser = User( // todo: move to tests directory later
+    id = 0,
+    firstName = "firstName",
+    lastName = "lastName",
+    gender = Gender.MALE,
+    birthDate = "22.11",
+    city = null,
+    country = null,
+    homeTown = "",
+    photosInfo = UserPhotosInfo(
+        photoId = "",
+        photo50 = "",
+        photoMax = "",
+        photoMaxOrig = ""
+    ),
+    mobilePhone = "",
+    homePhone = "",
+    relation = Relation.NOT_DEFINED,
+    lastSeen = null,
+    counters = null,
+    permissions = UserPermissions(
+        isClosed = true,
+        canAccessClosed = true,
+        canWritePrivateMessage = true,
+        canSendFriendRequest = true
+    ),
+    searchId = -1,
+    foundTime = UnixMillis(0)
+)

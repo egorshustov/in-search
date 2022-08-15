@@ -17,7 +17,7 @@ val Throwable.isFloodOrTooManyRequests: Boolean
             (vkErrorCode == VkApiError.TOO_MANY_REQUESTS_PER_SECOND.code
                     || vkErrorCode == VkApiError.FLOOD_CONTROL.code)
 
-val testFloodException = NetworkException.VkException( // todo: move to tests directory later
+val mockFloodException = NetworkException.VkException( // todo: move to tests directory later
     message = "Too frequent requests",
     vkErrorCode = VkApiError.FLOOD_CONTROL.code
 )

@@ -1,10 +1,13 @@
 package com.egorshustov.vpoiske.feature.search.main_search.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.egorshustov.vpoiske.core.model.data.mockUser
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchEvent
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchState
 
@@ -15,12 +18,20 @@ internal fun MainSearchScreen(
     onStartNewSearchClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column {
-        if (state.users.isEmpty()) {
-            NoSearchesStub(onStartNewSearchClick = onStartNewSearchClick)
-        } else {
-            state.users.forEach {
-                Text(text = it.firstName + " " + it.lastName)
+    if (state.users.isEmpty()) {
+        NoSearchesStub(onStartNewSearchClick = onStartNewSearchClick)
+    } else {
+        val context = LocalContext.current
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3)
+        ) {
+            items(state.users) { user ->
+                UserCard(
+                    user = user,
+                    onUserCardClick = { userId ->
+                        onTriggerEvent(MainSearchEvent.OnClickUserCard(userId, context))
+                    }
+                )
             }
         }
     }
@@ -30,7 +41,7 @@ internal fun MainSearchScreen(
 @Composable
 internal fun MainSearchScreenPreview() {
     MainSearchScreen(
-        state = MainSearchState(),
+        state = MainSearchState(users = List(100) { mockUser }),
         onTriggerEvent = {},
         onStartNewSearchClick = {},
         modifier = Modifier

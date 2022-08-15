@@ -1,6 +1,8 @@
 package com.egorshustov.vpoiske.feature.search.main_search
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.egorshustov.vpoiske.core.common.model.Result
-import com.egorshustov.vpoiske.core.common.model.data
 import com.egorshustov.vpoiske.core.domain.user.GetLastSearchUsersUseCase
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
 import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
@@ -17,7 +18,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +45,9 @@ internal class MainSearchViewModel @Inject constructor(
             is MainSearchEvent.OnStartSearchProcess -> onStartSearchProcess(
                 searchId = event.searchId, appContext = event.appContext
             )
+            is MainSearchEvent.OnClickUserCard -> onClickUserCard(
+                userId = event.userId, context = event.context
+            )
         }
     }
 
@@ -54,6 +57,12 @@ internal class MainSearchViewModel @Inject constructor(
 
     private fun onStartSearchProcess(searchId: Long, appContext: Context) {
         enqueueWorkRequest(searchId, appContext)
+    }
+
+    private fun onClickUserCard(userId: Long, context: Context) {
+        val userUrl = "https://vk.com/id$userId"
+        val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(userUrl) }
+        context.startActivity(intent)
     }
 
     private fun enqueueWorkRequest(searchId: Long, appContext: Context) {
@@ -73,7 +82,6 @@ internal class MainSearchViewModel @Inject constructor(
 
     private fun getLastSearchUsers() {
         getLastSearchUsersUseCase(Unit).onEach {
-            //Timber.d(it.data.toString())
             if (it is Result.Success) {
                 _state.value = state.value.copy(users = it.data)
             }
