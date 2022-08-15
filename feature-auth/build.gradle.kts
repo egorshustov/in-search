@@ -36,9 +36,7 @@ dependencies {
     implementation(project(":core-domain"))
     implementation(project(":core-ui"))
 
-    kapt(Hilt.hiltCompiler)
+    kapt(libs.dagger.hilt.compiler)
 
-    implementation(Compose.material3)
-    debugImplementation(Compose.uiTooling)
-    implementation(Compose.uiToolingPreview)
+    implementation(libs.androidx.compose.material3)
 }

@@ -36,5 +36,5 @@ dependencies {
     implementation(AndroidX.roomPaging)
     ksp(AndroidX.roomCompiler)
 
-    kapt(Hilt.hiltCompiler)
+    kapt(libs.dagger.hilt.compiler)
 }

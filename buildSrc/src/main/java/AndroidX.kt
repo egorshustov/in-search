@@ -1,11 +1,5 @@
 object AndroidX {
 
-    private const val coreKtxVersion = "1.8.0"
-    const val coreKtx = "androidx.core:core-ktx:$coreKtxVersion"
-
-    private const val appCompatVersion = "1.4.2"
-    const val appCompat = "androidx.appcompat:appcompat:$appCompatVersion"
-
     private const val lifecycleRuntimeKtxVersion = "2.5.1"
     const val lifecycleRuntimeKtx =
         "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleRuntimeKtxVersion"
@@ -21,15 +15,4 @@ object AndroidX {
     const val roomKtx = "androidx.room:room-ktx:$roomVersion"
     const val roomCompiler = "androidx.room:room-compiler:$roomVersion"
     const val roomPaging = "androidx.room:room-paging:$roomVersion"
-
-    private const val datastorePreferencesVersion = "1.0.0"
-    const val datastorePreferences =
-        "androidx.datastore:datastore-preferences:$datastorePreferencesVersion"
-
-    private const val customViewVersion = "1.1.0"
-    const val customView = "androidx.customview:customview:$customViewVersion"
-
-    private const val customViewPoolingContainerVersion = "1.0.0"
-    const val customViewPoolingContainer = "androidx.customview:customview-poolingcontainer:$customViewPoolingContainerVersion"
-
 }

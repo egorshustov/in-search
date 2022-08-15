@@ -29,6 +29,6 @@ android {
 dependencies {
     implementation(project(":core-common"))
 
-    kapt(Hilt.hiltCompiler)
-    implementation(AndroidX.datastorePreferences)
+    kapt(libs.dagger.hilt.compiler)
+    implementation(libs.androidx.dataStore.preferences)
 }

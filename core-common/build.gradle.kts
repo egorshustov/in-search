@@ -27,11 +27,11 @@ android {
 }
 
 dependencies {
-    api(Compose.runtime)
+    api(libs.androidx.compose.runtime)
     api(Compose.navigationCompose)
-    api(Hilt.hiltAndroid)
-    api(Hilt.hiltNavigationCompose)
+    api(libs.dagger.hilt.android)
+    api(libs.androidx.hilt.navigation.compose)
     api(libs.timber)
 
-    kapt(Hilt.hiltCompiler)
+    kapt(libs.dagger.hilt.compiler)
 }

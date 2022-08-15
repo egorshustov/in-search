@@ -31,7 +31,7 @@ dependencies {
     implementation(project(":core-common"))
     implementation(project(":core-model"))
 
-    kapt(Hilt.hiltCompiler)
+    kapt(libs.dagger.hilt.compiler)
 
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.android)

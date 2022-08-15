@@ -6,8 +6,6 @@ object Build {
     const val kotlinGradlePlugin =
         "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.kotlinVersion}"
 
-    const val hiltGradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:${Hilt.hiltVersion}"
-
     private const val googleServicesPluginVersion = "4.3.13"
     const val googleServicesPlugin = "com.google.gms:google-services:$googleServicesPluginVersion"
 

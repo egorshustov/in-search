@@ -82,23 +82,20 @@ dependencies {
     implementation(project(":feature-params"))
     implementation(project(":feature-search"))
 
-    implementation(AndroidX.coreKtx)
-    implementation(AndroidX.appCompat)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
     implementation(Google.material)
-    implementation(Compose.material3)
-    implementation(Compose.uiToolingPreview)
-    implementation(Compose.activity)
+    implementation(libs.androidx.compose.material3)
     implementation(AndroidX.lifecycleRuntimeKtx)
 
-    implementation(Hilt.hiltAndroid)
-    kapt(Hilt.hiltCompiler)
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.compiler)
 
     implementation(AndroidX.workRuntimeKtx)
-    implementation(Hilt.hiltWork)
+    implementation(libs.androidx.hilt.work)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlyticsKtx)
     implementation(libs.firebase.analyticsKtx)
-
-    debugImplementation(Compose.uiTooling)
 }
