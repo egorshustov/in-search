@@ -1,8 +1,10 @@
+// TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id(Plugins.androidLibrary)
     kotlin(KotlinPlugins.android)
     kotlin(KotlinPlugins.kapt)
-    id(Plugins.ksp) version Kotlin.kspVersion
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -23,7 +25,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Compose.composeVersion
+        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
     }
 }
 
@@ -31,10 +33,10 @@ dependencies {
     implementation(project(":core-common"))
     implementation(project(":core-model"))
 
-    implementation(AndroidX.roomRuntime)
-    implementation(AndroidX.roomKtx)
-    implementation(AndroidX.roomPaging)
-    ksp(AndroidX.roomCompiler)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    ksp(libs.androidx.room.compiler)
 
     kapt(libs.dagger.hilt.compiler)
 }

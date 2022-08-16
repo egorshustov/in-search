@@ -5,11 +5,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath(Build.gradleBuildTools)
-        classpath(Build.kotlinGradlePlugin)
+        classpath(libs.android.gradlePlugin)
+        classpath(libs.kotlin.gradlePlugin)
         classpath(libs.dagger.hilt.gradlePlugin)
-        classpath(Build.googleServicesPlugin)
-        classpath(Build.firebaseCrashlyticsPlugin)
+        classpath(libs.gms.googleServices)
+        classpath(libs.firebase.crashlyticsGradle)
     }
 }
 

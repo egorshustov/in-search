@@ -22,13 +22,13 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Compose.composeVersion
+        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
     }
 }
 
 dependencies {
     implementation(project(":core-common"))
 
-    kapt(libs.dagger.hilt.compiler)
     implementation(libs.androidx.dataStore.preferences)
+    kapt(libs.dagger.hilt.compiler)
 }

@@ -22,7 +22,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Compose.composeVersion
+        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
     }
 }
 
@@ -34,10 +34,9 @@ dependencies {
     implementation(project(":core-ui"))
 
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
 
     kapt(libs.dagger.hilt.compiler)
     kapt(libs.androidx.hilt.compiler)
-
-    implementation(AndroidX.workRuntimeKtx)
-    implementation(libs.androidx.hilt.work)
 }

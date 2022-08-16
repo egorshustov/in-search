@@ -65,7 +65,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Compose.composeVersion
+        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
     }
     packagingOptions {
         resources {
@@ -85,15 +85,13 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
-    implementation(Google.material)
     implementation(libs.androidx.compose.material3)
-    implementation(AndroidX.lifecycleRuntimeKtx)
+    implementation(libs.androidx.lifecycle.runtimeKtx)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
 
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)
-
-    implementation(AndroidX.workRuntimeKtx)
-    implementation(libs.androidx.hilt.work)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlyticsKtx)

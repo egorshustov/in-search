@@ -22,7 +22,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Compose.composeVersion
+        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
     }
 }
 
@@ -33,7 +33,7 @@ dependencies {
     implementation(project(":core-datastore"))
     implementation(project(":core-network"))
 
-    implementation(AndroidX.roomPaging)
+    implementation(libs.androidx.room.paging)
 
     kapt(libs.dagger.hilt.compiler)
 }
