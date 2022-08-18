@@ -27,6 +27,9 @@ android {
 }
 
 dependencies {
+    api(libs.kotlinx.coroutines.core)
+    api(libs.kotlinx.coroutines.android)
+
     api(libs.androidx.compose.runtime)
     api(libs.androidx.navigation.compose)
     api(libs.androidx.hilt.navigation.compose)
