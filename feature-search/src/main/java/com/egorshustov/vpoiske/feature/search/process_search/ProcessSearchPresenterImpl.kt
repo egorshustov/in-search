@@ -22,11 +22,13 @@ import timber.log.Timber
 internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     @Assisted("searchId") private val searchId: Long,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    getAccessTokenUseCase: GetAccessTokenUseCase,
+    private val getAccessTokenUseCase: GetAccessTokenUseCase,
     private val getSearchUseCase: GetSearchUseCase,
     getUsersCountUseCase: GetUsersCountUseCase,
     private val searchUsersUseCase: SearchUsersUseCase,
-    private val saveUsersUseCase: SaveUsersUseCase
+    private val saveUsersUseCase: SaveUsersUseCase,
+    private val getUserUseCase: GetUserUseCase,
+    private val saveUserUseCase: SaveUserUseCase
 ) : ProcessSearchPresenter {
 
     // This exception handler allows to catch non-cancellation exceptions
@@ -36,15 +38,6 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     }
 
     private val presenterScope = CoroutineScope(ioDispatcher + exceptionHandler)
-
-    private val accessTokenFlow: StateFlow<String> = getAccessTokenUseCase(Unit)
-        .mapNotNull { it.data }
-        .log("accessTokenFlow")
-        .stateIn(
-            scope = presenterScope,
-            started = SharingStarted.Lazily,
-            initialValue = ""
-        )
 
     private val foundUsersCountFlow: StateFlow<Int> = getUsersCountUseCase(
         GetUsersCountUseCaseParams(searchId)
@@ -104,7 +97,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
 
     private suspend fun Search.init() {
         Timber.d("Current isSearchCompletedFlow.value: ${isSearchCompletedFlow.value}")
-        while (true) {
+        while (!isSearchCompletedFlow.value) {
             val randomDay = (1..MAX_DAYS_IN_MONTH).random()
             val randomMonth = (1..MONTHS_IN_YEAR).random()
             Timber.d("Search users with birthday: $randomDay.$randomMonth")
@@ -117,80 +110,61 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         }
     }
 
-    private suspend fun searchUsers(
-        search: Search,
-        birthDay: Int,
-        birthMonth: Int
-    ): Job = CoroutineScope(presenterScope.coroutineContext).launch {
-        // todo check if: presenterScope.launch { gonna work
-        accessTokenFlow
-            .filterNot { accessToken -> accessToken.isBlank() }
-            .getUsersWithSearchRequest(
+    private fun searchUsers(search: Search, birthDay: Int, birthMonth: Int): Job = getAccessToken()
+        .flatMapMerge { accessToken ->
+            getUsers(
                 search = search,
                 birthDay = birthDay,
-                birthMonth = birthMonth
-            )
-            .filterUsersObtainedWithSearchRequest(search)
-            .mapResult { filteredSearchUsers ->
+                birthMonth = birthMonth,
+                accessToken = accessToken
+            ).filterUsers(search).concatMapResult { filteredUsers ->
                 if (search.isFriendsLimitSet) {
-                    // TODO sendGetUserRequest for every filteredSearchUsersList user
+                    filteredUsers.fetchAdditionalDataAndProcess(search, accessToken)
                 } else {
-                    filteredSearchUsers.apply {
-                        val time = currentTime
-                        forEach {
-                            it.searchId = search.id
-                            it.foundTime = time
-                        }
-                    }
-                    saveUsersUseCase(SaveUsersUseCaseParams(filteredSearchUsers)).also {
-                        Timber.d("Saved users count: ${it.data?.size}")
-                    }
+                    filteredUsers.saveUsers(search)
                 }
             }
-            .ignoreResultData()
-            .onEach {
-                Timber.d("onEach $it")
-                if (it.succeeded) currentCoroutineContext().cancel()
-            }.launchIn(this)
+        }.launchIn(presenterScope)
 
-        Timber.d("Search users return")
-    }
+    private fun getAccessToken(): Flow<String> = getAccessTokenUseCase(Unit)
+        .map { it.data.toString() }
+        .filterNot { it.isBlank() }
+        .take(1)
 
-    private fun Flow<String>.getUsersWithSearchRequest(
+    private fun getUsers(
         search: Search,
         birthDay: Int,
-        birthMonth: Int
-    ): Flow<Result<List<User>>> = flatMapMerge { accessToken ->
-        searchUsersUseCase(
-            SearchUsersUseCaseParams(
-                searchUsersParams = SearchUsersRequestParams(
-                    countryId = search.country.id,
-                    cityId = search.city.id,
-                    ageFrom = search.ageFrom,
-                    ageTo = search.ageTo,
-                    birthDay = birthDay,
-                    birthMonth = birthMonth,
-                    fields = if (search.isFriendsLimitSet) {
-                        SEARCH_USERS_FRIENDS_LIMIT_SET_FIELDS
-                    } else {
-                        SEARCH_USERS_FRIENDS_LIMIT_NOT_SET_FIELDS
-                    },
-                    homeTown = search.homeTown?.takeUnless { it.isBlank() },
-                    relationId = search.relation.id,
-                    genderId = search.gender.id,
-                    hasPhoto = true,
-                    count = MAX_POSSIBLE_USERS_COUNT,
-                    sortTypeId = UsersSortType.BY_REGISTRATION_DATE.id
-                ),
-                commonParams = VkCommonRequestParams(accessToken)
-            )
-        ).also {
-            Timber.d("Let's wait for a ${pauseDelay.count} millis to prevent API flood block")
-            delay(pauseDelay.toDuration())
-        }
+        birthMonth: Int,
+        accessToken: String
+    ): Flow<Result<List<User>>> = searchUsersUseCase(
+        SearchUsersUseCaseParams(
+            searchUsersParams = SearchUsersRequestParams(
+                countryId = search.country.id,
+                cityId = search.city.id,
+                ageFrom = search.ageFrom,
+                ageTo = search.ageTo,
+                birthDay = birthDay,
+                birthMonth = birthMonth,
+                fields = if (search.isFriendsLimitSet) {
+                    SEARCH_USERS_FRIENDS_LIMIT_SET_FIELDS
+                } else {
+                    SEARCH_USERS_FRIENDS_LIMIT_NOT_SET_FIELDS
+                },
+                homeTown = search.homeTown?.takeUnless { it.isBlank() },
+                relationId = search.relation.id,
+                genderId = search.gender.id,
+                hasPhoto = true,
+                count = MAX_POSSIBLE_USERS_COUNT,
+                sortTypeId = UsersSortType.BY_REGISTRATION_DATE.id
+            ),
+            commonParams = VkCommonRequestParams(accessToken)
+        )
+    ).doOnResultSuccess {
+        Timber.d("Let's wait for a ${pauseDelay.count} millis to avoid API flood blocking")
+        delay(pauseDelay.toDuration())
     }
 
-    private fun Flow<Result<List<User>>>.filterUsersObtainedWithSearchRequest(search: Search): Flow<Result<List<User>>> =
+    private fun Flow<Result<List<User>>>.filterUsers(search: Search): Flow<Result<List<User>>> =
         mapResult { users ->
             Timber.d(
                 "Filter users obtained with search request\n" +
@@ -210,6 +184,62 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
                 Timber.d("Search users count filtered: ${it.size}")
             }
         }
+
+    private fun List<User>.fetchAdditionalDataAndProcess(
+        search: Search,
+        accessToken: String
+    ): Flow<Result<Unit>> = asFlow().flatMapConcat {
+        // We're sending requests sequentially to avoid API flood blocking:
+        getUser(userId = it.id, accessToken = accessToken)
+            .filterUser(search)
+            .saveUserIfFiltered(search)
+    }
+
+    private fun getUser(userId: Long, accessToken: String): Flow<Result<User>> =
+        getUserUseCase(
+            GetUserUseCaseParams(
+                getUserParams = GetUserRequestParams(
+                    userId = userId,
+                    fields = GET_USER_FIELDS
+                ),
+                commonParams = VkCommonRequestParams(accessToken)
+            )
+        ).doOnResultSuccess {
+            Timber.d("Let's wait for a ${pauseDelay.count} millis to avoid API flood blocking")
+            delay(pauseDelay.toDuration())
+        }
+
+    private fun Flow<Result<User>>.filterUser(search: Search): Flow<Result<User>> =
+        filterResult { user ->
+            val isFriendsCountAcceptable =
+                user.counters?.friends in (search.friendsMinCount ?: 0)..
+                        (search.friendsMaxCount ?: Int.MAX_VALUE)
+
+            val isDesiredRelation = user.relation == search.relation
+            isFriendsCountAcceptable && isDesiredRelation
+        }
+
+    private fun Flow<Result<User>>.saveUserIfFiltered(search: Search): Flow<Result<Unit>> =
+        doOnResultSuccess { user ->
+            user.apply {
+                searchId = search.id
+                foundTime = currentTime
+            }
+            saveUserUseCase(SaveUserUseCaseParams(user))
+        }.ignoreResultData()
+
+    private fun List<User>.saveUsers(search: Search): Flow<Result<Unit>> = suspend {
+        apply {
+            val time = currentTime
+            forEach { user ->
+                user.searchId = search.id
+                user.foundTime = time
+            }
+        }
+        saveUsersUseCase(SaveUsersUseCaseParams(this)).also {
+            Timber.d("Saved users count: ${it.data?.size}")
+        }
+    }.asFlow().ignoreResultData()
 
     private fun collectIsSearchCompleted() {
         presenterScope.launch {

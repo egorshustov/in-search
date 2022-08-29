@@ -1,5 +1,6 @@
 package com.egorshustov.vpoiske.core.common.model
 
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
@@ -34,7 +35,28 @@ suspend inline fun <T, R> Result<T>.map(crossinline transform: suspend (value: T
 inline fun <T, R> Flow<Result<T>>.mapResult(crossinline transform: suspend (value: T) -> R): Flow<Result<R>> =
     map { it.map(transform) }
 
-inline fun <T> Flow<Result<T>>.doOnError(crossinline action: suspend (value: Result.Error) -> Unit): Flow<Result<T>> =
+inline fun <T> Flow<Result<T>>.filterResult(crossinline predicate: suspend (T) -> Boolean): Flow<Result<T>> =
+    transform { value ->
+        when (value) {
+            is Result.Success -> if (predicate(value.data)) emit(value)
+            else -> emit(value)
+        }
+    }
+
+@OptIn(FlowPreview::class)
+inline fun <T, R> Flow<Result<T>>.concatMapResult(crossinline transform: (value: T) -> Flow<Result<R>>): Flow<Result<R>> =
+    flatMapConcat {
+        when (it) {
+            is Result.Success -> transform(it.data)
+            is Result.Error -> flow { emit(it) }
+            Result.Loading -> flow { emit(Result.Loading) }
+        }
+    }
+
+inline fun <T> Flow<Result<T>>.doOnResultSuccess(crossinline action: suspend (value: T) -> Unit): Flow<Result<T>> =
+    onEach { if (it is Result.Success) action(it.data) }
+
+inline fun <T> Flow<Result<T>>.doOnResultError(crossinline action: suspend (value: Result.Error) -> Unit): Flow<Result<T>> =
     onEach { if (it is Result.Error) action(it) }
 
 fun <T> Flow<Result<T>>.ignoreResultData(): Flow<Result<Unit>> =
