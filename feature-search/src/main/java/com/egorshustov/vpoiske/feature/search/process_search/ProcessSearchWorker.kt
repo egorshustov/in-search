@@ -17,10 +17,7 @@ import com.egorshustov.vpoiske.core.ui.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
 
 @HiltWorker
 internal class ProcessSearchWorker @AssistedInject constructor(
@@ -39,7 +36,9 @@ internal class ProcessSearchWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         setForeground(createForegroundInfo())
 
-        val collectStateJob = coroutineContext.collectProcessSearchState()
+        val collectStateJob = CoroutineScope(coroutineContext).launch {
+            collectProcessSearchState()
+        }
         presenter.startSearch().join()
         collectStateJob.cancelAndJoin()
 
@@ -80,13 +79,9 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         null
     }
 
-    private suspend fun CoroutineContext.collectProcessSearchState(): Job =
-        CoroutineScope(this).launch {
-            presenter.state.onEach {
-                Timber.d(it.toString())
-            }.stateIn(this)
-        }
-
+    private suspend fun collectProcessSearchState(): Nothing = presenter.state.collect {
+        Timber.d(it.toString())
+    }
 
     private fun sendProgressNotification(foundUsersCount: Int, foundUsersLimit: Int) {
         val contentText = applicationContext.getString(

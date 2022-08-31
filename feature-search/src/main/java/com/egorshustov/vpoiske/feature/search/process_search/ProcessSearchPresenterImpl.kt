@@ -243,7 +243,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
 
     private fun collectIsSearchCompleted() {
         presenterScope.launch {
-            isSearchCompletedFlow.collectLatest { isSearchCompleted ->
+            isSearchCompletedFlow.collect { isSearchCompleted ->
                 Timber.d("isSearchCompleted $isSearchCompleted")
                 if (isSearchCompleted) cancel()
             }
