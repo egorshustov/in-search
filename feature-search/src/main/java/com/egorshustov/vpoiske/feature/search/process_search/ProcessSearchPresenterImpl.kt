@@ -37,7 +37,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         Timber.d("Caught exceptionHandler $exception")
     }
 
-    private val presenterScope = CoroutineScope(ioDispatcher + exceptionHandler)
+    private val presenterScope = CoroutineScope(ioDispatcher + SupervisorJob() + exceptionHandler)
 
     private val foundUsersCountFlow: StateFlow<Int> = getUsersCountUseCase(
         GetUsersCountUseCaseParams(searchId)

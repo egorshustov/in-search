@@ -46,7 +46,7 @@ fun AppNavHost(
             startSearchProcess = { searchId ->
                 navController.navigate(SearchDestination.createNavigationRoute(searchId)) {
                     launchSingleTop = true
-                    popUpTo(ParamsDestination.route) { inclusive = true }
+                    popUpTo(SearchDestination.route) { inclusive = true }
                 }
             },
             navigateToAuth = {
