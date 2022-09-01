@@ -128,7 +128,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
 
     private fun getAccessToken(): Flow<String> = getAccessTokenUseCase(Unit)
         .map { it.data.toString() }
-        .filterNot { it.isBlank() }
+        .filterNot { it.isEmpty() }
         .take(1)
 
     private fun getUsers(
@@ -245,7 +245,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         presenterScope.launch {
             isSearchCompletedFlow.collect { isSearchCompleted ->
                 Timber.d("isSearchCompleted $isSearchCompleted")
-                if (isSearchCompleted) cancel()
+                if (isSearchCompleted) presenterScope.cancel()
             }
         }
     }

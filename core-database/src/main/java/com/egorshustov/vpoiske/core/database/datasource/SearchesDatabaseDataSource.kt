@@ -14,6 +14,8 @@ interface SearchesDatabaseDataSource {
 
     suspend fun getSearch(id: Long): Result<SearchEntity>
 
+    suspend fun getLastSearch(): Result<SearchEntity>
+
     suspend fun saveSearch(entity: SearchEntity): Result<Long>
 
     suspend fun deleteSearch(id: Long)

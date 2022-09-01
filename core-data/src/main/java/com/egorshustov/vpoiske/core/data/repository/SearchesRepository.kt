@@ -15,6 +15,8 @@ interface SearchesRepository {
 
     suspend fun getSearch(id: Long): Result<Search>
 
+    suspend fun getLastSearch(): Result<Search>
+
     suspend fun saveSearch(search: Search): Result<Long>
 
     suspend fun deleteSearch(id: Long)

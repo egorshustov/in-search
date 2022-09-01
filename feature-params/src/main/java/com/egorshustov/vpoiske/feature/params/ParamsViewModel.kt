@@ -14,6 +14,7 @@ import com.egorshustov.vpoiske.core.domain.city.GetCitiesUseCaseParams
 import com.egorshustov.vpoiske.core.domain.country.GetCountriesStreamUseCase
 import com.egorshustov.vpoiske.core.domain.country.RequestCountriesUseCase
 import com.egorshustov.vpoiske.core.domain.country.RequestCountriesUseCaseParams
+import com.egorshustov.vpoiske.core.domain.search.GetLastSearchUseCase
 import com.egorshustov.vpoiske.core.domain.search.SaveSearchUseCase
 import com.egorshustov.vpoiske.core.domain.search.SaveSearchUseCaseParams
 import com.egorshustov.vpoiske.core.domain.token.GetAccessTokenUseCase
@@ -29,6 +30,7 @@ import javax.inject.Inject
 internal class ParamsViewModel @Inject constructor(
     getAccessTokenUseCase: GetAccessTokenUseCase,
     private val requestCountriesUseCase: RequestCountriesUseCase,
+    private val getLastSearchUseCase: GetLastSearchUseCase,
     private val getCountriesStreamUseCase: GetCountriesStreamUseCase,
     private val getCitiesUseCase: GetCitiesUseCase,
     private val saveSearchUseCase: SaveSearchUseCase
@@ -39,7 +41,7 @@ internal class ParamsViewModel @Inject constructor(
 
     private val accessTokenFlow: StateFlow<String> = getAccessTokenUseCase(Unit)
         .mapNotNull {
-            if (it.data?.isBlank() == true) {
+            if (it.data?.isEmpty() == true) {
                 _state.value = state.value.copy(
                     authState = state.value.authState.copy(isAuthRequired = true)
                 )
@@ -55,13 +57,15 @@ internal class ParamsViewModel @Inject constructor(
     init {
         subscribeCountriesStream()
         onTriggerEvent(ParamsEvent.RequestCountries)
+        onTriggerEvent(ParamsEvent.GetLastSearch)
     }
 
     fun onTriggerEvent(event: ParamsEvent) {
         when (event) {
             ParamsEvent.OnAuthRequested -> onAuthRequested()
             ParamsEvent.OnSearchProcessInitiated -> onSearchProcessInitiated()
-            ParamsEvent.RequestCountries -> requestCountries()
+            ParamsEvent.RequestCountries -> viewModelScope.launch { requestCountries() }
+            ParamsEvent.GetLastSearch -> getLastSearch()
             ParamsEvent.OnClickResetParamsToDefault -> onClickResetParamsToDefault()
             is ParamsEvent.OnSelectCountry -> onSelectCountry(event.country)
             is ParamsEvent.OnSelectCity -> onSelectCity(event.city)
@@ -97,22 +101,59 @@ internal class ParamsViewModel @Inject constructor(
         )
     }
 
-    private fun requestCountries() {
-        accessTokenFlow
-            .onEach { accessToken ->
-                requestCountriesUseCase(
-                    RequestCountriesUseCaseParams(
-                        VkCommonRequestParams(accessToken = accessToken)
-                    )
-                ).onEach { result ->
-                    when (result) {
-                        Result.Loading -> {}
-                        is Result.Success -> Unit
-                        is Result.Error -> {}
-                    }
-                }.launchIn(viewModelScope)
-            }.launchIn(viewModelScope)
+    private suspend fun requestCountries() {
+        val accessToken = accessTokenFlow.filterNot { it.isEmpty() }.first()
+
+        requestCountriesUseCase(
+            RequestCountriesUseCaseParams(
+                VkCommonRequestParams(accessToken)
+            )
+        ).onEach { result ->
+            when (result) {
+                Result.Loading -> {}
+                is Result.Success -> Unit
+                is Result.Error -> {}
+            }
+        }.launchIn(viewModelScope)
     }
+
+    private fun getLastSearch() {
+        viewModelScope.launch {
+            val lastSearchResult = getLastSearchUseCase(Unit)
+            if (lastSearchResult is Result.Success) {
+                val lastSearch = lastSearchResult.data
+                _state.value = createParamsStateFromSearchModel(lastSearch)
+                getCities(lastSearch.country.id)
+            }
+        }
+    }
+
+    private fun createParamsStateFromSearchModel(search: Search): ParamsState = state.value.copy(
+        countriesState = state.value.countriesState.copy(selectedCountry = search.country),
+        citiesState = state.value.citiesState.copy(selectedCity = search.city),
+        genderState = state.value.genderState.copy(selectedGender = search.gender),
+        ageRangeState = state.value.ageRangeState.copy(
+            selectedAgeFrom = search.ageFrom,
+            selectedAgeTo = search.ageTo
+        ),
+        relationState = state.value.relationState.copy(selectedRelation = search.relation),
+        extraOptionsState = state.value.extraOptionsState.copy(
+            withPhoneOnly = search.withPhoneOnly,
+            foundUsersLimit = search.foundUsersLimit,
+            daysInterval = search.daysInterval
+        ),
+        friendsRangeState = state.value.friendsRangeState.copy(
+            needToSetFriendsRange = search.friendsMinCount != null || search.friendsMaxCount != null,
+            selectedFriendsMinCount = search.friendsMinCount
+                ?: state.value.friendsRangeState.selectedFriendsMinCount,
+            selectedFriendsMaxCount = search.friendsMaxCount
+                ?: state.value.friendsRangeState.selectedFriendsMaxCount
+        ),
+        followersRangeState = state.value.followersRangeState.copy(
+            selectedFollowersMinCount = search.followersMinCount,
+            selectedFollowersMaxCount = search.followersMaxCount,
+        )
+    )
 
     private fun onClickResetParamsToDefault() {
         val savedCountries = state.value.countriesState.countries
@@ -130,16 +171,18 @@ internal class ParamsViewModel @Inject constructor(
                     citiesState = state.value.citiesState.copy(cities = emptyList())
                 )
             } else {
-                getCities(country.id)
+                viewModelScope.launch { getCities(country.id) }
             }
         }
     }
 
-    private fun getCities(countryId: Int) {
+    private suspend fun getCities(countryId: Int) {
+        val accessToken = accessTokenFlow.filterNot { it.isEmpty() }.first()
+
         getCitiesUseCase(
             GetCitiesUseCaseParams(
                 GetCitiesRequestParams(countryId),
-                VkCommonRequestParams(accessToken = accessTokenFlow.replayCache.first())
+                VkCommonRequestParams(accessToken)
             )
         ).onEach { result ->
             when (result) {

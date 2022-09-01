@@ -38,6 +38,10 @@ internal class DefaultSearchesRepository @Inject constructor(
         searchesDatabaseDataSource.getSearch(id).map { it.asExternalModel() }
     }
 
+    override suspend fun getLastSearch(): Result<Search> = withContext(ioDispatcher) {
+        searchesDatabaseDataSource.getLastSearch().map { it.asExternalModel() }
+    }
+
     override suspend fun saveSearch(search: Search): Result<Long> = withContext(ioDispatcher) {
         searchesDatabaseDataSource.saveSearch(search.asEntity())
     }

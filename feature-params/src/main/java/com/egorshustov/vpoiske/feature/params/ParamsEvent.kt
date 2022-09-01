@@ -13,6 +13,8 @@ internal sealed interface ParamsEvent {
 
     object RequestCountries : ParamsEvent
 
+    object GetLastSearch : ParamsEvent
+
     object OnClickResetParamsToDefault : ParamsEvent
 
     data class OnSelectCountry(val country: Country?) : ParamsEvent

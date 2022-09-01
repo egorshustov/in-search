@@ -41,6 +41,20 @@ internal class SearchesRoomDataSource @Inject constructor(
             }
         }
 
+    override suspend fun getLastSearch(): Result<SearchEntity> =
+        withContext(ioDispatcher) {
+            try {
+                val searchEntity = searchDao.getLastSearch()
+                if (searchEntity != null) {
+                    return@withContext Result.Success(searchEntity)
+                } else {
+                    return@withContext Result.Error(DatabaseException.EntriesNotFoundException())
+                }
+            } catch (e: Exception) {
+                return@withContext Result.Error(DatabaseException.RequestException(e))
+            }
+        }
+
     override suspend fun saveSearch(entity: SearchEntity): Result<Long> =
         withContext(ioDispatcher) {
             try {
