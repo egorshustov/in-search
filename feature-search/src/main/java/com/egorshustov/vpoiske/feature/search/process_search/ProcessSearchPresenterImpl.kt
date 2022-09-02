@@ -35,6 +35,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Timber.d("exceptionHandler thread $currentThreadName")
         Timber.d("Caught exceptionHandler $exception")
+        // todo: change state on exception
     }
 
     private val presenterScope = CoroutineScope(ioDispatcher + SupervisorJob() + exceptionHandler)
@@ -67,9 +68,10 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
 
     override val state: StateFlow<ProcessSearchState> = combine(
         foundUsersCountFlow,
+        foundUsersLimitFlow,
         uiMessageManager.message,
-    ) { foundUsersCount, message ->
-        ProcessSearchState(foundUsersCount, message)
+    ) { foundUsersCount, foundUsersLimit, message ->
+        ProcessSearchState(foundUsersCount, foundUsersLimit, message)
     }.distinctUntilChanged()
         .log("ProcessSearchState")
         .stateIn(
@@ -172,6 +174,8 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
             )
             users.filter { user ->
                 val isNotClosed = user.permissions.isClosed == false
+                val isInRequiredLocation = user.country?.id == search.country.id
+                        && user.city?.id == search.city.id
                 val isFollowersCountAcceptable =
                     user.counters?.followers in search.followersMinCount..search.followersMaxCount
                 val isInDaysInterval =
@@ -179,7 +183,8 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
                             UnixSeconds(search.daysInterval * SECONDS_IN_DAY)
                 val phoneCheckPassed = if (search.withPhoneOnly) user.hasValidPhone else true
 
-                isNotClosed && isFollowersCountAcceptable && isInDaysInterval && phoneCheckPassed
+                isNotClosed && isInRequiredLocation && isFollowersCountAcceptable
+                        && isInDaysInterval && phoneCheckPassed
             }.also {
                 Timber.d("Search users count filtered: ${it.size}")
             }

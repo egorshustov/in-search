@@ -54,16 +54,15 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         val titleText = applicationContext.getString(R.string.search_process_in_progress)
         val cancelText = applicationContext.getString(R.string.search_process_cancel)
 
-        val notification = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        notificationBuilder
             .setContentTitle(titleText)
             .setContentIntent(createOpenActivityPendingIntent())
             .setSmallIcon(R.drawable.ic_search_24)
             .setOnlyAlertOnce(true)
             .setOngoing(true)
             .addAction(R.drawable.ic_stop_24, cancelText, cancelWorkPendingIntent)
-            .build()
 
-        return ForegroundInfo(PROGRESS_NOTIFICATION_ID, notification)
+        return ForegroundInfo(PROGRESS_NOTIFICATION_ID, notificationBuilder.build())
     }
 
     private fun createOpenActivityPendingIntent(): PendingIntent? = try {
@@ -79,8 +78,15 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         null
     }
 
-    private suspend fun collectProcessSearchState(): Nothing = presenter.state.collect {
-        Timber.d(it.toString())
+    private suspend fun collectProcessSearchState(): Nothing = presenter.state.collect { state ->
+        Timber.e(state.toString())
+        state.foundUsersLimit?.let { foundUsersLimit ->
+            if (state.foundUsersCount >= foundUsersLimit) {
+                sendCompleteNotification(state.foundUsersCount, foundUsersLimit)
+            } else {
+                sendProgressNotification(state.foundUsersCount, foundUsersLimit)
+            }
+        }
     }
 
     private fun sendProgressNotification(foundUsersCount: Int, foundUsersLimit: Int) {
