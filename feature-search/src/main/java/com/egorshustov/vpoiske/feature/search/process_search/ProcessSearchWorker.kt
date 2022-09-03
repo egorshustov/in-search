@@ -6,10 +6,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
-import androidx.work.CoroutineWorker
-import androidx.work.ForegroundInfo
-import androidx.work.WorkManager
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.common.utils.NOTIFICATION_CHANNEL_ID
@@ -40,7 +37,7 @@ internal class ProcessSearchWorker @AssistedInject constructor(
             parentJob = completableJob
         )
         launch(completableJob) {
-            presenter.state.collect()
+            presenter.state.collectFlow()
         }
         launch(completableJob) {
             presenter.startSearch().join()
@@ -83,15 +80,17 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         null
     }
 
-    private suspend fun StateFlow<ProcessSearchState>.collect(): Nothing =
+    private suspend fun StateFlow<ProcessSearchState>.collectFlow(): Nothing =
         collect { state ->
             Timber.d(state.toString())
-            state.foundUsersLimit?.let { foundUsersLimit ->
-                if (state.foundUsersCount >= foundUsersLimit) {
-                    sendCompleteNotification(state.foundUsersCount, foundUsersLimit)
-                } else {
-                    sendProgressNotification(state.foundUsersCount, foundUsersLimit)
-                }
+            state.foundUsersLimit ?: return@collect
+
+            val processPercentage = (state.foundUsersCount * 100) / state.foundUsersLimit
+            setProgress(workDataOf(PROGRESS_PERCENTAGE_ARG to processPercentage))
+            if (state.foundUsersCount >= state.foundUsersLimit) {
+                sendCompleteNotification(state.foundUsersCount, state.foundUsersLimit)
+            } else {
+                sendProgressNotification(state.foundUsersCount, state.foundUsersLimit)
             }
         }
 
@@ -131,6 +130,7 @@ internal class ProcessSearchWorker @AssistedInject constructor(
 
     companion object {
         const val SEARCH_ID_ARG = "SEARCH_ID_ARG"
+        const val PROGRESS_PERCENTAGE_ARG = "PROGRESS_PERCENTAGE_ARG"
 
         private const val PROGRESS_NOTIFICATION_ID = 1
         private const val COMPLETE_NOTIFICATION_ID = 2

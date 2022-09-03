@@ -33,8 +33,8 @@ fun AppNavHost(
         searchGraph(
             navigateToAuth = {
                 navController.navigate(AuthDestination.route) {
-                    launchSingleTop = true
                     popUpTo(SearchDestination.route) { inclusive = true }
+                    launchSingleTop = true
                 }
             },
             navigateToParams = {
@@ -45,14 +45,14 @@ fun AppNavHost(
         paramsGraph(
             startSearchProcess = { searchId ->
                 navController.navigate(SearchDestination.createNavigationRoute(searchId)) {
-                    launchSingleTop = true
                     popUpTo(SearchDestination.route) { inclusive = true }
+                    launchSingleTop = true
                 }
             },
             navigateToAuth = {
                 navController.navigate(AuthDestination.route) {
-                    launchSingleTop = true
                     popUpTo(ParamsDestination.route) { inclusive = true }
+                    launchSingleTop = true
                 }
             }
         )

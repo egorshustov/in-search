@@ -73,8 +73,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         uiMessageManager.message,
     ) { foundUsersCount, foundUsersLimit, message ->
         ProcessSearchState(foundUsersCount, foundUsersLimit, message)
-    }.distinctUntilChanged()
-        .log("ProcessSearchState")
+    }.log("ProcessSearchState")
         .stateIn(
             scope = presenterScope,
             started = SharingStarted.WhileSubscribed(5000),

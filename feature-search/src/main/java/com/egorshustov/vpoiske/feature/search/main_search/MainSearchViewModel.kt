@@ -6,18 +6,20 @@ import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.work.*
 import com.egorshustov.vpoiske.core.common.model.Result
+import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
+import com.egorshustov.vpoiske.core.common.utils.currentThreadName
 import com.egorshustov.vpoiske.core.domain.user.GetLastSearchUsersUseCase
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
 import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,8 +29,18 @@ internal class MainSearchViewModel @Inject constructor(
     @ApplicationContext appContext: Context
 ) : ViewModel() {
 
-    private val searchId: Long? = savedStateHandle.get<Long>(SearchDestination.searchIdArg)?.also {
-        onTriggerEvent(MainSearchEvent.OnStartSearchProcess(it, appContext))
+    private val liveSearchProcessPercentage: MediatorLiveData<Int> = MediatorLiveData<Int>()
+
+    private val searchProcessPercentageFlow: Flow<Int> = liveSearchProcessPercentage.asFlow()
+
+    private val workInfoLiveObserver = Observer<WorkInfo> { workInfo ->
+        val searchProcessPercentage =
+            workInfo.progress.getInt(ProcessSearchWorker.PROGRESS_PERCENTAGE_ARG, NO_VALUE)
+
+        //Timber.e("workInfoLiveObserver $currentThreadName")
+        if (searchProcessPercentage != NO_VALUE) {
+            liveSearchProcessPercentage.value = searchProcessPercentage
+        }
     }
 
     private val _state: MutableState<MainSearchState> = mutableStateOf(MainSearchState())
@@ -36,7 +48,15 @@ internal class MainSearchViewModel @Inject constructor(
 
     init {
         getLastSearchUsers()
+        searchProcessPercentageFlow.onEach {
+            Timber.e("$it $currentThreadName")
+        }.launchIn(viewModelScope)
+
         //onStartSearchProcess(2, appContext) // TODO: remove after testing
+    }
+
+    private val searchId: Long? = savedStateHandle.get<Long>(SearchDestination.searchIdArg)?.also {
+        onTriggerEvent(MainSearchEvent.OnStartSearchProcess(it, appContext))
     }
 
     fun onTriggerEvent(event: MainSearchEvent) {
@@ -73,10 +93,15 @@ internal class MainSearchViewModel @Inject constructor(
             .setInputData(data)
             .build()
 
-        WorkManager.getInstance(appContext).enqueueUniqueWork(
+        val workManager = WorkManager.getInstance(appContext)
+        workManager.enqueueUniqueWork(
             "ProcessSearchWorker",
             ExistingWorkPolicy.REPLACE, // todo replace with KEEP after testing
             request
+        )
+        liveSearchProcessPercentage.addSource(
+            workManager.getWorkInfoByIdLiveData(request.id),
+            workInfoLiveObserver
         )
     }
 

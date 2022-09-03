@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.lifecycle.livedataKtx)
 
     kapt(libs.dagger.hilt.compiler)
     kapt(libs.androidx.hilt.compiler)
