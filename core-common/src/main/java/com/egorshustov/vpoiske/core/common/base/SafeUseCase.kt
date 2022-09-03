@@ -24,7 +24,7 @@ abstract class SafeUseCase<in P, R>(private val coroutineDispatcher: CoroutineDi
             execute(parameters).let { Result.Success(it) }
         }
     } catch (e: Exception) {
-        Timber.d(e)
+        Timber.w(e)
         Result.Error(e)
     }
 

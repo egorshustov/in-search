@@ -21,6 +21,7 @@ import timber.log.Timber
 @OptIn(FlowPreview::class)
 internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     @Assisted("searchId") private val searchId: Long,
+    @Assisted("parentJob") private val parentJob: Job,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val getAccessTokenUseCase: GetAccessTokenUseCase,
     private val getSearchUseCase: GetSearchUseCase,
@@ -38,7 +39,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         // todo: change state on exception
     }
 
-    private val presenterScope = CoroutineScope(ioDispatcher + SupervisorJob() + exceptionHandler)
+    private val presenterScope = CoroutineScope(ioDispatcher + parentJob + exceptionHandler)
 
     private val foundUsersCountFlow: StateFlow<Int> = getUsersCountUseCase(
         GetUsersCountUseCaseParams(searchId)
@@ -84,7 +85,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         collectIsSearchCompleted()
     }
 
-    override suspend fun startSearch(): Job = presenterScope.launch {
+    override fun startSearch(): Job = presenterScope.launch {
         Timber.d("startSearch with id: $searchId")
         val search = getSearchUseCase(GetSearchUseCaseParams(searchId)).data ?: return@launch
         Timber.d("Search obtained from DB: $search")
@@ -262,7 +263,10 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
 
-        fun create(@Assisted("searchId") searchId: Long): ProcessSearchPresenterImpl
+        fun create(
+            @Assisted("searchId") searchId: Long,
+            @Assisted("parentJob") parentJob: Job
+        ): ProcessSearchPresenterImpl
     }
 
     private companion object {

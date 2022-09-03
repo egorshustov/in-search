@@ -7,7 +7,7 @@ internal interface ProcessSearchPresenter {
 
     val state: StateFlow<ProcessSearchState>
 
-    suspend fun startSearch(): Job
+    fun startSearch(): Job
 
     fun clearUiMessage(id: Long)
 }

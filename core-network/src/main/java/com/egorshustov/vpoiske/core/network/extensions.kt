@@ -17,13 +17,12 @@ internal fun <T> Flow<Result<T>>.retryWhenFloodError(
     retryAttemptsCount: Long
 ): Flow<Result<T>> = retryWhen { cause, attempt ->
     if (cause.isFloodOrTooManyRequests && attempt < retryAttemptsCount) {
-        Timber.e("We're sending requests too frequently, let's wait for a ${delayDuration.inWholeSeconds} seconds")
+        Timber.w("We're sending requests too frequently, let's wait for a ${delayDuration.inWholeSeconds} seconds")
         delay(delayDuration)
-        Timber.e("Waited for a ${delayDuration.inWholeSeconds} seconds, let's resend request with $attempt attempt")
+        Timber.w("Waited for a ${delayDuration.inWholeSeconds} seconds, let's resend request with $attempt attempt")
         true
     } else {
-        Timber.e(cause)
-        emit(Result.Error(cause))
+        Timber.w(cause)
         false
     }
 }

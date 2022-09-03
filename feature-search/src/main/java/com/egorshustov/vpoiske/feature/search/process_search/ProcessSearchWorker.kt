@@ -17,18 +17,16 @@ import com.egorshustov.vpoiske.core.ui.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
 @HiltWorker
 internal class ProcessSearchWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    presenterFactory: ProcessSearchPresenterImpl.Factory,
+    private val presenterFactory: ProcessSearchPresenterImpl.Factory,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : CoroutineWorker(appContext, workerParams) {
-
-    private val presenter: ProcessSearchPresenter =
-        presenterFactory.create(inputData.getLong(SEARCH_ID_ARG, 0))
 
     private val notificationBuilder =
         NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
@@ -36,11 +34,18 @@ internal class ProcessSearchWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
         setForeground(createForegroundInfo())
 
-        val collectStateJob = CoroutineScope(coroutineContext).launch {
-            collectProcessSearchState()
+        val completableJob = Job(currentCoroutineContext().job)
+        val presenter: ProcessSearchPresenter = presenterFactory.create(
+            searchId = inputData.getLong(SEARCH_ID_ARG, 0),
+            parentJob = completableJob
+        )
+        launch(completableJob) {
+            presenter.state.collect()
         }
-        presenter.startSearch().join()
-        collectStateJob.cancelAndJoin()
+        launch(completableJob) {
+            presenter.startSearch().join()
+        }
+        completableJob.children.forEach { it.join() }
 
         Timber.d("Result.success()")
         return@withContext Result.success()
@@ -78,16 +83,17 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         null
     }
 
-    private suspend fun collectProcessSearchState(): Nothing = presenter.state.collect { state ->
-        Timber.e(state.toString())
-        state.foundUsersLimit?.let { foundUsersLimit ->
-            if (state.foundUsersCount >= foundUsersLimit) {
-                sendCompleteNotification(state.foundUsersCount, foundUsersLimit)
-            } else {
-                sendProgressNotification(state.foundUsersCount, foundUsersLimit)
+    private suspend fun StateFlow<ProcessSearchState>.collect(): Nothing =
+        collect { state ->
+            Timber.d(state.toString())
+            state.foundUsersLimit?.let { foundUsersLimit ->
+                if (state.foundUsersCount >= foundUsersLimit) {
+                    sendCompleteNotification(state.foundUsersCount, foundUsersLimit)
+                } else {
+                    sendProgressNotification(state.foundUsersCount, foundUsersLimit)
+                }
             }
         }
-    }
 
     private fun sendProgressNotification(foundUsersCount: Int, foundUsersLimit: Int) {
         val contentText = applicationContext.getString(
@@ -115,6 +121,7 @@ internal class ProcessSearchWorker @AssistedInject constructor(
             .setContentText(contentText)
             .setOnlyAlertOnce(false)
             .setAutoCancel(true)
+            .setOngoing(false)
             .setProgress(0, 0, false)
             .mActions.clear()
 

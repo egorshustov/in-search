@@ -25,7 +25,7 @@ suspend inline fun <T, R> Result<T>.map(crossinline transform: suspend (value: T
             try {
                 Result.Success(transform(data))
             } catch (e: Throwable) {
-                Timber.e(e)
+                Timber.w(e)
                 Result.Error(e)
             }
         is Result.Loading -> Result.Loading
