@@ -1,5 +1,8 @@
 package com.egorshustov.vpoiske.core.ui.api
 
+import android.content.Context
+import androidx.annotation.StringRes
+import com.egorshustov.vpoiske.core.common.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -9,17 +12,16 @@ import kotlinx.coroutines.sync.withLock
 import java.util.*
 
 data class UiMessage(
-    val message: String,
+    @StringRes private val messageResId: Int? = null,
+    private val message: String? = null,
     val id: Long = UUID.randomUUID().mostSignificantBits
-)
-
-fun UiMessage(
-    t: Throwable,
-    id: Long = UUID.randomUUID().mostSignificantBits
-): UiMessage = UiMessage(
-    message = t.message ?: "Error occurred: $t",
-    id = id
-)
+) {
+    fun getText(context: Context): String = when {
+        messageResId != null -> context.getString(messageResId)
+        !message.isNullOrBlank() -> message
+        else -> context.getString(R.string.error_unexpected)
+    }
+}
 
 class UiMessageManager {
     private val mutex = Mutex()

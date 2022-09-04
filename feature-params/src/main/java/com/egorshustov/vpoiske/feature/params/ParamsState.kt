@@ -1,5 +1,6 @@
 package com.egorshustov.vpoiske.feature.params
 
+import androidx.compose.runtime.Immutable
 import com.egorshustov.vpoiske.core.model.data.City
 import com.egorshustov.vpoiske.core.model.data.Country
 import com.egorshustov.vpoiske.core.model.data.Gender
@@ -16,6 +17,7 @@ private const val DEFAULT_SELECTED_FRIENDS_MAX_COUNT = 250
 private const val DEFAULT_SELECTED_FOLLOWERS_MIN_COUNT = 0
 private const val DEFAULT_SELECTED_FOLLOWERS_MAX_COUNT = 150
 
+@Immutable
 internal data class ParamsState(
     val searchState: SearchState = SearchState(),
     val authState: AuthState = AuthState(),
@@ -29,50 +31,60 @@ internal data class ParamsState(
     val followersRangeState: FollowersRangeState = FollowersRangeState()
 )
 
+@Immutable
 internal data class SearchState(
     val searchId: Long? = null
 )
 
+@Immutable
 internal data class AuthState(
     val isAuthRequired: Boolean = false
 )
 
+@Immutable
 internal data class CountriesState(
     val countries: List<Country> = emptyList(),
     val selectedCountry: Country? = null
 )
 
+@Immutable
 internal data class CitiesState(
     val cities: List<City> = emptyList(),
     val selectedCity: City? = null
 )
 
+@Immutable
 internal data class GenderState(
     val selectedGender: Gender = Gender.NOT_DEFINED
 )
 
+@Immutable
 internal data class AgeRangeState(
     val commonAgeRange: IntRange = 18..50,
     val selectedAgeFrom: Int? = null,
     val selectedAgeTo: Int? = null
 )
 
+@Immutable
 internal data class RelationState(
     val selectedRelation: Relation = Relation.NOT_DEFINED
 )
 
+@Immutable
 internal data class ExtraOptionsState(
     val withPhoneOnly: Boolean = DEFAULT_WITH_PHONE_ONLY,
     val foundUsersLimit: Int = DEFAULT_FOUND_USERS_LIMIT,
     val daysInterval: Int = DEFAULT_DAYS_INTERVAL
 )
 
+@Immutable
 internal data class FriendsRangeState(
     val needToSetFriendsRange: Boolean = DEFAULT_NEED_TO_SET_FRIENDS_RANGE,
     val selectedFriendsMinCount: Int = DEFAULT_SELECTED_FRIENDS_MIN_COUNT,
     val selectedFriendsMaxCount: Int = DEFAULT_SELECTED_FRIENDS_MAX_COUNT
 )
 
+@Immutable
 internal data class FollowersRangeState(
     val selectedFollowersMinCount: Int = DEFAULT_SELECTED_FOLLOWERS_MIN_COUNT,
     val selectedFollowersMaxCount: Int = DEFAULT_SELECTED_FOLLOWERS_MAX_COUNT

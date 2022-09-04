@@ -55,8 +55,14 @@
     <!--Error description strings-->
 
     <string name="error_something_went_wrong">Что-то пошло не так. Попробуйте повторить позднее</string>
-    <string name="error_check_internet_or_unavailable">Ошибка соединения: отсутствует подключение к сети или сервер недоступен</string>
-    <string name="error_wrong_login_or_password">Указан неверный логин или пароль!</string>
+
+    <string name="error_unexpected">Непредвиденная ошибка</string>
+    <string name="error_network_check_internet_or_unavailable">Ошибка соединения: отсутствует подключение к сети или сервер недоступен</string>
+    <string name="error_network_wrong_login_or_password">Указан неверный логин или пароль!</string>
+    <string name="error_network_flood">Вы слишком часто отправляете запросы! Подождите и попробуйте позже</string>
+
+    <string name="error_database_entries_not_found">Ошибка! Не удалось получить сохранённые данные</string>
+    <string name="error_database_request">Не удалось выполнить операцию с базой данных</string>
 
     <!--Other strings-->
 

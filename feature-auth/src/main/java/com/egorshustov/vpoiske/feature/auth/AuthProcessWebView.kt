@@ -12,7 +12,7 @@ import com.egorshustov.vpoiske.core.common.utils.UrlString
 import com.egorshustov.vpoiske.core.common.utils.evaluateJavascriptInMainThread
 import com.egorshustov.vpoiske.core.common.utils.loadUrlInMainThread
 import com.egorshustov.vpoiske.core.common.utils.prepareUrlAndParseSafely
-import com.egorshustov.vpoiske.feature.auth.utils.AuthErrorType
+import com.egorshustov.vpoiske.feature.auth.utils.AuthWebViewErrorType
 import com.egorshustov.vpoiske.feature.auth.utils.AuthHelper
 import com.egorshustov.vpoiske.feature.auth.utils.AuthRequestType
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +25,7 @@ internal fun AuthProcessWebView(
     login: String,
     password: String,
     onAuthDataObtained: (userId: String, accessToken: String) -> Unit,
-    onError: (authErrorType: AuthErrorType) -> Unit
+    onError: (errorType: AuthWebViewErrorType) -> Unit
 ) {
     var webView: WebView
     val appJsInterface = remember { AppJsInterface() }
@@ -58,7 +58,7 @@ internal fun AuthProcessWebView(
                     AuthRequestType.IMPLICIT_FLOW -> {
                         when {
                             html.contains(AuthHelper.SERVICE_MSG_WARNING_HTML_TEXT) -> {
-                                onError(AuthErrorType.WRONG_LOGIN_OR_PASSWORD)
+                                onError(AuthWebViewErrorType.WRONG_LOGIN_OR_PASSWORD)
                                 return
                             }
                             html.contains(AuthHelper.EMAIL_INPUT_HTML_CODE) -> {
@@ -88,7 +88,7 @@ internal fun AuthProcessWebView(
                     AuthRequestType.AUTHORIZATION_CODE_FLOW -> {
                         when {
                             html.contains(AuthHelper.AUTHORIZATION_CODE_ERROR_HTML_TEXT) -> {
-                                onError(AuthErrorType.UNDEFINED)
+                                onError(AuthWebViewErrorType.UNDEFINED)
                             }
                             else -> {
                                 uri.getQueryParameter("code")?.let { code ->

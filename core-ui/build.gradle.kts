@@ -27,6 +27,7 @@ android {
 
 dependencies {
     implementation(project(":core-navigation"))
+    implementation(project(":core-common"))
 
     api(libs.androidx.compose.ui.tooling.preview)
     api(libs.coilKt.compose)
