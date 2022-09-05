@@ -2,11 +2,12 @@
 kotlin = "1.7.0"
 kotlinxCoroutines = "1.6.4"
 ksp = "1.7.0-1.0.6"
-androidGradlePlugin = "7.2.1"
+androidGradlePlugin = "7.2.2"
 androidxActivity = "1.5.1"
-androidxAppCompat = "1.4.2"
-androidxCompose = "1.2.0"
-androidxComposeMaterial3 = "1.0.0-alpha15"
+androidxAppCompat = "1.5.0"
+androidxCompose = "1.2.1"
+androidxComposeCompiler = "1.2.0"
+androidxComposeMaterial3 = "1.0.0-beta01"
 androidxCore = "1.8.0"
 androidxCustomView = "1.1.0"
 androidxCustomViewPoolingContainer = "1.0.0"
@@ -14,7 +15,7 @@ androidxDataStore = "1.0.0"
 androidxHiltCompiler = "1.0.0"
 androidxHiltWork = "1.0.0"
 androidxHiltNavigationCompose = "1.0.0"
-androidxLifecycle = "2.5.1"
+androidxLifecycle = "2.6.0-alpha01"
 androidxNavigation = "2.5.1"
 androidxPagingCompose = "1.0.0-alpha15"
 androidxPagingRuntime = "3.1.1"
@@ -38,9 +39,11 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidxComposeMaterial3" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "androidxCompose" }
+androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "androidxCompose" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "androidxCompose" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidxCompose" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "androidxCompose" }
+androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util", version.ref = "androidxCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-customview = { group = "androidx.customview", name = "customview", version.ref = "androidxCustomView" }
 androidx-customview-poolingcontainer = { group = "androidx.customview", name = "customview-poolingcontainer", version.ref = "androidxCustomViewPoolingContainer" }
@@ -49,6 +52,7 @@ androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", vers
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "androidxHiltWork" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-runtimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
+androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-livedataKtx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "androidxPagingCompose" }

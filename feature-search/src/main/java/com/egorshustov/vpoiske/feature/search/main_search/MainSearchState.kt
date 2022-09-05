@@ -6,9 +6,9 @@ import com.egorshustov.vpoiske.core.ui.api.UiMessage
 
 @Immutable
 internal data class MainSearchState(
-    val isAuthRequired: Boolean = false,
     val users: List<User> = emptyList(),
     val searchProcessPercentage: Int? = null,
+    val isAuthRequired: Boolean = false,
     val isLoading: Boolean = false,
     val message: UiMessage? = null
 ) {

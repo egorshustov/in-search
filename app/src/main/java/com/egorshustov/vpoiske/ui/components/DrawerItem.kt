@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.egorshustov.vpoiske.R
 
 @Composable
-fun DrawerItem(
+fun DrawerItem( // TODO: replace with new androidx.compose.material3.NavigationDrawerItem
     @StringRes textResId: Int,
     @DrawableRes drawableResId: Int,
     onClick: () -> Unit

@@ -7,10 +7,7 @@ import com.egorshustov.vpoiske.core.common.exceptions.isFloodOrTooManyRequests
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.ui.api.UiMessage
 import com.egorshustov.vpoiske.core.ui.api.UiMessageManager
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.net.ConnectException
 import java.net.UnknownHostException
@@ -21,7 +18,7 @@ class ObservableLoadingCounter {
     private val count = AtomicInteger()
     private val loadingState = MutableStateFlow(count.get())
 
-    val observable: Flow<Boolean>
+    val flow: Flow<Boolean>
         get() = loadingState.map { it > 0 }.distinctUntilChanged()
 
     fun addLoader() {
@@ -33,20 +30,23 @@ class ObservableLoadingCounter {
     }
 }
 
-suspend fun <T> Flow<Result<T>>.collectResult(
-    counter: ObservableLoadingCounter,
+fun <T> Flow<Result<T>>.unwrapResult(
+    counter: ObservableLoadingCounter? = null,
     uiMessageManager: UiMessageManager? = null
-) = collect { result ->
+): Flow<T> = transform { result ->
     when (result) {
-        Result.Loading -> counter.addLoader()
-        is Result.Success -> counter.removeLoader()
+        Result.Loading -> counter?.addLoader()
+        is Result.Success -> {
+            emit(result.data)
+            counter?.removeLoader()
+        }
         is Result.Error -> {
             Timber.w(result.exception)
             val uiMessage = result.exception.getUiMessage()
             if (uiMessageManager != null && uiMessage != null) {
                 uiMessageManager.emitMessage(uiMessage)
             }
-            counter.removeLoader()
+            counter?.removeLoader()
         }
     }
 }

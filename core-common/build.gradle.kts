@@ -22,7 +22,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxCompose.get()
+        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
 }
 
@@ -30,7 +30,6 @@ dependencies {
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.coroutines.android)
 
-    api(libs.androidx.compose.runtime)
     api(libs.androidx.navigation.compose)
     api(libs.androidx.hilt.navigation.compose)
     api(libs.dagger.hilt.android)
