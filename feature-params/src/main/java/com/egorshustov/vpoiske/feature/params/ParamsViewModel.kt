@@ -36,8 +36,8 @@ internal class ParamsViewModel @Inject constructor(
     private val saveSearchUseCase: SaveSearchUseCase
 ) : ViewModel() {
 
-    private val _state: MutableState<ParamsState> = mutableStateOf(ParamsState())
-    val state: State<ParamsState> = _state
+    private val _state: MutableStateFlow<ParamsState> = MutableStateFlow(ParamsState())
+    val state: StateFlow<ParamsState> = _state
 
     private val accessTokenFlow: StateFlow<String> = getAccessTokenUseCase(Unit)
         .mapNotNull {

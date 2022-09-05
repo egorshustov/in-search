@@ -1,10 +1,14 @@
 package com.egorshustov.vpoiske.feature.params
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.egorshustov.vpoiske.feature.params.components.ParamsScreen
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun ParamsRoute(
     modifier: Modifier = Modifier,
@@ -12,11 +16,11 @@ internal fun ParamsRoute(
     requireAuth: () -> Unit,
     viewModel: ParamsViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state.value
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val onTriggerEvent = viewModel::onTriggerEvent
 
-    if (state.searchState.searchId != null) {
-        startSearchProcess(state.searchState.searchId)
+    state.searchState.searchId?.let {
+        startSearchProcess(it)
         onTriggerEvent(ParamsEvent.OnSearchProcessInitiated)
     }
 
