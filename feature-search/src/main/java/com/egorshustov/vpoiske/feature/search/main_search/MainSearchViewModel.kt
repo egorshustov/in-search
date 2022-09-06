@@ -11,6 +11,7 @@ import com.egorshustov.vpoiske.core.domain.user.GetLastSearchUsersUseCase
 import com.egorshustov.vpoiske.core.model.data.User
 import com.egorshustov.vpoiske.core.ui.api.UiMessageManager
 import com.egorshustov.vpoiske.core.ui.util.ObservableLoadingCounter
+import com.egorshustov.vpoiske.core.ui.util.WhileSubscribed
 import com.egorshustov.vpoiske.core.ui.util.unwrapResult
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
 import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
@@ -18,7 +19,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,7 +49,7 @@ internal class MainSearchViewModel @Inject constructor(
     private val searchProcessPercentageFlow: Flow<Int?> = liveSearchProcessPercentage.asFlow()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = WhileSubscribed,
             initialValue = null
         )
 
@@ -66,17 +66,9 @@ internal class MainSearchViewModel @Inject constructor(
     }.log("MainSearchState")
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = WhileSubscribed,
             initialValue = MainSearchState.Empty
         )
-
-    init {
-        viewModelScope.launch {
-            usersFlow.collect {
-                Timber.e(it.toString())
-            }
-        }
-    }
 
     private val searchId: Long? = savedStateHandle.get<Long>(SearchDestination.searchIdArg)?.also {
         onTriggerEvent(MainSearchEvent.OnStartSearchProcess(it, appContext))
@@ -91,6 +83,7 @@ internal class MainSearchViewModel @Inject constructor(
             is MainSearchEvent.OnClickUserCard -> onClickUserCard(
                 userId = event.userId, context = event.context
             )
+            is MainSearchEvent.ClearUiMessage -> onClearUiMessage(event.uiMessageId)
         }
     }
 
@@ -100,12 +93,6 @@ internal class MainSearchViewModel @Inject constructor(
 
     private fun onStartSearchProcess(searchId: Long, appContext: Context) {
         enqueueWorkRequest(searchId, appContext)
-    }
-
-    private fun onClickUserCard(userId: Long, context: Context) {
-        val userUrl = "https://vk.com/id$userId"
-        val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(userUrl) }
-        context.startActivity(intent)
     }
 
     private fun enqueueWorkRequest(searchId: Long, appContext: Context) {
@@ -126,5 +113,17 @@ internal class MainSearchViewModel @Inject constructor(
             workManager.getWorkInfoByIdLiveData(request.id),
             workInfoLiveObserver
         )
+    }
+
+    private fun onClickUserCard(userId: Long, context: Context) {
+        val userUrl = "https://vk.com/id$userId"
+        val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(userUrl) }
+        context.startActivity(intent)
+    }
+
+    private fun onClearUiMessage(uiMessageId: Long) {
+        viewModelScope.launch {
+            uiMessageManager.clearMessage(uiMessageId)
+        }
     }
 }

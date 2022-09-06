@@ -1,12 +1,8 @@
 package com.egorshustov.vpoiske.feature.params
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.egorshustov.vpoiske.core.common.model.Result
-import com.egorshustov.vpoiske.core.common.model.data
 import com.egorshustov.vpoiske.core.common.utils.currentTime
 import com.egorshustov.vpoiske.core.common.utils.toSeconds
 import com.egorshustov.vpoiske.core.domain.city.GetCitiesUseCase
@@ -21,6 +17,10 @@ import com.egorshustov.vpoiske.core.domain.token.GetAccessTokenUseCase
 import com.egorshustov.vpoiske.core.model.data.*
 import com.egorshustov.vpoiske.core.model.data.requestsparams.GetCitiesRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
+import com.egorshustov.vpoiske.core.ui.api.UiMessageManager
+import com.egorshustov.vpoiske.core.ui.util.ObservableLoadingCounter
+import com.egorshustov.vpoiske.core.ui.util.WhileSubscribed
+import com.egorshustov.vpoiske.core.ui.util.unwrapResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -36,26 +36,31 @@ internal class ParamsViewModel @Inject constructor(
     private val saveSearchUseCase: SaveSearchUseCase
 ) : ViewModel() {
 
-    private val _state: MutableStateFlow<ParamsState> = MutableStateFlow(ParamsState())
-    val state: StateFlow<ParamsState> = _state
+    private val loadingState = ObservableLoadingCounter()
+    private val uiMessageManager = UiMessageManager()
 
     private val accessTokenFlow: StateFlow<String> = getAccessTokenUseCase(Unit)
-        .mapNotNull {
-            if (it.data?.isEmpty() == true) {
+        .unwrapResult(loadingState, uiMessageManager)
+        .onEach { accessToken ->
+            if (accessToken.isEmpty()) {
                 _state.value = state.value.copy(
                     authState = state.value.authState.copy(isAuthRequired = true)
                 )
             }
-            it.data
         }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Lazily,
+            started = WhileSubscribed,
             initialValue = ""
         )
 
+    private val _state: MutableStateFlow<ParamsState> = MutableStateFlow(ParamsState())
+    val state: StateFlow<ParamsState> = _state
+
     init {
-        subscribeCountriesStream()
+        collectCountriesStream()
+        collectLoadingState()
+        collectUiMessageManager()
         onTriggerEvent(ParamsEvent.RequestCountries)
         onTriggerEvent(ParamsEvent.GetLastSearch)
     }
@@ -86,6 +91,7 @@ internal class ParamsViewModel @Inject constructor(
                 event.followersMaxCount
             )
             ParamsEvent.OnClickStartSearch -> onClickStartSearch()
+            is ParamsEvent.ClearUiMessage -> onClearUiMessage(event.uiMessageId)
         }
     }
 
@@ -108,13 +114,8 @@ internal class ParamsViewModel @Inject constructor(
             RequestCountriesUseCaseParams(
                 VkCommonRequestParams(accessToken)
             )
-        ).onEach { result ->
-            when (result) {
-                Result.Loading -> {}
-                is Result.Success -> Unit
-                is Result.Error -> {}
-            }
-        }.launchIn(viewModelScope)
+        ).unwrapResult(loadingState, uiMessageManager)
+            .launchIn(viewModelScope)
     }
 
     private fun getLastSearch() {
@@ -184,15 +185,12 @@ internal class ParamsViewModel @Inject constructor(
                 GetCitiesRequestParams(countryId),
                 VkCommonRequestParams(accessToken)
             )
-        ).onEach { result ->
-            when (result) {
-                Result.Loading -> {}
-                is Result.Success -> _state.value = state.value.copy(
-                    citiesState = state.value.citiesState.copy(cities = result.data)
+        ).unwrapResult(loadingState, uiMessageManager)
+            .onEach { cities ->
+                _state.value = state.value.copy(
+                    citiesState = state.value.citiesState.copy(cities = cities)
                 )
-                is Result.Error -> {}
-            }
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     private fun onSelectCity(city: City?) {
@@ -288,16 +286,13 @@ internal class ParamsViewModel @Inject constructor(
     private fun onClickStartSearch() {
         createSearchModelFromParamsState(state.value)?.let { search ->
             viewModelScope.launch {
-                when (val searchIdResult = saveSearchUseCase(SaveSearchUseCaseParams(search))) {
-                    Result.Loading -> {}
-                    is Result.Success -> {
-                        _state.value = state.value.copy(
-                            searchState = state.value.searchState.copy(
-                                searchId = searchIdResult.data
-                            )
-                        )
-                    }
-                    is Result.Error -> {}
+                val searchId = saveSearchUseCase(SaveSearchUseCaseParams(search))
+                    .unwrapResult(loadingState, uiMessageManager)
+
+                searchId?.let {
+                    _state.value = state.value.copy(
+                        searchState = state.value.searchState.copy(searchId = it)
+                    )
                 }
             }
         }
@@ -343,14 +338,33 @@ internal class ParamsViewModel @Inject constructor(
         )
     }
 
-    private fun subscribeCountriesStream() {
-        getCountriesStreamUseCase(Unit).onEach {
-            val countries = it.data
-            if (!countries.isNullOrEmpty()) {
-                _state.value = state.value.copy(
-                    countriesState = state.value.countriesState.copy(countries = countries)
-                )
-            }
+    private fun onClearUiMessage(uiMessageId: Long) {
+        viewModelScope.launch {
+            uiMessageManager.clearMessage(uiMessageId)
+        }
+    }
+
+    private fun collectCountriesStream() {
+        getCountriesStreamUseCase(Unit)
+            .unwrapResult(loadingState, uiMessageManager)
+            .onEach { countries ->
+                if (countries.isNotEmpty()) {
+                    _state.value = state.value.copy(
+                        countriesState = state.value.countriesState.copy(countries = countries)
+                    )
+                }
+            }.launchIn(viewModelScope)
+    }
+
+    private fun collectLoadingState() {
+        loadingState.flow.onEach { isLoading ->
+            _state.value = state.value.copy(isLoading = isLoading)
+        }.launchIn(viewModelScope)
+    }
+
+    private fun collectUiMessageManager() {
+        uiMessageManager.message.onEach { message ->
+            _state.value = state.value.copy(message = message)
         }.launchIn(viewModelScope)
     }
 }

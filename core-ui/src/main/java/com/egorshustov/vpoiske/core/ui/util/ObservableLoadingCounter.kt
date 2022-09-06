@@ -51,6 +51,29 @@ fun <T> Flow<Result<T>>.unwrapResult(
     }
 }
 
+suspend fun <T> Result<T>.unwrapResult(
+    counter: ObservableLoadingCounter? = null,
+    uiMessageManager: UiMessageManager? = null
+): T? = when (this) {
+    Result.Loading -> {
+        counter?.addLoader()
+        null
+    }
+    is Result.Success -> {
+        counter?.removeLoader()
+        data
+    }
+    is Result.Error -> {
+        Timber.w(exception)
+        val uiMessage = exception.getUiMessage()
+        if (uiMessageManager != null && uiMessage != null) {
+            uiMessageManager.emitMessage(uiMessage)
+        }
+        counter?.removeLoader()
+        null
+    }
+}
+
 private fun Throwable?.getUiMessage(): UiMessage? = when {
     // Custom network exceptions:
     this?.isFloodOrTooManyRequests == true -> UiMessage(messageResId = R.string.error_network_flood)

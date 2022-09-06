@@ -5,6 +5,7 @@ import com.egorshustov.vpoiske.core.model.data.City
 import com.egorshustov.vpoiske.core.model.data.Country
 import com.egorshustov.vpoiske.core.model.data.Gender
 import com.egorshustov.vpoiske.core.model.data.Relation
+import com.egorshustov.vpoiske.core.ui.api.UiMessage
 
 private const val DEFAULT_WITH_PHONE_ONLY = false
 private const val DEFAULT_FOUND_USERS_LIMIT = 100
@@ -28,8 +29,14 @@ internal data class ParamsState(
     val relationState: RelationState = RelationState(),
     val extraOptionsState: ExtraOptionsState = ExtraOptionsState(),
     val friendsRangeState: FriendsRangeState = FriendsRangeState(),
-    val followersRangeState: FollowersRangeState = FollowersRangeState()
-)
+    val followersRangeState: FollowersRangeState = FollowersRangeState(),
+    val isLoading: Boolean = false,
+    val message: UiMessage? = null
+) {
+    companion object {
+        val Default = ParamsState()
+    }
+}
 
 @Immutable
 internal data class SearchState(

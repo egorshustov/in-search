@@ -46,4 +46,6 @@ internal sealed interface ParamsEvent {
     ) : ParamsEvent
 
     object OnClickStartSearch : ParamsEvent
+
+    data class ClearUiMessage(val uiMessageId: Long) : ParamsEvent
 }

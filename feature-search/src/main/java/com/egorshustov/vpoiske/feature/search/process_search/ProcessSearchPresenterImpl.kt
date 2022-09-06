@@ -11,6 +11,7 @@ import com.egorshustov.vpoiske.core.domain.user.*
 import com.egorshustov.vpoiske.core.model.data.*
 import com.egorshustov.vpoiske.core.model.data.requestsparams.*
 import com.egorshustov.vpoiske.core.ui.api.UiMessageManager
+import com.egorshustov.vpoiske.core.ui.util.WhileSubscribed
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -47,7 +48,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         .log("foundUsersCountFlow")
         .stateIn(
             scope = presenterScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = WhileSubscribed,
             initialValue = 0
         )
 
@@ -76,7 +77,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     }.log("ProcessSearchState")
         .stateIn(
             scope = presenterScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = WhileSubscribed,
             initialValue = ProcessSearchState.Empty
         )
 
