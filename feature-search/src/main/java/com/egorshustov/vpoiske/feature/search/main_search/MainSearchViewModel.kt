@@ -110,7 +110,7 @@ internal class MainSearchViewModel @Inject constructor(
         val workManager = WorkManager.getInstance(appContext)
         workManager.enqueueUniqueWork(
             "ProcessSearchWorker",
-            ExistingWorkPolicy.REPLACE, // todo replace with KEEP after testing
+            ExistingWorkPolicy.REPLACE,
             request
         )
         liveWorkInfo.addSource(
