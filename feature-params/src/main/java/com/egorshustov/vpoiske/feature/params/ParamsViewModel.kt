@@ -43,9 +43,7 @@ internal class ParamsViewModel @Inject constructor(
         .unwrapResult(loadingState, uiMessageManager)
         .onEach { accessToken ->
             if (accessToken.isEmpty()) {
-                _state.value = state.value.copy(
-                    authState = state.value.authState.copy(isAuthRequired = true)
-                )
+                _state.update { it.copy(authState = it.authState.copy(isAuthRequired = true)) }
             }
         }
         .stateIn(
@@ -55,7 +53,7 @@ internal class ParamsViewModel @Inject constructor(
         )
 
     private val _state: MutableStateFlow<ParamsState> = MutableStateFlow(ParamsState())
-    val state: StateFlow<ParamsState> = _state
+    val state: StateFlow<ParamsState> = _state.asStateFlow()
 
     init {
         collectCountriesStream()
@@ -96,15 +94,15 @@ internal class ParamsViewModel @Inject constructor(
     }
 
     private fun onAuthRequested() {
-        _state.value = state.value.copy(
-            authState = state.value.authState.copy(isAuthRequired = false)
-        )
+        _state.update {
+            it.copy(authState = it.authState.copy(isAuthRequired = false))
+        }
     }
 
     private fun onSearchProcessInitiated() {
-        _state.value = state.value.copy(
-            searchState = state.value.searchState.copy(searchId = null)
-        )
+        _state.update {
+            it.copy(searchState = it.searchState.copy(searchId = null))
+        }
     }
 
     private suspend fun requestCountries() {
@@ -123,54 +121,56 @@ internal class ParamsViewModel @Inject constructor(
             val lastSearchResult = getLastSearchUseCase(Unit)
             if (lastSearchResult is Result.Success) {
                 val lastSearch = lastSearchResult.data
-                _state.value = createParamsStateFromSearchModel(lastSearch)
+                _state.updateAndGetParamsStateFromSearchModel(lastSearch)
                 getCities(lastSearch.country.id)
             }
         }
     }
 
-    private fun createParamsStateFromSearchModel(search: Search): ParamsState = state.value.copy(
-        countriesState = state.value.countriesState.copy(selectedCountry = search.country),
-        citiesState = state.value.citiesState.copy(selectedCity = search.city),
-        genderState = state.value.genderState.copy(selectedGender = search.gender),
-        ageRangeState = state.value.ageRangeState.copy(
-            selectedAgeFrom = search.ageFrom,
-            selectedAgeTo = search.ageTo
-        ),
-        relationState = state.value.relationState.copy(selectedRelation = search.relation),
-        extraOptionsState = state.value.extraOptionsState.copy(
-            withPhoneOnly = search.withPhoneOnly,
-            foundUsersLimit = search.foundUsersLimit,
-            daysInterval = search.daysInterval
-        ),
-        friendsRangeState = state.value.friendsRangeState.copy(
-            needToSetFriendsRange = search.friendsMinCount != null || search.friendsMaxCount != null,
-            selectedFriendsMinCount = search.friendsMinCount
-                ?: state.value.friendsRangeState.selectedFriendsMinCount,
-            selectedFriendsMaxCount = search.friendsMaxCount
-                ?: state.value.friendsRangeState.selectedFriendsMaxCount
-        ),
-        followersRangeState = state.value.followersRangeState.copy(
-            selectedFollowersMinCount = search.followersMinCount,
-            selectedFollowersMaxCount = search.followersMaxCount,
-        )
-    )
+    private fun MutableStateFlow<ParamsState>.updateAndGetParamsStateFromSearchModel(search: Search): ParamsState =
+        updateAndGet {
+            it.copy(
+                countriesState = it.countriesState.copy(selectedCountry = search.country),
+                citiesState = it.citiesState.copy(selectedCity = search.city),
+                genderState = it.genderState.copy(selectedGender = search.gender),
+                ageRangeState = it.ageRangeState.copy(
+                    selectedAgeFrom = search.ageFrom,
+                    selectedAgeTo = search.ageTo
+                ),
+                relationState = it.relationState.copy(selectedRelation = search.relation),
+                extraOptionsState = it.extraOptionsState.copy(
+                    withPhoneOnly = search.withPhoneOnly,
+                    foundUsersLimit = search.foundUsersLimit,
+                    daysInterval = search.daysInterval
+                ),
+                friendsRangeState = it.friendsRangeState.copy(
+                    needToSetFriendsRange = search.friendsMinCount != null || search.friendsMaxCount != null,
+                    selectedFriendsMinCount = search.friendsMinCount
+                        ?: it.friendsRangeState.selectedFriendsMinCount,
+                    selectedFriendsMaxCount = search.friendsMaxCount
+                        ?: it.friendsRangeState.selectedFriendsMaxCount
+                ),
+                followersRangeState = it.followersRangeState.copy(
+                    selectedFollowersMinCount = search.followersMinCount,
+                    selectedFollowersMaxCount = search.followersMaxCount,
+                )
+            )
+        }
 
     private fun onClickResetParamsToDefault() {
-        val savedCountries = state.value.countriesState.countries
-        _state.value = ParamsState(countriesState = CountriesState(savedCountries))
+        _state.update { ParamsState(countriesState = CountriesState(it.countriesState.countries)) }
     }
 
     private fun onSelectCountry(country: Country?) {
         if (country != state.value.countriesState.selectedCountry) {
-            _state.value = state.value.copy(
-                countriesState = state.value.countriesState.copy(selectedCountry = country),
-                citiesState = state.value.citiesState.copy(selectedCity = null)
-            )
-            if (country == null) {
-                _state.value = state.value.copy(
-                    citiesState = state.value.citiesState.copy(cities = emptyList())
+            _state.update {
+                it.copy(
+                    countriesState = it.countriesState.copy(selectedCountry = country),
+                    citiesState = it.citiesState.copy(selectedCity = null)
                 )
+            }
+            if (country == null) {
+                _state.update { it.copy(citiesState = it.citiesState.copy(cities = emptyList())) }
             } else {
                 viewModelScope.launch { getCities(country.id) }
             }
@@ -187,114 +187,92 @@ internal class ParamsViewModel @Inject constructor(
             )
         ).unwrapResult(loadingState, uiMessageManager)
             .onEach { cities ->
-                _state.value = state.value.copy(
-                    citiesState = state.value.citiesState.copy(cities = cities)
-                )
+                _state.update { it.copy(citiesState = it.citiesState.copy(cities = cities)) }
             }.launchIn(viewModelScope)
     }
 
     private fun onSelectCity(city: City?) {
-        _state.value = state.value.copy(
-            citiesState = state.value.citiesState.copy(selectedCity = city)
-        )
+        _state.update { it.copy(citiesState = it.citiesState.copy(selectedCity = city)) }
     }
 
     private fun onSelectGender(gender: Gender) {
-        _state.value = state.value.copy(
-            genderState = state.value.genderState.copy(selectedGender = gender)
-        )
+        _state.update { it.copy(genderState = it.genderState.copy(selectedGender = gender)) }
     }
 
     private fun onSelectAgeFrom(ageFrom: Int?) {
-        _state.value = state.value.copy(
-            ageRangeState = state.value.ageRangeState.copy(selectedAgeFrom = ageFrom)
-        )
+        _state.update { it.copy(ageRangeState = it.ageRangeState.copy(selectedAgeFrom = ageFrom)) }
 
         val ageTo = state.value.ageRangeState.selectedAgeTo
         if (ageFrom == null || ageTo == null) return
 
         if (ageFrom > ageTo) {
-            _state.value = state.value.copy(
-                ageRangeState = state.value.ageRangeState.copy(selectedAgeTo = ageFrom)
-            )
+            _state.update { it.copy(ageRangeState = it.ageRangeState.copy(selectedAgeTo = ageFrom)) }
         }
     }
 
     private fun onSelectAgeTo(ageTo: Int?) {
-        _state.value = state.value.copy(
-            ageRangeState = state.value.ageRangeState.copy(selectedAgeTo = ageTo)
-        )
+        _state.update { it.copy(ageRangeState = it.ageRangeState.copy(selectedAgeTo = ageTo)) }
 
         val ageFrom = state.value.ageRangeState.selectedAgeFrom
         if (ageFrom == null || ageTo == null) return
 
         if (ageFrom > ageTo) {
-            _state.value = state.value.copy(
-                ageRangeState = state.value.ageRangeState.copy(selectedAgeFrom = ageTo)
-            )
+            _state.update { it.copy(ageRangeState = it.ageRangeState.copy(selectedAgeFrom = ageTo)) }
         }
     }
 
     private fun onSelectRelation(relation: Relation) {
-        _state.value = state.value.copy(
-            relationState = state.value.relationState.copy(selectedRelation = relation)
-        )
+        _state.update { it.copy(relationState = it.relationState.copy(selectedRelation = relation)) }
     }
 
     private fun onChangeWithPhoneOnly(withPhoneOnly: Boolean) {
-        _state.value = state.value.copy(
-            extraOptionsState = state.value.extraOptionsState.copy(withPhoneOnly = withPhoneOnly)
-        )
+        _state.update {
+            it.copy(extraOptionsState = it.extraOptionsState.copy(withPhoneOnly = withPhoneOnly))
+        }
     }
 
     private fun onChangeFoundUsersLimit(foundUsersLimit: Int) {
-        _state.value = state.value.copy(
-            extraOptionsState = state.value.extraOptionsState.copy(foundUsersLimit = foundUsersLimit)
-        )
+        _state.update { it.copy(extraOptionsState = it.extraOptionsState.copy(foundUsersLimit = foundUsersLimit)) }
     }
 
     private fun onChangeDaysInterval(daysInterval: Int) {
-        _state.value = state.value.copy(
-            extraOptionsState = state.value.extraOptionsState.copy(daysInterval = daysInterval)
-        )
+        _state.update { it.copy(extraOptionsState = it.extraOptionsState.copy(daysInterval = daysInterval)) }
     }
 
     private fun onChangeNeedToSetFriendsRange(needToSetFriendsRange: Boolean) {
-        _state.value = state.value.copy(
-            friendsRangeState = state.value.friendsRangeState.copy(needToSetFriendsRange = needToSetFriendsRange)
-        )
+        _state.update { it.copy(friendsRangeState = it.friendsRangeState.copy(needToSetFriendsRange = needToSetFriendsRange)) }
     }
 
     private fun onChangeSelectedFriendsRange(friendsMinCount: Int, friendsMaxCount: Int) {
-        _state.value = state.value.copy(
-            friendsRangeState = state.value.friendsRangeState.copy(
-                selectedFriendsMinCount = friendsMinCount,
-                selectedFriendsMaxCount = friendsMaxCount
+        _state.update {
+            it.copy(
+                friendsRangeState = it.friendsRangeState.copy(
+                    selectedFriendsMinCount = friendsMinCount,
+                    selectedFriendsMaxCount = friendsMaxCount
+                )
             )
-        )
+        }
     }
 
     private fun onChangeSelectedFollowersRange(followersMinCount: Int, followersMaxCount: Int) {
-        _state.value = state.value.copy(
-            followersRangeState = state.value.followersRangeState.copy(
-                selectedFollowersMinCount = followersMinCount,
-                selectedFollowersMaxCount = followersMaxCount
+        _state.update {
+            it.copy(
+                followersRangeState = it.followersRangeState.copy(
+                    selectedFollowersMinCount = followersMinCount,
+                    selectedFollowersMaxCount = followersMaxCount
+                )
             )
-        )
+        }
     }
 
     private fun onClickStartSearch() {
-        createSearchModelFromParamsState(state.value)?.let { search ->
-            viewModelScope.launch {
-                val searchId = saveSearchUseCase(SaveSearchUseCaseParams(search))
-                    .unwrapResult(loadingState, uiMessageManager)
-
-                searchId?.let {
-                    _state.value = state.value.copy(
-                        searchState = state.value.searchState.copy(searchId = it)
-                    )
+        val search = createSearchModelFromParamsState(state.value) ?: return
+        viewModelScope.launch {
+            saveSearchUseCase(SaveSearchUseCaseParams(search))
+                .unwrapResult(loadingState, uiMessageManager)
+                ?.also { searchId ->
+                    _state.update { it.copy(searchState = it.searchState.copy(searchId = searchId)) }
                 }
-            }
         }
     }
 
@@ -349,22 +327,20 @@ internal class ParamsViewModel @Inject constructor(
             .unwrapResult(loadingState, uiMessageManager)
             .onEach { countries ->
                 if (countries.isNotEmpty()) {
-                    _state.value = state.value.copy(
-                        countriesState = state.value.countriesState.copy(countries = countries)
-                    )
+                    _state.update { it.copy(countriesState = it.countriesState.copy(countries = countries)) }
                 }
             }.launchIn(viewModelScope)
     }
 
     private fun collectLoadingState() {
         loadingState.flow.onEach { isLoading ->
-            _state.value = state.value.copy(isLoading = isLoading)
+            _state.update { it.copy(isLoading = isLoading) }
         }.launchIn(viewModelScope)
     }
 
     private fun collectUiMessageManager() {
         uiMessageManager.message.onEach { message ->
-            _state.value = state.value.copy(message = message)
+            _state.update { it.copy(message = message) }
         }.launchIn(viewModelScope)
     }
 }

@@ -88,7 +88,7 @@ internal class MainSearchViewModel @Inject constructor(
     }
 
     private fun onAuthRequested() {
-        isAuthRequiredFlow.value = false
+        isAuthRequiredFlow.update { false }
     }
 
     private fun onStartSearchProcess(searchId: Long, appContext: Context) {

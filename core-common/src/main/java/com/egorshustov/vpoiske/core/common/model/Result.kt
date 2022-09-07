@@ -80,5 +80,5 @@ val <T> Result<T>.exception: Throwable?
  * Updates value of [MutableStateFlow] if [Result] is of type [Result.Success]
  */
 inline fun <reified T> Result<T>.updateOnSuccess(stateFlow: MutableStateFlow<T>) {
-    if (this is Result.Success) stateFlow.value = data
+    if (this is Result.Success) stateFlow.update { data }
 }

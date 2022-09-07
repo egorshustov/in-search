@@ -89,7 +89,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         Timber.d("startSearch with id: $searchId")
         val search = getSearchUseCase(GetSearchUseCaseParams(searchId)).data ?: return@launch
         Timber.d("Search obtained from DB: $search")
-        foundUsersLimitFlow.value = search.foundUsersLimit
+        foundUsersLimitFlow.update { search.foundUsersLimit }
         search.init()
     }.apply {
         invokeOnCompletion {
@@ -130,7 +130,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         }.launchIn(presenterScope)
 
     private fun getAccessToken(): Flow<String> = getAccessTokenUseCase(Unit)
-        .map { it.data.toString() }
+        .mapNotNull { it.data }
         .filterNot { it.isEmpty() }
         .take(1)
 

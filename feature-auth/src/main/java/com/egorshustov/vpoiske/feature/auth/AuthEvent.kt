@@ -13,4 +13,6 @@ internal sealed interface AuthEvent {
     object OnNeedToFinishAuthProcessed : AuthEvent
 
     object OnAuthError : AuthEvent
+
+    data class ClearUiMessage(val uiMessageId: Long) : AuthEvent
 }

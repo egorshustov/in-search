@@ -1,34 +1,34 @@
 package com.egorshustov.vpoiske.feature.auth
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.egorshustov.vpoiske.core.common.model.data
 import com.egorshustov.vpoiske.core.domain.token.GetAccessTokenUseCase
 import com.egorshustov.vpoiske.core.domain.token.SaveAccessTokenUseCase
 import com.egorshustov.vpoiske.core.domain.token.SaveAccessTokenUseCaseParams
+import com.egorshustov.vpoiske.core.ui.api.UiMessageManager
+import com.egorshustov.vpoiske.core.ui.util.ObservableLoadingCounter
+import com.egorshustov.vpoiske.core.ui.util.unwrapResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 internal class AuthViewModel @Inject constructor(
-    getAccessTokenUseCase: GetAccessTokenUseCase,
+    private val getAccessTokenUseCase: GetAccessTokenUseCase,
     private val saveAccessTokenUseCase: SaveAccessTokenUseCase
 ) : ViewModel() {
 
-    private val _state: MutableState<AuthState> = mutableStateOf(AuthState())
-    val state: State<AuthState> = _state
+    private val loadingState = ObservableLoadingCounter()
+    private val uiMessageManager = UiMessageManager()
+
+    private val _state: MutableStateFlow<AuthState> = MutableStateFlow(AuthState())
+    val state: StateFlow<AuthState> = _state.asStateFlow()
 
     init {
-        getAccessTokenUseCase(Unit).onEach {
-            val accessToken = it.data
-            _state.value = state.value.copy(needToFinishAuth = !accessToken.isNullOrBlank())
-        }.launchIn(viewModelScope)
+        collectAccessToken()
+        collectLoadingState()
+        collectUiMessageManager()
     }
 
     fun onTriggerEvent(event: AuthEvent) {
@@ -42,19 +42,20 @@ internal class AuthViewModel @Inject constructor(
             )
             AuthEvent.OnNeedToFinishAuthProcessed -> onNeedToFinishAuthProcessed()
             AuthEvent.OnAuthError -> onAuthError()
+            is AuthEvent.ClearUiMessage -> onClearUiMessage(event.uiMessageId)
         }
     }
 
     private fun onUpdateLogin(login: String) {
-        _state.value = state.value.copy(typedLoginText = login)
+        _state.update { it.copy(typedLoginText = login) }
     }
 
     private fun onUpdatePassword(password: String) {
-        _state.value = state.value.copy(typedPasswordText = password)
+        _state.update { it.copy(typedPasswordText = password) }
     }
 
     private fun onStartAuthProcess() {
-        _state.value = state.value.copy(isLoading = true)
+        loadingState.addLoader()
     }
 
     private fun onAuthDataObtained(userId: String, accessToken: String) {
@@ -64,10 +65,36 @@ internal class AuthViewModel @Inject constructor(
     }
 
     private fun onNeedToFinishAuthProcessed() {
-        _state.value = state.value.copy(needToFinishAuth = false)
+        _state.update { it.copy(needToFinishAuth = false) }
     }
 
     private fun onAuthError() {
-        _state.value = state.value.copy(isLoading = false)
+        loadingState.removeLoader()
+    }
+
+    private fun onClearUiMessage(uiMessageId: Long) {
+        viewModelScope.launch {
+            uiMessageManager.clearMessage(uiMessageId)
+        }
+    }
+
+    private fun collectAccessToken() {
+        getAccessTokenUseCase(Unit)
+            .unwrapResult(loadingState, uiMessageManager)
+            .onEach { accessToken ->
+                _state.update { it.copy(needToFinishAuth = accessToken.isNotBlank()) }
+            }.launchIn(viewModelScope)
+    }
+
+    private fun collectLoadingState() {
+        loadingState.flow.onEach { isLoading ->
+            _state.update { it.copy(isLoading = isLoading) }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun collectUiMessageManager() {
+        uiMessageManager.message.onEach { message ->
+            _state.update { it.copy(message = message) }
+        }.launchIn(viewModelScope)
     }
 }
