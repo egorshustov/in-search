@@ -19,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,16 +29,16 @@ internal class MainSearchViewModel @Inject constructor(
     @ApplicationContext appContext: Context
 ) : ViewModel() {
 
-    private val liveSearchProcessPercentage: MediatorLiveData<Int> = MediatorLiveData<Int>()
+    private val liveWorkInfo: MediatorLiveData<WorkInfo> = MediatorLiveData<WorkInfo>()
 
-    private val workInfoLiveObserver = Observer<WorkInfo> { workInfo ->
-        val searchProcessPercentage =
-            workInfo.progress.getInt(ProcessSearchWorker.PROGRESS_PERCENTAGE_ARG, NO_VALUE)
+    private val workInfoLiveObserver = Observer<WorkInfo> { liveWorkInfo.value = it }
 
-        //Timber.e("workInfoLiveObserver $currentThreadName")
-        if (searchProcessPercentage != NO_VALUE) {
-            liveSearchProcessPercentage.value = searchProcessPercentage
-        }
+    private val workInfoFlow: Flow<WorkInfo> = liveWorkInfo.asFlow()
+
+    init { // todo: remove after testing
+        workInfoFlow.onEach {
+            Timber.e(it.toString())
+        }.launchIn(viewModelScope)
     }
 
     private val loadingState = ObservableLoadingCounter()
@@ -46,12 +47,15 @@ internal class MainSearchViewModel @Inject constructor(
     private val usersFlow: Flow<List<User>> =
         getLastSearchUsersUseCase(Unit).unwrapResult(loadingState, uiMessageManager)
 
-    private val searchProcessPercentageFlow: Flow<Int?> = liveSearchProcessPercentage.asFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = WhileSubscribed,
-            initialValue = null
-        )
+    private val searchProcessPercentageFlow: StateFlow<Int?> = workInfoFlow.transform { workInfo ->
+        val searchProcessPercentage =
+            workInfo.progress.getInt(ProcessSearchWorker.PROGRESS_PERCENTAGE_ARG, NO_VALUE)
+        if (searchProcessPercentage != NO_VALUE) emit(searchProcessPercentage)
+    }.stateIn(
+        scope = viewModelScope,
+        started = WhileSubscribed,
+        initialValue = null
+    )
 
     private val isAuthRequiredFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -109,7 +113,7 @@ internal class MainSearchViewModel @Inject constructor(
             ExistingWorkPolicy.REPLACE, // todo replace with KEEP after testing
             request
         )
-        liveSearchProcessPercentage.addSource(
+        liveWorkInfo.addSource(
             workManager.getWorkInfoByIdLiveData(request.id),
             workInfoLiveObserver
         )
