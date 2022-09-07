@@ -17,7 +17,7 @@ androidxHiltWork = "1.0.0"
 androidxHiltNavigationCompose = "1.0.0"
 androidxLifecycle = "2.6.0-alpha01"
 androidxNavigation = "2.5.1"
-androidxPagingCompose = "1.0.0-alpha15"
+androidxPagingCompose = "1.0.0-alpha16"
 androidxPagingRuntime = "3.1.1"
 androidxRoom = "2.4.3"
 androidxWork = "2.7.1"
@@ -56,7 +56,7 @@ androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "life
 androidx-lifecycle-livedataKtx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "androidxPagingCompose" }
-androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidxPagingRuntime" }
+androidx-paging-runtimeKtx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "androidxPagingRuntime" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidxRoom" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
