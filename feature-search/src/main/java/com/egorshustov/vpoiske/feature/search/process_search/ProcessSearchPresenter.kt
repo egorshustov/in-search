@@ -9,5 +9,5 @@ internal interface ProcessSearchPresenter {
 
     fun startSearch(): Job
 
-    fun clearUiMessage(id: Long)
+    fun clearUiMessage(uiMessageId: Long)
 }

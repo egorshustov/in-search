@@ -57,7 +57,7 @@ internal class CountriesKtorDataSource @Inject constructor(
                 )
             }
         } catch (e: Throwable) {
-            emit(Result.Error(NetworkException.VkException(e)))
+            emit(Result.Error(e))
         }
     }.flowOn(ioDispatcher)
 }

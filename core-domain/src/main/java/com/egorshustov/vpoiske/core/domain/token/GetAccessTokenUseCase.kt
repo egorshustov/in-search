@@ -2,9 +2,9 @@ package com.egorshustov.vpoiske.core.domain.token
 
 import com.egorshustov.vpoiske.core.common.base.FlowUseCase
 import com.egorshustov.vpoiske.core.common.model.Result
-import com.egorshustov.vpoiske.core.common.model.asResult
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
+import com.egorshustov.vpoiske.core.common.utils.asResult
 import com.egorshustov.vpoiske.core.datastore.PreferenceStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow

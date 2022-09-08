@@ -2,9 +2,9 @@ package com.egorshustov.vpoiske.core.data.repository
 
 import androidx.paging.PagingData
 import com.egorshustov.vpoiske.core.common.model.Result
-import com.egorshustov.vpoiske.core.common.model.map
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
+import com.egorshustov.vpoiske.core.common.utils.map
 import com.egorshustov.vpoiske.core.data.mappers.asEntity
 import com.egorshustov.vpoiske.core.data.mappers.asPagingDataStream
 import com.egorshustov.vpoiske.core.database.datasource.SearchesDatabaseDataSource

@@ -79,7 +79,7 @@ internal class UsersKtorDataSource @Inject constructor(
         delayDuration = errorDelay.toDuration(),
         retryAttemptsCount = RETRY_ATTEMPTS_COUNT
     ).catch {
-        emit(Result.Error(NetworkException.VkException(it)))
+        emit(Result.Error(it))
     }.flowOn(ioDispatcher)
 
     override fun getUser(
@@ -112,7 +112,7 @@ internal class UsersKtorDataSource @Inject constructor(
         delayDuration = errorDelay.toDuration(),
         retryAttemptsCount = RETRY_ATTEMPTS_COUNT
     ).catch {
-        emit(Result.Error(NetworkException.VkException(it)))
+        emit(Result.Error(it))
     }.flowOn(ioDispatcher)
 
     private companion object {

@@ -32,7 +32,8 @@ class ObservableLoadingCounter {
 
 fun <T> Flow<Result<T>>.unwrapResult(
     counter: ObservableLoadingCounter? = null,
-    uiMessageManager: UiMessageManager? = null
+    uiMessageManager: UiMessageManager? = null,
+    onError: ((Throwable?) -> Unit)? = null
 ): Flow<T> = transform { result ->
     when (result) {
         Result.Loading -> counter?.addLoader()
@@ -47,13 +48,15 @@ fun <T> Flow<Result<T>>.unwrapResult(
                 uiMessageManager.emitMessage(uiMessage)
             }
             counter?.removeLoader()
+            onError?.invoke(result.exception)
         }
     }
 }
 
 suspend fun <T> Result<T>.unwrapResult(
     counter: ObservableLoadingCounter? = null,
-    uiMessageManager: UiMessageManager? = null
+    uiMessageManager: UiMessageManager? = null,
+    onError: ((Throwable?) -> Unit)? = null
 ): T? = when (this) {
     Result.Loading -> {
         counter?.addLoader()
@@ -70,6 +73,7 @@ suspend fun <T> Result<T>.unwrapResult(
             uiMessageManager.emitMessage(uiMessage)
         }
         counter?.removeLoader()
+        onError?.invoke(exception)
         null
     }
 }
@@ -77,7 +81,7 @@ suspend fun <T> Result<T>.unwrapResult(
 private fun Throwable?.getUiMessage(): UiMessage? = when {
     // Custom network exceptions:
     this?.isFloodOrTooManyRequests == true -> UiMessage(messageResId = R.string.error_network_flood)
-    this is NetworkException.VkException -> UiMessage(message = message)
+    this is NetworkException.VkException -> UiMessage(message = cause?.message)
     // Custom database exceptions:
     this is DatabaseException.EntriesNotAddedException -> null
     this is DatabaseException.EntriesNotFoundException -> UiMessage(messageResId = R.string.error_database_entries_not_found)

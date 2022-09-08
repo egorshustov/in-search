@@ -1,6 +1,7 @@
 package com.egorshustov.vpoiske.feature.search.process_search
 
-import com.egorshustov.vpoiske.core.common.model.*
+import com.egorshustov.vpoiske.core.common.exceptions.NetworkException
+import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.common.utils.*
@@ -12,6 +13,7 @@ import com.egorshustov.vpoiske.core.model.data.*
 import com.egorshustov.vpoiske.core.model.data.requestsparams.*
 import com.egorshustov.vpoiske.core.ui.api.UiMessageManager
 import com.egorshustov.vpoiske.core.ui.util.WhileSubscribed
+import com.egorshustov.vpoiske.core.ui.util.unwrapResult
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -33,24 +35,20 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     private val saveUserUseCase: SaveUserUseCase
 ) : ProcessSearchPresenter {
 
-    // This exception handler allows to catch non-cancellation exceptions
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Timber.d("exceptionHandler thread $currentThreadName")
-        Timber.d("Caught exceptionHandler $exception")
-        // todo: change state on exception
+        Timber.d("CoroutineExceptionHandler. $exception")
+        cancelSearch()
     }
 
     private val presenterScope = CoroutineScope(ioDispatcher + parentJob + exceptionHandler)
 
     private val foundUsersCountFlow: StateFlow<Int> = getUsersCountUseCase(
         GetUsersCountUseCaseParams(searchId)
-    ).mapNotNull { it.data }
-        .log("foundUsersCountFlow")
-        .stateIn(
-            scope = presenterScope,
-            started = WhileSubscribed,
-            initialValue = 0
-        )
+    ).mapNotNull { it.data }.stateIn(
+        scope = presenterScope,
+        started = WhileSubscribed,
+        initialValue = 0
+    )
 
     private val foundUsersLimitFlow: MutableStateFlow<Int?> = MutableStateFlow(null)
 
@@ -59,14 +57,13 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         foundUsersLimitFlow
     ) { foundUsersCount, foundUsersLimit ->
         foundUsersLimit != null && foundUsersCount >= foundUsersLimit
-    }.log("isSearchCompletedFlow")
-        .stateIn(
-            scope = presenterScope,
-            started = SharingStarted.Lazily,
-            initialValue = false
-        )
+    }.stateIn(
+        scope = presenterScope,
+        started = SharingStarted.Lazily,
+        initialValue = false
+    )
 
-    private val uiMessageManager = UiMessageManager() // TODO replace with shared flow
+    private val uiMessageManager = UiMessageManager()
 
     override val state: StateFlow<ProcessSearchState> = combine(
         foundUsersCountFlow,
@@ -74,36 +71,28 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         uiMessageManager.message,
     ) { foundUsersCount, foundUsersLimit, message ->
         ProcessSearchState(foundUsersCount, foundUsersLimit, message)
-    }.log("ProcessSearchState")
-        .stateIn(
-            scope = presenterScope,
-            started = WhileSubscribed,
-            initialValue = ProcessSearchState.Empty
-        )
+    }.stateIn(
+        scope = presenterScope,
+        started = WhileSubscribed,
+        initialValue = ProcessSearchState.Empty
+    )
 
     init {
         collectIsSearchCompleted()
     }
 
     override fun startSearch(): Job = presenterScope.launch {
-        Timber.d("startSearch with id: $searchId")
+        Timber.d("startSearch. searchId id: $searchId")
         val search = getSearchUseCase(GetSearchUseCaseParams(searchId)).data ?: return@launch
-        Timber.d("Search obtained from DB: $search")
         foundUsersLimitFlow.update { search.foundUsersLimit }
         search.init()
-    }.apply {
-        invokeOnCompletion {
-            Timber.d("invokeOnCompletion thread $currentThreadName")
-            Timber.d("Caught invokeOnCompletion $it")
-        }
     }
 
     private suspend fun Search.init() {
-        Timber.d("Current isSearchCompletedFlow.value: ${isSearchCompletedFlow.value}")
         while (!isSearchCompletedFlow.value) {
             val randomDay = (1..MAX_DAYS_IN_MONTH).random()
             val randomMonth = (1..MONTHS_IN_YEAR).random()
-            Timber.d("Search users with birthday: $randomDay.$randomMonth")
+            Timber.d("Search.init. Searching users with birthday: $randomDay.$randomMonth")
 
             searchUsers(
                 search = this@init,
@@ -120,7 +109,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
                 birthDay = birthDay,
                 birthMonth = birthMonth,
                 accessToken = accessToken
-            ).filterUsers(search).concatMapResult { filteredUsers ->
+            ).filterUsers(search).flatMapConcat { filteredUsers ->
                 if (search.isFriendsLimitSet) {
                     filteredUsers.fetchAdditionalDataAndProcess(search, accessToken)
                 } else {
@@ -134,12 +123,20 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         .filterNot { it.isEmpty() }
         .take(1)
 
+    /**
+     * Sending "users.search" request.
+     * @param search current search entity for building request params.
+     * @param birthDay search for users with this birthday.
+     * @param birthMonth search for users with this birth month.
+     * @param accessToken auth token which must be added to the request.
+     * @return obtained users.
+     */
     private fun getUsers(
         search: Search,
         birthDay: Int,
         birthMonth: Int,
         accessToken: String
-    ): Flow<Result<List<User>>> = searchUsersUseCase(
+    ): Flow<List<User>> = searchUsersUseCase(
         SearchUsersUseCaseParams(
             searchUsersParams = SearchUsersRequestParams(
                 countryId = search.country.id,
@@ -162,33 +159,32 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
             ),
             commonParams = VkCommonRequestParams(accessToken)
         )
-    ).doOnResultSuccess {
-        Timber.d("Let's wait for a ${pauseDelay.count} millis to avoid API flood blocking")
-        delay(pauseDelay.toDuration())
+    ).unwrapResult(
+        uiMessageManager = uiMessageManager,
+        onError = { if (it is NetworkException.VkException) cancelSearch() }
+    ).onEach {
+        delay(pauseDelay.toDuration()) // delay to avoid API flood blocking
     }
 
-    private fun Flow<Result<List<User>>>.filterUsers(search: Search): Flow<Result<List<User>>> =
-        mapResult { users ->
-            Timber.d(
-                "Filter users obtained with search request\n" +
-                        "Search users count initial: ${users.size}"
-            )
-            users.filter { user ->
-                val isNotClosed = user.permissions.isClosed == false
-                val isInRequiredLocation = user.country?.id == search.country.id
-                        && user.city?.id == search.city.id
-                val isFollowersCountAcceptable =
-                    user.counters?.followers in search.followersMinCount..search.followersMaxCount
-                val isInDaysInterval =
-                    search.startTime - (user.lastSeen?.time ?: UnixSeconds.Zero) <
-                            UnixSeconds(search.daysInterval * SECONDS_IN_DAY)
-                val phoneCheckPassed = if (search.withPhoneOnly) user.hasValidPhone else true
+    /**
+     * Filter users which were obtained with "users.search" request.
+     * @param search current search entity with filtering params.
+     * @return filtered users.
+     */
+    private fun Flow<List<User>>.filterUsers(search: Search): Flow<List<User>> =
+        filterList { user ->
+            val isNotClosed = user.permissions.isClosed == false
+            val isInRequiredLocation = user.country?.id == search.country.id
+                    && user.city?.id == search.city.id
+            val isFollowersCountAcceptable =
+                user.counters?.followers in search.followersMinCount..search.followersMaxCount
+            val isInDaysInterval =
+                search.startTime - (user.lastSeen?.time ?: UnixSeconds.Zero) <
+                        UnixSeconds(search.daysInterval * SECONDS_IN_DAY)
+            val phoneCheckPassed = if (search.withPhoneOnly) user.hasValidPhone else true
 
-                isNotClosed && isInRequiredLocation && isFollowersCountAcceptable
-                        && isInDaysInterval && phoneCheckPassed
-            }.also {
-                Timber.d("Search users count filtered: ${it.size}")
-            }
+            isNotClosed && isInRequiredLocation && isFollowersCountAcceptable
+                    && isInDaysInterval && phoneCheckPassed
         }
 
     private fun List<User>.fetchAdditionalDataAndProcess(
@@ -201,38 +197,37 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
             .saveUserIfFiltered(search)
     }
 
-    private fun getUser(userId: Long, accessToken: String): Flow<Result<User>> =
-        getUserUseCase(
-            GetUserUseCaseParams(
-                getUserParams = GetUserRequestParams(
-                    userId = userId,
-                    fields = GET_USER_FIELDS
-                ),
-                commonParams = VkCommonRequestParams(accessToken)
-            )
-        ).doOnResultSuccess {
-            Timber.d("Let's wait for a ${pauseDelay.count} millis to avoid API flood blocking")
-            delay(pauseDelay.toDuration())
+    private fun getUser(userId: Long, accessToken: String): Flow<User> = getUserUseCase(
+        GetUserUseCaseParams(
+            getUserParams = GetUserRequestParams(
+                userId = userId,
+                fields = GET_USER_FIELDS
+            ),
+            commonParams = VkCommonRequestParams(accessToken)
+        )
+    ).unwrapResult(
+        uiMessageManager = uiMessageManager,
+        onError = { if (it is NetworkException.VkException) cancelSearch() }
+    ).onEach {
+        delay(pauseDelay.toDuration()) // delay to avoid API flood blocking
+    }
+
+    private fun Flow<User>.filterUser(search: Search): Flow<User> = filter { user ->
+        val isFriendsCountAcceptable =
+            user.counters?.friends in (search.friendsMinCount ?: 0)..
+                    (search.friendsMaxCount ?: Int.MAX_VALUE)
+
+        val isDesiredRelation = user.relation == search.relation
+        isFriendsCountAcceptable && isDesiredRelation
+    }
+
+    private fun Flow<User>.saveUserIfFiltered(search: Search): Flow<Result<Unit>> = map { user ->
+        user.apply {
+            searchId = search.id
+            foundTime = currentTime
         }
-
-    private fun Flow<Result<User>>.filterUser(search: Search): Flow<Result<User>> =
-        filterResult { user ->
-            val isFriendsCountAcceptable =
-                user.counters?.friends in (search.friendsMinCount ?: 0)..
-                        (search.friendsMaxCount ?: Int.MAX_VALUE)
-
-            val isDesiredRelation = user.relation == search.relation
-            isFriendsCountAcceptable && isDesiredRelation
-        }
-
-    private fun Flow<Result<User>>.saveUserIfFiltered(search: Search): Flow<Result<Unit>> =
-        doOnResultSuccess { user ->
-            user.apply {
-                searchId = search.id
-                foundTime = currentTime
-            }
-            saveUserUseCase(SaveUserUseCaseParams(user))
-        }.ignoreResultData()
+        saveUserUseCase(SaveUserUseCaseParams(user)).ignoreResultData()
+    }
 
     private fun List<User>.saveUsers(search: Search): Flow<Result<Unit>> = suspend {
         apply {
@@ -242,22 +237,26 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
                 user.foundTime = time
             }
         }
-        saveUsersUseCase(SaveUsersUseCaseParams(this)).also {
-            Timber.d("Saved users count: ${it.data?.size}")
-        }
+        saveUsersUseCase(SaveUsersUseCaseParams(this))
     }.asFlow().ignoreResultData()
 
     private fun collectIsSearchCompleted() {
         presenterScope.launch {
             isSearchCompletedFlow.collect { isSearchCompleted ->
-                Timber.d("isSearchCompleted $isSearchCompleted")
-                if (isSearchCompleted) presenterScope.cancel()
+                if (isSearchCompleted) cancelSearch()
             }
         }
     }
 
-    override fun clearUiMessage(id: Long) {
-        TODO("Not yet implemented")
+    private fun cancelSearch() {
+        Timber.d("cancelSearch.")
+        presenterScope.cancel()
+    }
+
+    override fun clearUiMessage(uiMessageId: Long) {
+        presenterScope.launch {
+            uiMessageManager.clearMessage(uiMessageId)
+        }
     }
 
     @AssistedFactory

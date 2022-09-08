@@ -1,9 +1,9 @@
 package com.egorshustov.vpoiske.core.data.repository
 
 import com.egorshustov.vpoiske.core.common.model.Result
-import com.egorshustov.vpoiske.core.common.model.mapResult
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
+import com.egorshustov.vpoiske.core.common.utils.mapResult
 import com.egorshustov.vpoiske.core.data.mappers.asEntityList
 import com.egorshustov.vpoiske.core.database.datasource.CountriesDatabaseDataSource
 import com.egorshustov.vpoiske.core.database.model.asExternalModelList

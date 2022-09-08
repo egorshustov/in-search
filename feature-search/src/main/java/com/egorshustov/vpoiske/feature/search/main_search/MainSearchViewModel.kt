@@ -33,7 +33,7 @@ internal class MainSearchViewModel @Inject constructor(
 
     private val workInfoLiveObserver = Observer<WorkInfo> { liveWorkInfo.value = it }
 
-    private val workInfoFlow: Flow<WorkInfo> = liveWorkInfo.asFlow()
+    private val workInfoFlow: Flow<WorkInfo?> = liveWorkInfo.asFlow()
 
     init { // todo: remove after testing
         workInfoFlow.onEach {
@@ -49,8 +49,10 @@ internal class MainSearchViewModel @Inject constructor(
 
     private val searchProcessPercentageFlow: StateFlow<Int?> = workInfoFlow.transform { workInfo ->
         val searchProcessPercentage =
-            workInfo.progress.getInt(ProcessSearchWorker.PROGRESS_PERCENTAGE_ARG, NO_VALUE)
-        if (searchProcessPercentage != NO_VALUE) emit(searchProcessPercentage)
+            workInfo?.progress?.getInt(ProcessSearchWorker.PROGRESS_PERCENTAGE_ARG, NO_VALUE)
+        if (searchProcessPercentage != NO_VALUE && searchProcessPercentage != null) {
+            emit(searchProcessPercentage)
+        }
     }.stateIn(
         scope = viewModelScope,
         started = WhileSubscribed,
@@ -102,9 +104,14 @@ internal class MainSearchViewModel @Inject constructor(
     private fun enqueueWorkRequest(searchId: Long, appContext: Context) {
         val data: Data = workDataOf(ProcessSearchWorker.SEARCH_ID_ARG to searchId)
 
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
         val request = OneTimeWorkRequestBuilder<ProcessSearchWorker>()
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
             .setInputData(data)
+            .setConstraints(constraints)
             .build()
 
         val workManager = WorkManager.getInstance(appContext)

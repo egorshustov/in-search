@@ -1,9 +1,9 @@
 package com.egorshustov.vpoiske.core.data.repository
 
 import com.egorshustov.vpoiske.core.common.model.Result
-import com.egorshustov.vpoiske.core.common.model.mapResult
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
+import com.egorshustov.vpoiske.core.common.utils.mapResult
 import com.egorshustov.vpoiske.core.model.data.City
 import com.egorshustov.vpoiske.core.model.data.requestsparams.GetCitiesRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams

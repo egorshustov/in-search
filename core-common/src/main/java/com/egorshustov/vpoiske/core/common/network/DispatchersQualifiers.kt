@@ -7,5 +7,6 @@ import javax.inject.Qualifier
 annotation class Dispatcher(val appDispatcher: AppDispatchers)
 
 enum class AppDispatchers {
+    MAIN,
     IO
 }

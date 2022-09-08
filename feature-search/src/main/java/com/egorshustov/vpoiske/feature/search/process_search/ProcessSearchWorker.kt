@@ -3,14 +3,17 @@ package com.egorshustov.vpoiske.feature.search.process_search
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
+import com.egorshustov.vpoiske.core.common.network.AppDispatchers.MAIN
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.common.utils.NOTIFICATION_CHANNEL_ID
 import com.egorshustov.vpoiske.core.ui.R
+import com.egorshustov.vpoiske.core.ui.api.UiMessage
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
@@ -22,34 +25,34 @@ internal class ProcessSearchWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val presenterFactory: ProcessSearchPresenterImpl.Factory,
+    @Dispatcher(MAIN) private val mainDispatcher: CoroutineDispatcher,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val notificationBuilder =
         NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
 
+    private var presenter: ProcessSearchPresenter? = null
+
     override suspend fun doWork(): Result = withContext(ioDispatcher) {
+        Timber.d("doWork. started")
         setForeground(createForegroundInfo())
 
         val completableJob = Job(currentCoroutineContext().job)
-        val presenter: ProcessSearchPresenter = presenterFactory.create(
+        presenter = presenterFactory.create(
             searchId = inputData.getLong(SEARCH_ID_ARG, 0),
             parentJob = completableJob
-        )
-        launch(completableJob) {
-            presenter.state.collectFlow()
-        }
-        launch(completableJob) {
-            presenter.startSearch().join()
+        ).also {
+            launch(completableJob) { it.state.collectFlow() }
+            launch(completableJob) { it.startSearch().join() }
         }
         completableJob.children.forEach { it.join() }
 
-        Timber.d("Result.success()")
+        Timber.d("doWork. completed")
         return@withContext Result.success()
     }
 
     private fun createForegroundInfo(): ForegroundInfo {
-        // This PendingIntent can be used to cancel the worker
         val cancelWorkPendingIntent = WorkManager.getInstance(applicationContext)
             .createCancelPendingIntent(id)
 
@@ -80,19 +83,29 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         null
     }
 
-    private suspend fun StateFlow<ProcessSearchState>.collectFlow(): Nothing =
-        collect { state ->
-            Timber.d(state.toString())
-            state.foundUsersLimit ?: return@collect
+    private suspend fun StateFlow<ProcessSearchState>.collectFlow(): Nothing = collect { state ->
+        state.foundUsersLimit ?: return@collect
+        state.message?.let { showMessage(it) }
 
-            val processPercentage = (state.foundUsersCount * 100) / state.foundUsersLimit
-            setProgress(workDataOf(PROGRESS_PERCENTAGE_ARG to processPercentage))
-            if (state.foundUsersCount >= state.foundUsersLimit) {
-                sendCompleteNotification(state.foundUsersCount, state.foundUsersLimit)
-            } else {
-                sendProgressNotification(state.foundUsersCount, state.foundUsersLimit)
-            }
+        val processPercentage = (state.foundUsersCount * 100) / state.foundUsersLimit
+        setProgress(workDataOf(PROGRESS_PERCENTAGE_ARG to processPercentage))
+        Timber.e("processPercentage. $processPercentage")
+        if (state.foundUsersCount >= state.foundUsersLimit) {
+            sendCompleteNotification(state.foundUsersCount, state.foundUsersLimit)
+        } else {
+            sendProgressNotification(state.foundUsersCount, state.foundUsersLimit)
         }
+    }
+
+    private suspend fun showMessage(message: UiMessage) = withContext(mainDispatcher) {
+        Toast.makeText(
+            applicationContext,
+            message.getText(applicationContext),
+            Toast.LENGTH_LONG
+        ).show()
+        Timber.d("showMessage. message: $message")
+        presenter?.clearUiMessage(message.id)
+    }
 
     private fun sendProgressNotification(foundUsersCount: Int, foundUsersLimit: Int) {
         val contentText = applicationContext.getString(
