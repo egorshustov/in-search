@@ -6,7 +6,7 @@ internal sealed interface MainSearchEvent {
 
     object OnAuthRequested : MainSearchEvent
 
-    data class OnStartSearchProcess(val searchId: Long, val appContext: Context) : MainSearchEvent
+    data class OnStartSearchProcess(val searchId: Long) : MainSearchEvent
 
     data class OnClickUserCard(val userId: Long, val context: Context) : MainSearchEvent
 

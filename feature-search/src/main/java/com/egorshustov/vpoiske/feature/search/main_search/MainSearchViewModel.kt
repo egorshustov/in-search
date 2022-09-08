@@ -29,14 +29,21 @@ internal class MainSearchViewModel @Inject constructor(
     @ApplicationContext appContext: Context
 ) : ViewModel() {
 
-    private val liveWorkInfo: MediatorLiveData<WorkInfo> = MediatorLiveData<WorkInfo>()
+    private val workManager = WorkManager.getInstance(appContext)
 
-    private val workInfoLiveObserver = Observer<WorkInfo> { liveWorkInfo.value = it }
+    private val liveWorkInfo: MediatorLiveData<WorkInfo?> = MediatorLiveData<WorkInfo?>()
+
+    private val workInfoLiveObserver =
+        Observer<List<WorkInfo>?> { liveWorkInfo.value = it.firstOrNull() }
 
     private val workInfoFlow: Flow<WorkInfo?> = liveWorkInfo.asFlow()
 
-    init { // todo: remove after testing
-        workInfoFlow.onEach {
+    init {
+        liveWorkInfo.addSource(
+            workManager.getWorkInfosForUniqueWorkLiveData(SEARCH_WORK_NAME),
+            workInfoLiveObserver
+        )
+        workInfoFlow.onEach { // todo: remove after testing
             Timber.e(it.toString())
         }.launchIn(viewModelScope)
     }
@@ -68,7 +75,7 @@ internal class MainSearchViewModel @Inject constructor(
         loadingState.flow,
         uiMessageManager.message,
     ) { users, searchProcessPercentage, isAuthRequired, isLoading, message ->
-        MainSearchState(users, searchProcessPercentage, isAuthRequired, isLoading, message)
+        MainSearchState(users, searchProcessPercentage, false, isAuthRequired, isLoading, message)
     }.log("MainSearchState")
         .stateIn(
             scope = viewModelScope,
@@ -77,14 +84,14 @@ internal class MainSearchViewModel @Inject constructor(
         )
 
     private val searchId: Long? = savedStateHandle.get<Long>(SearchDestination.searchIdArg)?.also {
-        onTriggerEvent(MainSearchEvent.OnStartSearchProcess(it, appContext))
+        onTriggerEvent(MainSearchEvent.OnStartSearchProcess(it))
     }
 
     fun onTriggerEvent(event: MainSearchEvent) {
         when (event) {
             MainSearchEvent.OnAuthRequested -> onAuthRequested()
             is MainSearchEvent.OnStartSearchProcess -> onStartSearchProcess(
-                searchId = event.searchId, appContext = event.appContext
+                searchId = event.searchId
             )
             is MainSearchEvent.OnClickUserCard -> onClickUserCard(
                 userId = event.userId, context = event.context
@@ -97,11 +104,11 @@ internal class MainSearchViewModel @Inject constructor(
         isAuthRequiredFlow.update { false }
     }
 
-    private fun onStartSearchProcess(searchId: Long, appContext: Context) {
-        enqueueWorkRequest(searchId, appContext)
+    private fun onStartSearchProcess(searchId: Long) {
+        enqueueWorkRequest(searchId)
     }
 
-    private fun enqueueWorkRequest(searchId: Long, appContext: Context) {
+    private fun enqueueWorkRequest(searchId: Long) {
         val data: Data = workDataOf(ProcessSearchWorker.SEARCH_ID_ARG to searchId)
 
         val constraints = Constraints.Builder()
@@ -114,15 +121,10 @@ internal class MainSearchViewModel @Inject constructor(
             .setConstraints(constraints)
             .build()
 
-        val workManager = WorkManager.getInstance(appContext)
         workManager.enqueueUniqueWork(
-            "ProcessSearchWorker",
+            SEARCH_WORK_NAME,
             ExistingWorkPolicy.REPLACE,
             request
-        )
-        liveWorkInfo.addSource(
-            workManager.getWorkInfoByIdLiveData(request.id),
-            workInfoLiveObserver
         )
     }
 
@@ -136,5 +138,9 @@ internal class MainSearchViewModel @Inject constructor(
         viewModelScope.launch {
             uiMessageManager.clearMessage(uiMessageId)
         }
+    }
+
+    companion object {
+        private const val SEARCH_WORK_NAME = "ProcessSearchWorkName"
     }
 }

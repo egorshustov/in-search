@@ -89,7 +89,6 @@ internal class ProcessSearchWorker @AssistedInject constructor(
 
         val processPercentage = (state.foundUsersCount * 100) / state.foundUsersLimit
         setProgress(workDataOf(PROGRESS_PERCENTAGE_ARG to processPercentage))
-        Timber.e("processPercentage. $processPercentage")
         if (state.foundUsersCount >= state.foundUsersLimit) {
             sendCompleteNotification(state.foundUsersCount, state.foundUsersLimit)
         } else {
