@@ -253,7 +253,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
         presenterScope.cancel()
     }
 
-    override fun clearUiMessage(uiMessageId: Long) {
+    override fun onMessageShown(uiMessageId: Long) {
         presenterScope.launch {
             uiMessageManager.clearMessage(uiMessageId)
         }

@@ -42,7 +42,7 @@ internal class AuthViewModel @Inject constructor(
             )
             AuthEvent.OnNeedToFinishAuthProcessed -> onNeedToFinishAuthProcessed()
             AuthEvent.OnAuthError -> onAuthError()
-            is AuthEvent.ClearUiMessage -> onClearUiMessage(event.uiMessageId)
+            is AuthEvent.OnMessageShown -> onMessageShown(event.uiMessageId)
         }
     }
 
@@ -72,7 +72,7 @@ internal class AuthViewModel @Inject constructor(
         loadingState.removeLoader()
     }
 
-    private fun onClearUiMessage(uiMessageId: Long) {
+    private fun onMessageShown(uiMessageId: Long) {
         viewModelScope.launch {
             uiMessageManager.clearMessage(uiMessageId)
         }

@@ -10,5 +10,5 @@ internal sealed interface MainSearchEvent {
 
     data class OnClickUserCard(val userId: Long, val context: Context) : MainSearchEvent
 
-    data class ClearUiMessage(val uiMessageId: Long) : MainSearchEvent
+    data class OnMessageShown(val uiMessageId: Long) : MainSearchEvent
 }

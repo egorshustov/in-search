@@ -21,7 +21,9 @@
     <string name="search_process_in_progress">Выполняется поиск</string>
     <string name="search_process_cancel">Отмена</string>
     <string name="search_process_found">Найдено %1$s/%2$s</string>
+    <string name="search_process_is_running">Поиск выполняется…</string>
     <string name="search_process_completed">Поиск завершён</string>
+    <string name="search_process_cancelled">Поиск отменён</string>
 
     <!--Params feature strings-->
 

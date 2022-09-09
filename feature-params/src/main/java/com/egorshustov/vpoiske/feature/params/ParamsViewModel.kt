@@ -89,7 +89,7 @@ internal class ParamsViewModel @Inject constructor(
                 event.followersMaxCount
             )
             ParamsEvent.OnClickStartSearch -> onClickStartSearch()
-            is ParamsEvent.ClearUiMessage -> onClearUiMessage(event.uiMessageId)
+            is ParamsEvent.OnMessageShown -> onMessageShown(event.uiMessageId)
         }
     }
 
@@ -316,7 +316,7 @@ internal class ParamsViewModel @Inject constructor(
         )
     }
 
-    private fun onClearUiMessage(uiMessageId: Long) {
+    private fun onMessageShown(uiMessageId: Long) {
         viewModelScope.launch {
             uiMessageManager.clearMessage(uiMessageId)
         }

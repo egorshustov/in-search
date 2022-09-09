@@ -103,7 +103,7 @@ internal class ProcessSearchWorker @AssistedInject constructor(
             Toast.LENGTH_LONG
         ).show()
         Timber.d("showMessage. message: $message")
-        presenter?.clearUiMessage(message.id)
+        presenter?.onMessageShown(message.id)
     }
 
     private fun sendProgressNotification(foundUsersCount: Int, foundUsersLimit: Int) {

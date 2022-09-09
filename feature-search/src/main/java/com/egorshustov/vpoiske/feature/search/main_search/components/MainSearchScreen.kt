@@ -1,9 +1,11 @@
 package com.egorshustov.vpoiske.feature.search.main_search.components
 
+import android.widget.Toast
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,10 +20,19 @@ internal fun MainSearchScreen(
     onStartNewSearchClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
+    state.message?.let { message ->
+        LaunchedEffect(message) {
+            Toast.makeText(context, message.getText(context), Toast.LENGTH_LONG).show()
+            // Notify the view model that the message has been dismissed
+            onTriggerEvent(MainSearchEvent.OnMessageShown(message.id))
+        }
+    }
+
     if (state.users.isEmpty()) {
         NoSearchesStub(onStartNewSearchClick = onStartNewSearchClick)
     } else {
-        val context = LocalContext.current
         LazyVerticalGrid(
             columns = GridCells.Fixed(3)
         ) {

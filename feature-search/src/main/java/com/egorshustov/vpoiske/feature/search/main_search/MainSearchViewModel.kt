@@ -3,12 +3,16 @@ package com.egorshustov.vpoiske.feature.search.main_search
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import androidx.work.*
+import com.egorshustov.vpoiske.core.common.R
 import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
+import com.egorshustov.vpoiske.core.common.utils.combine
 import com.egorshustov.vpoiske.core.common.utils.log
 import com.egorshustov.vpoiske.core.domain.user.GetLastSearchUsersUseCase
 import com.egorshustov.vpoiske.core.model.data.User
+import com.egorshustov.vpoiske.core.ui.api.UiMessage
 import com.egorshustov.vpoiske.core.ui.api.UiMessageManager
 import com.egorshustov.vpoiske.core.ui.util.ObservableLoadingCounter
 import com.egorshustov.vpoiske.core.ui.util.WhileSubscribed
@@ -33,8 +37,10 @@ internal class MainSearchViewModel @Inject constructor(
 
     private val liveWorkInfo: MediatorLiveData<WorkInfo?> = MediatorLiveData<WorkInfo?>()
 
-    private val workInfoLiveObserver =
-        Observer<List<WorkInfo>?> { liveWorkInfo.value = it.firstOrNull() }
+    private val workInfoLiveObserver = Observer<List<WorkInfo>?> {
+        Timber.e("Observer $it")
+        liveWorkInfo.value = it.firstOrNull()
+    }
 
     private val workInfoFlow: Flow<WorkInfo?> = liveWorkInfo.asFlow()
 
@@ -54,6 +60,32 @@ internal class MainSearchViewModel @Inject constructor(
     private val usersFlow: Flow<List<User>> =
         getLastSearchUsersUseCase(Unit).unwrapResult(loadingState, uiMessageManager)
 
+    private val isSearchRunningFlow: StateFlow<Boolean> = workInfoFlow.map { workInfo ->
+        workInfo?.state?.let { emitUiMessageIfSearchStateHasChanged(it) }
+        workInfo?.state == WorkInfo.State.RUNNING
+    }.stateIn(
+        scope = viewModelScope,
+        started = WhileSubscribed,
+        initialValue = false
+    )
+
+    private suspend fun emitUiMessageIfSearchStateHasChanged(searchState: WorkInfo.State) {
+        @StringRes val messageStrRes: Int? = when {
+            !state.value.isSearchRunning && searchState == WorkInfo.State.RUNNING -> {
+                R.string.search_process_is_running
+            }
+            state.value.isSearchRunning && searchState == WorkInfo.State.SUCCEEDED -> {
+                R.string.search_process_completed
+            }
+            state.value.isSearchRunning && (searchState == WorkInfo.State.CANCELLED
+                    || searchState == WorkInfo.State.FAILED) -> {
+                R.string.search_process_cancelled
+            }
+            else -> null
+        }
+        messageStrRes?.let { uiMessageManager.emitMessage(UiMessage(it)) }
+    }
+
     private val searchProcessPercentageFlow: StateFlow<Int?> = workInfoFlow.transform { workInfo ->
         val searchProcessPercentage =
             workInfo?.progress?.getInt(ProcessSearchWorker.PROGRESS_PERCENTAGE_ARG, NO_VALUE)
@@ -70,12 +102,26 @@ internal class MainSearchViewModel @Inject constructor(
 
     val state: StateFlow<MainSearchState> = combine(
         usersFlow,
+        isSearchRunningFlow,
         searchProcessPercentageFlow,
         isAuthRequiredFlow,
         loadingState.flow,
-        uiMessageManager.message,
-    ) { users, searchProcessPercentage, isAuthRequired, isLoading, message ->
-        MainSearchState(users, searchProcessPercentage, false, isAuthRequired, isLoading, message)
+        uiMessageManager.message
+    ) { users,
+        isSearchRunning,
+        searchProcessPercentage,
+        isAuthRequired,
+        isLoading,
+        message ->
+
+        MainSearchState(
+            users = users,
+            isSearchRunning = isSearchRunning,
+            searchProcessPercentage = searchProcessPercentage,
+            isAuthRequired = isAuthRequired,
+            isLoading = isLoading,
+            message = message
+        )
     }.log("MainSearchState")
         .stateIn(
             scope = viewModelScope,
@@ -96,7 +142,7 @@ internal class MainSearchViewModel @Inject constructor(
             is MainSearchEvent.OnClickUserCard -> onClickUserCard(
                 userId = event.userId, context = event.context
             )
-            is MainSearchEvent.ClearUiMessage -> onClearUiMessage(event.uiMessageId)
+            is MainSearchEvent.OnMessageShown -> onMessageShown(event.uiMessageId)
         }
     }
 
@@ -134,7 +180,7 @@ internal class MainSearchViewModel @Inject constructor(
         context.startActivity(intent)
     }
 
-    private fun onClearUiMessage(uiMessageId: Long) {
+    private fun onMessageShown(uiMessageId: Long) {
         viewModelScope.launch {
             uiMessageManager.clearMessage(uiMessageId)
         }
