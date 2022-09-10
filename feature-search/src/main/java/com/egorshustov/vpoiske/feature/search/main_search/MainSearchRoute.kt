@@ -14,6 +14,7 @@ internal fun MainSearchRoute(
     modifier: Modifier = Modifier,
     requireAuth: () -> Unit,
     onStartNewSearchClick: () -> Unit,
+    openDrawer: () -> Unit,
     viewModel: MainSearchViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -28,6 +29,7 @@ internal fun MainSearchRoute(
         state = state,
         onTriggerEvent = onTriggerEvent,
         onStartNewSearchClick = onStartNewSearchClick,
+        openDrawer = openDrawer,
         modifier = modifier
     )
 }

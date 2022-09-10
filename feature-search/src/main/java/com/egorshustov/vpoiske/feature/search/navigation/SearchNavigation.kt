@@ -21,7 +21,8 @@ object SearchDestination : AppNavigationDestination {
 
 fun NavGraphBuilder.searchGraph(
     navigateToAuth: () -> Unit,
-    navigateToParams: () -> Unit
+    navigateToParams: () -> Unit,
+    openDrawer: () -> Unit
 ) {
     navigation(
         route = SearchDestination.route,
@@ -35,7 +36,8 @@ fun NavGraphBuilder.searchGraph(
         composable(route = SearchDestination.destination) {
             MainSearchRoute(
                 requireAuth = navigateToAuth,
-                onStartNewSearchClick = navigateToParams
+                onStartNewSearchClick = navigateToParams,
+                openDrawer = openDrawer
             )
         }
     }

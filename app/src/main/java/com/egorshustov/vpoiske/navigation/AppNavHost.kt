@@ -20,6 +20,7 @@ import com.egorshustov.vpoiske.feature.search.navigation.searchGraph
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
+    openDrawer: () -> Unit = {},
     navController: NavHostController = rememberNavController(),
     startDestination: String = SearchDestination.route
 ) {
@@ -39,7 +40,8 @@ fun AppNavHost(
             },
             navigateToParams = {
                 navController.navigate(ParamsDestination.route)
-            }
+            },
+            openDrawer = openDrawer,
         )
 
         paramsGraph(
