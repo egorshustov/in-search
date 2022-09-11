@@ -31,10 +31,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":core-navigation"))
-    implementation(project(":core-common"))
-    implementation(project(":core-domain"))
-    implementation(project(":core-ui"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:common"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:ui"))
 
     kapt(libs.dagger.hilt.compiler)
 }

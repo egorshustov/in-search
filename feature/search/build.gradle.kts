@@ -1,6 +1,7 @@
 plugins {
     id(Plugins.androidLibrary)
     kotlin(KotlinPlugins.android)
+    kotlin(KotlinPlugins.kapt)
 }
 
 android {
@@ -26,5 +27,16 @@ android {
 }
 
 dependencies {
-    implementation(project(":core-common"))
+    implementation(project(":core:common"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:model"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:ui"))
+
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.lifecycle.livedataKtx)
+
+    kapt(libs.dagger.hilt.compiler)
+    kapt(libs.androidx.hilt.compiler)
 }

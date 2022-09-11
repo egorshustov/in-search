@@ -1,7 +1,6 @@
 plugins {
     id(Plugins.androidLibrary)
     kotlin(KotlinPlugins.android)
-    kotlin(KotlinPlugins.kapt)
 }
 
 android {
@@ -27,15 +26,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":core-common"))
-    implementation(project(":core-navigation"))
-    implementation(project(":core-model"))
-    implementation(project(":core-domain"))
-    implementation(project(":core-ui"))
+    implementation(project(":core:common"))
+    implementation(project(":core:model"))
+    implementation(project(":core:data"))
+    implementation(project(":core:datastore"))
 
-    implementation(libs.androidx.work.runtime)
-    implementation(libs.androidx.hilt.work)
-
-    kapt(libs.dagger.hilt.compiler)
-    kapt(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.room.paging)
 }

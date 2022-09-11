@@ -9,17 +9,17 @@ rootProject.name = "VPoiske"
 include(
     ":app",
 
-    ":core-common",
-    ":core-data",
-    ":core-database",
-    ":core-datastore",
-    ":core-domain",
-    ":core-model",
-    ":core-navigation",
-    ":core-network",
-    ":core-ui",
+    ":core:common",
+    ":core:data",
+    ":core:database",
+    ":core:datastore",
+    ":core:domain",
+    ":core:model",
+    ":core:navigation",
+    ":core:network",
+    ":core:ui",
 
-    ":feature-auth",
-    ":feature-search",
-    ":feature-params"
+    ":feature:auth",
+    ":feature:search",
+    ":feature:params"
 )

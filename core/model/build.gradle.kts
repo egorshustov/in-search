@@ -1,9 +1,7 @@
 plugins {
     id(Plugins.androidLibrary)
     kotlin(KotlinPlugins.android)
-    kotlin(KotlinPlugins.kapt)
 }
-
 android {
     compileSdk = AppConfig.compileSdk
     defaultConfig {
@@ -26,9 +24,7 @@ android {
     }
 }
 
-dependencies {
-    implementation(project(":core-common"))
 
-    implementation(libs.androidx.dataStore.preferences)
-    kapt(libs.dagger.hilt.compiler)
+dependencies {
+    implementation(project(":core:common"))
 }
