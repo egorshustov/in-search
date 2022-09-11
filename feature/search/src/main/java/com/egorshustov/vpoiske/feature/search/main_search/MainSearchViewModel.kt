@@ -7,7 +7,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import androidx.work.*
 import com.egorshustov.vpoiske.core.common.R
-import com.egorshustov.vpoiske.core.common.utils.NO_VALUE
+import com.egorshustov.vpoiske.core.common.utils.NO_VALUE_F
 import com.egorshustov.vpoiske.core.common.utils.combine
 import com.egorshustov.vpoiske.core.common.utils.log
 import com.egorshustov.vpoiske.core.domain.user.GetLastSearchUsersUseCase
@@ -86,16 +86,16 @@ internal class MainSearchViewModel @Inject constructor(
         messageStrRes?.let { uiMessageManager.emitMessage(UiMessage(it)) }
     }
 
-    private val searchProcessPercentageFlow: StateFlow<Int?> = workInfoFlow.transform { workInfo ->
-        val searchProcessPercentage =
-            workInfo?.progress?.getInt(ProcessSearchWorker.PROGRESS_PERCENTAGE_ARG, NO_VALUE)
-        if (searchProcessPercentage != NO_VALUE && searchProcessPercentage != null) {
-            emit(searchProcessPercentage)
+    private val searchProcessValueFlow: StateFlow<Float> = workInfoFlow.transform { workInfo ->
+        val searchProcessValue =
+            workInfo?.progress?.getFloat(ProcessSearchWorker.PROGRESS_VALUE_ARG, NO_VALUE_F)
+        if (searchProcessValue != NO_VALUE_F && searchProcessValue != null) {
+            emit(searchProcessValue)
         }
     }.stateIn(
         scope = viewModelScope,
         started = WhileSubscribed,
-        initialValue = null
+        initialValue = 0f
     )
 
     private val isAuthRequiredFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -103,13 +103,13 @@ internal class MainSearchViewModel @Inject constructor(
     val state: StateFlow<MainSearchState> = combine(
         usersFlow,
         isSearchRunningFlow,
-        searchProcessPercentageFlow,
+        searchProcessValueFlow,
         isAuthRequiredFlow,
         loadingState.flow,
         uiMessageManager.message
     ) { users,
         isSearchRunning,
-        searchProcessPercentage,
+        searchProcessValue,
         isAuthRequired,
         isLoading,
         message ->
@@ -117,7 +117,7 @@ internal class MainSearchViewModel @Inject constructor(
         MainSearchState(
             users = users,
             isSearchRunning = isSearchRunning,
-            searchProcessPercentage = searchProcessPercentage,
+            searchProcessValue = searchProcessValue,
             isAuthRequired = isAuthRequired,
             isLoading = isLoading,
             message = message

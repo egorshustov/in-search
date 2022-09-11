@@ -42,9 +42,10 @@ internal fun ParamsScreen(
                 onNavigationClick = onBackClick
             )
         },
-    ) {
+    ) { innerPadding ->
         Column(
             modifier = modifier
+                .padding(innerPadding)
                 .padding(8.dp)
                 .verticalScroll(rememberScrollState())
         ) {

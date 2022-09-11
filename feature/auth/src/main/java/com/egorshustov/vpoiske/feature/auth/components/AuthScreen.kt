@@ -1,9 +1,6 @@
 package com.egorshustov.vpoiske.feature.auth.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -35,10 +32,11 @@ internal fun AuthScreen(
                 title = { Text(text = stringResource(id = R.string.auth_title)) },
             )
         },
-    ) {
+    ) { innerPadding ->
         val keyboardController = LocalSoftwareKeyboardController.current
         Column(
             modifier = modifier
+                .padding(innerPadding)
                 .fillMaxHeight()
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,

@@ -87,8 +87,8 @@ internal class ProcessSearchWorker @AssistedInject constructor(
         state.foundUsersLimit ?: return@collect
         state.message?.let { showMessage(it) }
 
-        val processPercentage = (state.foundUsersCount * 100) / state.foundUsersLimit
-        setProgress(workDataOf(PROGRESS_PERCENTAGE_ARG to processPercentage))
+        val processValue = state.foundUsersCount.toFloat() / state.foundUsersLimit
+        setProgress(workDataOf(PROGRESS_VALUE_ARG to processValue))
         if (state.foundUsersCount >= state.foundUsersLimit) {
             sendCompleteNotification(state.foundUsersCount, state.foundUsersLimit)
         } else {
@@ -142,7 +142,7 @@ internal class ProcessSearchWorker @AssistedInject constructor(
 
     companion object {
         const val SEARCH_ID_ARG = "SEARCH_ID_ARG"
-        const val PROGRESS_PERCENTAGE_ARG = "PROGRESS_PERCENTAGE_ARG"
+        const val PROGRESS_VALUE_ARG = "PROGRESS_VALUE_ARG"
 
         private const val PROGRESS_NOTIFICATION_ID = 1
         private const val COMPLETE_NOTIFICATION_ID = 2

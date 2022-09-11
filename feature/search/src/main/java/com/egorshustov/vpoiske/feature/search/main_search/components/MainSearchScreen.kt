@@ -1,5 +1,6 @@
 package com.egorshustov.vpoiske.feature.search.main_search.components
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -7,12 +8,12 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.egorshustov.vpoiske.core.common.R
 import com.egorshustov.vpoiske.core.model.data.mockUser
@@ -42,18 +43,36 @@ internal fun MainSearchScreen(
 
     Scaffold(
         topBar = {
-            AppTopAppBar(
-                titleRes = R.string.app_name,
-                navigationIcon = Icons.Filled.Menu,
-                navigationIconContentDescriptionRes = R.string.app_open_drawer,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent
-                ),
-                modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                ),
-                onNavigationClick = openDrawer
-            )
+            Box(contentAlignment = Alignment.BottomCenter) {
+                AppTopAppBar(
+                    titleRes = R.string.app_name,
+                    navigationIcon = Icons.Filled.Menu,
+                    navigationIconContentDescriptionRes = R.string.app_open_drawer,
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Transparent
+                    ),
+                    modifier = Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                    ),
+                    onNavigationClick = openDrawer
+                )
+                if (state.isSearchRunning) {
+                    val progressValue by remember(state.searchProcessValue) {
+                        mutableStateOf(state.searchProcessValue)
+                    }
+                    val animatedProgress by animateFloatAsState(
+                        targetValue = progressValue,
+                        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
+                    )
+
+                    LinearProgressIndicator(
+                        modifier = Modifier
+                            .semantics(mergeDescendants = true) {}
+                            .fillMaxWidth(),
+                        progress = animatedProgress
+                    )
+                }
+            }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->

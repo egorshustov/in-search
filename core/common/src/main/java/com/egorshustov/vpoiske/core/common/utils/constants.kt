@@ -11,5 +11,6 @@ const val MONTHS_IN_YEAR = 12
 const val MAX_COLUMN_COUNT = 3
 const val NO_VALUE = -1
 const val NO_VALUE_L = -1L
+const val NO_VALUE_F = -1f
 
 const val NOTIFICATION_CHANNEL_ID = "com.egorshustov.vpoiske.util.V_POISKE_NOTIFICATION_CHANNEL_ID"

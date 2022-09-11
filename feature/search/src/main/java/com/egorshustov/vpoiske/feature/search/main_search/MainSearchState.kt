@@ -8,7 +8,7 @@ import com.egorshustov.vpoiske.core.ui.api.UiMessage
 internal data class MainSearchState(
     val users: List<User> = emptyList(),
     val isSearchRunning: Boolean = false,
-    val searchProcessPercentage: Int? = null,
+    val searchProcessValue: Float = 0f,
     val isAuthRequired: Boolean = false,
     val isLoading: Boolean = false,
     val message: UiMessage? = null
