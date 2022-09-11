@@ -3,7 +3,7 @@ package com.egorshustov.vpoiske.core.ui.component
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,10 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 fun AppTopAppBar(
     @StringRes titleRes: Int,
     navigationIcon: ImageVector,
-    navigationIconContentDescription: String?,
+    @StringRes navigationIconContentDescriptionRes: Int,
     actions: @Composable RowScope.() -> Unit = {},
     modifier: Modifier = Modifier,
-    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(),
     onNavigationClick: () -> Unit = {}
 ) {
     TopAppBar(
@@ -28,7 +28,7 @@ fun AppTopAppBar(
             IconButton(onClick = onNavigationClick) {
                 Icon(
                     imageVector = navigationIcon,
-                    contentDescription = navigationIconContentDescription,
+                    contentDescription = stringResource(id = navigationIconContentDescriptionRes),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -40,12 +40,12 @@ fun AppTopAppBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview("Top App Bar")
+@Preview("AppTopAppBar")
 @Composable
 fun NiaTopAppBarPreview() {
     AppTopAppBar(
         titleRes = android.R.string.untitled,
-        navigationIcon = Icons.Default.Search,
-        navigationIconContentDescription = "Navigation icon"
+        navigationIcon = Icons.Filled.Menu,
+        navigationIconContentDescriptionRes = android.R.string.untitled
     )
 }

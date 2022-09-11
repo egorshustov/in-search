@@ -15,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.egorshustov.vpoiske.core.common.R
 import com.egorshustov.vpoiske.core.model.data.mockUser
@@ -47,9 +46,7 @@ internal fun MainSearchScreen(
             AppTopAppBar(
                 titleRes = R.string.app_name,
                 navigationIcon = Icons.Filled.Menu,
-                navigationIconContentDescription = stringResource(
-                    id = R.string.app_open_drawer
-                ),
+                navigationIconContentDescriptionRes = R.string.app_open_drawer,
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.Transparent
                 ),
@@ -61,10 +58,14 @@ internal fun MainSearchScreen(
         },
     ) { innerPadding ->
         if (state.users.isEmpty()) {
-            NoSearchesStub(onStartNewSearchClick = onStartNewSearchClick)
+            NoSearchesStub(
+                onStartNewSearchClick = onStartNewSearchClick,
+                modifier = Modifier.padding(innerPadding)
+            )
         } else {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(3)
+                columns = GridCells.Fixed(3),
+                contentPadding = innerPadding
             ) {
                 items(state.users) { user ->
                     UserCard(

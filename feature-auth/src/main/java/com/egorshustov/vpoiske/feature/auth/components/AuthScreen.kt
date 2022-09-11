@@ -29,67 +29,75 @@ internal fun AuthScreen(
     onTriggerEvent: (AuthEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    Column(
-        modifier = modifier
-            .fillMaxHeight()
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.auth_title)) },
+            )
+        },
     ) {
-        TextField(
-            modifier = modifier.fillMaxWidth(),
-            enabled = !state.isLoading,
-            value = state.typedLoginText,
-            onValueChange = { onTriggerEvent(AuthEvent.OnUpdateLogin(it)) },
-            label = { Text(text = stringResource(R.string.auth_email_or_phone)) },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
-            //textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
-            colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.surface)
-        )
-        TextField(
-            modifier = modifier.fillMaxWidth(),
-            enabled = !state.isLoading,
-            value = state.typedPasswordText,
-            onValueChange = { onTriggerEvent(AuthEvent.OnUpdatePassword(it)) },
-            label = { Text(text = stringResource(R.string.auth_password)) },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    onTriggerEvent(AuthEvent.OnStartAuthProcess)
-                    keyboardController?.hide()
-                }
-            ),
-            //textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-            colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.surface)
-        )
-        Button(
-            modifier = modifier.fillMaxWidth(),
-            enabled = !state.isLoading,
-            onClick = { onTriggerEvent(AuthEvent.OnStartAuthProcess) }
+        val keyboardController = LocalSoftwareKeyboardController.current
+        Column(
+            modifier = modifier
+                .fillMaxHeight()
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(stringResource(R.string.auth_login))
-        }
-    }
-
-    if (state.isLoading && !state.needToFinishAuth) {
-        val context = LocalContext.current
-        AuthProcessWebView(
-            login = state.typedLoginText,
-            password = state.typedPasswordText,
-            onAuthDataObtained = { userId, accessToken ->
-                onTriggerEvent(AuthEvent.OnAuthDataObtained(userId, accessToken))
-            },
-            onError = {
-                context.run { showMessage(getString(it.errorResId)) }
-                onTriggerEvent(AuthEvent.OnAuthError)
+            TextField(
+                modifier = modifier.fillMaxWidth(),
+                enabled = !state.isLoading,
+                value = state.typedLoginText,
+                onValueChange = { onTriggerEvent(AuthEvent.OnUpdateLogin(it)) },
+                label = { Text(text = stringResource(R.string.auth_email_or_phone)) },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                //textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
+                colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.surface)
+            )
+            TextField(
+                modifier = modifier.fillMaxWidth(),
+                enabled = !state.isLoading,
+                value = state.typedPasswordText,
+                onValueChange = { onTriggerEvent(AuthEvent.OnUpdatePassword(it)) },
+                label = { Text(text = stringResource(R.string.auth_password)) },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onTriggerEvent(AuthEvent.OnStartAuthProcess)
+                        keyboardController?.hide()
+                    }
+                ),
+                //textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
+                colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.surface)
+            )
+            Button(
+                modifier = modifier.fillMaxWidth(),
+                enabled = !state.isLoading,
+                onClick = { onTriggerEvent(AuthEvent.OnStartAuthProcess) }
+            ) {
+                Text(stringResource(R.string.auth_login))
             }
-        )
+        }
+
+        if (state.isLoading && !state.needToFinishAuth) {
+            val context = LocalContext.current
+            AuthProcessWebView(
+                login = state.typedLoginText,
+                password = state.typedPasswordText,
+                onAuthDataObtained = { userId, accessToken ->
+                    onTriggerEvent(AuthEvent.OnAuthDataObtained(userId, accessToken))
+                },
+                onError = {
+                    context.run { showMessage(getString(it.errorResId)) }
+                    onTriggerEvent(AuthEvent.OnAuthError)
+                }
+            )
+        }
     }
 }

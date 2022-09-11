@@ -12,7 +12,7 @@ object AuthDestination : AppNavigationDestination {
 }
 
 fun NavGraphBuilder.authGraph(
-    returnToPreviousScreen: () -> Unit
+    onBackClick: () -> Unit
 ) {
     navigation(
         route = AuthDestination.route,
@@ -20,7 +20,7 @@ fun NavGraphBuilder.authGraph(
     ) {
         composable(route = AuthDestination.destination) {
             AuthRoute(
-                onAuthFinished = returnToPreviousScreen
+                onAuthFinished = onBackClick
             )
         }
     }

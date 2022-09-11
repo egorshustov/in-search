@@ -56,11 +56,12 @@ fun AppNavHost(
                     popUpTo(ParamsDestination.route) { inclusive = true }
                     launchSingleTop = true
                 }
-            }
+            },
+            onBackClick = { navController.popBackStack() }
         )
 
         authGraph(
-            returnToPreviousScreen = { navController.popBackStack() }
+            onBackClick = { navController.popBackStack() }
         )
     }
 }

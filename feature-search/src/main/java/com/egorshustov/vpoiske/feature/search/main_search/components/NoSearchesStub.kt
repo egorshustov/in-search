@@ -15,11 +15,12 @@ import com.egorshustov.vpoiske.core.common.R
 
 @Composable
 internal fun NoSearchesStub(
-    onStartNewSearchClick: () -> Unit
+    onStartNewSearchClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val padding = 8.dp
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(padding)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,

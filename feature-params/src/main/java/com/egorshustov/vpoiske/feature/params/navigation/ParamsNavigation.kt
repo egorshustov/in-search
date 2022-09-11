@@ -13,7 +13,8 @@ object ParamsDestination : AppNavigationDestination {
 
 fun NavGraphBuilder.paramsGraph(
     startSearchProcess: (searchId: Long) -> Unit,
-    navigateToAuth: () -> Unit
+    navigateToAuth: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     navigation(
         route = ParamsDestination.route,
@@ -23,6 +24,7 @@ fun NavGraphBuilder.paramsGraph(
             ParamsRoute(
                 startSearchProcess = startSearchProcess,
                 requireAuth = navigateToAuth,
+                onBackClick = onBackClick
             )
         }
     }

@@ -14,6 +14,7 @@ internal fun ParamsRoute(
     modifier: Modifier = Modifier,
     startSearchProcess: (searchId: Long) -> Unit,
     requireAuth: () -> Unit,
+    onBackClick: () -> Unit,
     viewModel: ParamsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -32,6 +33,7 @@ internal fun ParamsRoute(
     ParamsScreen(
         state = state,
         onTriggerEvent = onTriggerEvent,
+        onBackClick = onBackClick,
         modifier = modifier
     )
 }

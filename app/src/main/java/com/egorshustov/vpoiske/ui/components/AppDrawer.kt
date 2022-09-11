@@ -15,7 +15,9 @@ import com.egorshustov.vpoiske.navigation.TopLevelDestination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDrawer(
+    currentRoute: String,
     onNavigateToTopLevelDestination: (TopLevelDestination) -> Unit,
+    closeDrawer: () -> Unit,
     onChangeThemeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -29,7 +31,13 @@ fun AppDrawer(
                 DrawerItem(
                     textResId = destination.titleResId,
                     drawableResId = destination.drawableResId,
-                    onClick = { onNavigateToTopLevelDestination(destination) }
+                    onClick = {
+                        if (currentRoute == destination.destination) {
+                            closeDrawer()
+                        } else {
+                            onNavigateToTopLevelDestination(destination)
+                        }
+                    }
                 )
             }
 

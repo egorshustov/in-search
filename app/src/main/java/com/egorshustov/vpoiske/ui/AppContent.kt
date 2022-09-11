@@ -6,6 +6,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.navigation.compose.rememberNavController
+import com.egorshustov.vpoiske.core.navigation.getCurrentRoute
 import com.egorshustov.vpoiske.core.ui.theme.VPoiskeTheme
 import com.egorshustov.vpoiske.navigation.AppNavHost
 import com.egorshustov.vpoiske.navigation.AppTopLevelNavigation
@@ -32,25 +33,24 @@ fun AppContent() {
             }
         }
 
-        var gesturesEnabled by remember { mutableStateOf(true) } // todo use it to disable gestures when necessary
+        var gesturesEnabled by remember { mutableStateOf(true) }
 
-        /*val routesWithDrawer = remember { TopLevelDestination.values().map { it.destination } }
+        val routesWithDrawer = remember { TopLevelDestination.values().map { it.destination } }
         val currentRoute = navController.getCurrentRoute()
-        if (currentRoute in routesWithDrawer) {
+        gesturesEnabled = currentRoute in routesWithDrawer
 
-        }*/
         ModalNavigationDrawer(
             gesturesEnabled = gesturesEnabled,
             drawerState = drawerState,
             drawerContent = {
                 AppDrawer(
+                    currentRoute = navController.getCurrentRoute(),
                     onNavigateToTopLevelDestination = { destination ->
                         coroutineScope.launch { drawerState.close() }
-                        if (destination != TopLevelDestination.LAST_SEARCH) {
-                            // (No need to navigate to last search screen,
-                            // because if we're able to click on this, we're already in here)
-                            appTopLevelNavigation.navigateTo(destination)
-                        }
+                        appTopLevelNavigation.navigateTo(destination)
+                    },
+                    closeDrawer = {
+                        coroutineScope.launch { drawerState.close() }
                     },
                     onChangeThemeClick = {}
                 )
