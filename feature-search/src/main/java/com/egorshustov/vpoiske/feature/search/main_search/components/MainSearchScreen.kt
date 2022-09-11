@@ -1,17 +1,15 @@
 package com.egorshustov.vpoiske.feature.search.main_search.components
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -32,10 +30,11 @@ internal fun MainSearchScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     state.message?.let { message ->
         LaunchedEffect(message) {
-            Toast.makeText(context, message.getText(context), Toast.LENGTH_LONG).show()
+            snackbarHostState.showSnackbar(message.getText(context))
             // Notify the view model that the message has been dismissed
             onTriggerEvent(MainSearchEvent.OnMessageShown(message.id))
         }
@@ -56,6 +55,7 @@ internal fun MainSearchScreen(
                 onNavigationClick = openDrawer
             )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         if (state.users.isEmpty()) {
             NoSearchesStub(

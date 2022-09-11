@@ -44,7 +44,7 @@ data class UserResponse(
     val homeTown: String? = null,
 
     @SerialName("photo_id")
-    val photoId: String?,
+    val photoId: String? = null,
 
     @SerialName("photo_50")
     val photo50: UrlString? = null,
