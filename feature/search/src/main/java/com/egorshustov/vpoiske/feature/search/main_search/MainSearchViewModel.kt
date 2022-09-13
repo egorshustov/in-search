@@ -7,9 +7,13 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import androidx.work.*
 import com.egorshustov.vpoiske.core.common.R
+import com.egorshustov.vpoiske.core.common.utils.MAX_COLUMN_COUNT
 import com.egorshustov.vpoiske.core.common.utils.NO_VALUE_F
 import com.egorshustov.vpoiske.core.common.utils.combine
 import com.egorshustov.vpoiske.core.common.utils.log
+import com.egorshustov.vpoiske.core.domain.column.GetColumnCountUseCase
+import com.egorshustov.vpoiske.core.domain.column.SaveColumnCountUseCase
+import com.egorshustov.vpoiske.core.domain.column.SaveColumnCountUseCaseParams
 import com.egorshustov.vpoiske.core.domain.user.GetLastSearchUsersUseCase
 import com.egorshustov.vpoiske.core.model.data.User
 import com.egorshustov.vpoiske.core.ui.api.UiMessage
@@ -29,6 +33,8 @@ import javax.inject.Inject
 @HiltViewModel
 internal class MainSearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    getColumnCountUseCase: GetColumnCountUseCase,
+    private val saveColumnCountUseCase: SaveColumnCountUseCase,
     getLastSearchUsersUseCase: GetLastSearchUsersUseCase,
     @ApplicationContext appContext: Context
 ) : ViewModel() {
@@ -56,6 +62,9 @@ internal class MainSearchViewModel @Inject constructor(
 
     private val loadingState = ObservableLoadingCounter()
     private val uiMessageManager = UiMessageManager()
+
+    private val columnCountFlow: Flow<Int> =
+        getColumnCountUseCase(Unit).unwrapResult(loadingState, uiMessageManager)
 
     private val usersFlow: Flow<List<User>> =
         getLastSearchUsersUseCase(Unit).unwrapResult(loadingState, uiMessageManager)
@@ -102,12 +111,14 @@ internal class MainSearchViewModel @Inject constructor(
 
     val state: StateFlow<MainSearchState> = combine(
         usersFlow,
+        columnCountFlow,
         isSearchRunningFlow,
         searchProcessValueFlow,
         isAuthRequiredFlow,
         loadingState.flow,
         uiMessageManager.message
     ) { users,
+        columnCount,
         isSearchRunning,
         searchProcessValue,
         isAuthRequired,
@@ -116,6 +127,7 @@ internal class MainSearchViewModel @Inject constructor(
 
         MainSearchState(
             users = users,
+            columnCount = columnCount,
             isSearchRunning = isSearchRunning,
             searchProcessValue = searchProcessValue,
             isAuthRequired = isAuthRequired,
@@ -139,9 +151,11 @@ internal class MainSearchViewModel @Inject constructor(
             is MainSearchEvent.OnStartSearchProcess -> onStartSearchProcess(
                 searchId = event.searchId
             )
+            MainSearchEvent.OnStopSearchProcess -> onStopSearchProcess()
             is MainSearchEvent.OnClickUserCard -> onClickUserCard(
                 userId = event.userId, context = event.context
             )
+            MainSearchEvent.OnChangeColumnCount -> onChangeColumnCount()
             is MainSearchEvent.OnMessageShown -> onMessageShown(event.uiMessageId)
         }
     }
@@ -174,10 +188,22 @@ internal class MainSearchViewModel @Inject constructor(
         )
     }
 
+    private fun onStopSearchProcess() {
+        workManager.cancelUniqueWork(SEARCH_WORK_NAME)
+    }
+
     private fun onClickUserCard(userId: Long, context: Context) {
         val userUrl = "https://vk.com/id$userId"
         val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(userUrl) }
         context.startActivity(intent)
+    }
+
+    private fun onChangeColumnCount() {
+        viewModelScope.launch {
+            val newColumnCount =
+                if (state.value.columnCount.dec() == 0) MAX_COLUMN_COUNT else state.value.columnCount.dec()
+            saveColumnCountUseCase(SaveColumnCountUseCaseParams(newColumnCount))
+        }
     }
 
     private fun onMessageShown(uiMessageId: Long) {

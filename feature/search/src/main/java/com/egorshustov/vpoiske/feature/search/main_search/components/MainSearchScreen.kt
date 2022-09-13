@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import com.egorshustov.vpoiske.core.common.R
 import com.egorshustov.vpoiske.core.model.data.mockUser
+import com.egorshustov.vpoiske.core.ui.R
 import com.egorshustov.vpoiske.core.ui.component.AppTopAppBar
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchEvent
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchState
@@ -48,6 +48,18 @@ internal fun MainSearchScreen(
                     titleRes = R.string.app_name,
                     navigationIcon = Icons.Filled.Menu,
                     navigationIconContentDescriptionRes = R.string.app_open_drawer,
+                    actions = {
+                        if (state.isSearchRunning) {
+                            StopSearchButton(onStopSearchClick = {
+                                onTriggerEvent(MainSearchEvent.OnStopSearchProcess)
+                            })
+                        }
+                        if (state.users.isNotEmpty()) {
+                            ChangeColumnCountIconButton(onChangeColumnCountClick = {
+                                onTriggerEvent(MainSearchEvent.OnChangeColumnCount)
+                            })
+                        }
+                    },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent
                     ),
@@ -83,7 +95,7 @@ internal fun MainSearchScreen(
             )
         } else {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
+                columns = GridCells.Fixed(state.columnCount),
                 contentPadding = innerPadding
             ) {
                 items(state.users) { user ->

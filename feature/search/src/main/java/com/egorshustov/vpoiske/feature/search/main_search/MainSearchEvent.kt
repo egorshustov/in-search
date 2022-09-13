@@ -8,7 +8,11 @@ internal sealed interface MainSearchEvent {
 
     data class OnStartSearchProcess(val searchId: Long) : MainSearchEvent
 
+    object OnStopSearchProcess : MainSearchEvent
+
     data class OnClickUserCard(val userId: Long, val context: Context) : MainSearchEvent
+
+    object OnChangeColumnCount : MainSearchEvent
 
     data class OnMessageShown(val uiMessageId: Long) : MainSearchEvent
 }

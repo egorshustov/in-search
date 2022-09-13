@@ -42,7 +42,7 @@ internal class DataStorePreferenceStorage @Inject constructor(
     override val accessToken: Flow<String>
         get() = dataStore.data.map { it[PREF_KEY_ACCESS_TOKEN].orEmpty() }
 
-    override suspend fun selectTheme(theme: String) {
+    override suspend fun saveSelectedTheme(theme: String) {
         dataStore.edit {
             it[PREF_KEY_SELECTED_THEME] = theme
         }
@@ -51,7 +51,7 @@ internal class DataStorePreferenceStorage @Inject constructor(
     override val selectedTheme =
         dataStore.data.map { it[PREF_KEY_SELECTED_THEME] ?: Theme.SYSTEM.storageKey }
 
-    override suspend fun selectColumnCount(count: Int) {
+    override suspend fun saveSelectedColumnCount(count: Int) {
         dataStore.edit {
             it[PREF_KEY_SELECTED_COLUMN_COUNT] = count
         }

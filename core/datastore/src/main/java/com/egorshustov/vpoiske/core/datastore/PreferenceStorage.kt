@@ -10,9 +10,9 @@ interface PreferenceStorage {
     suspend fun saveAccessToken(token: String)
     val accessToken: Flow<String>
 
-    suspend fun selectTheme(theme: String)
+    suspend fun saveSelectedTheme(theme: String)
     val selectedTheme: Flow<String>
 
-    suspend fun selectColumnCount(count: Int)
+    suspend fun saveSelectedColumnCount(count: Int)
     val selectedColumnCount: Flow<Int>
 }
