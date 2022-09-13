@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.main_search.components
+package com.egorshustov.vpoiske.core.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-internal fun LoadingStub() {
+fun LoadingStub() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -22,6 +22,6 @@ internal fun LoadingStub() {
 
 @Preview
 @Composable
-internal fun LoadingStubPreview() {
+fun LoadingStubPreview() {
     LoadingStub()
 }

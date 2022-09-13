@@ -7,7 +7,7 @@ data class Search(
     val city: City,
     val homeTown: String?,
     val gender: Gender,
-    val ageFrom: Int?,
+    val ageFrom: Int,
     val ageTo: Int?,
     val relation: Relation,
     val withPhoneOnly: Boolean,

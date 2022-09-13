@@ -199,11 +199,10 @@ internal class ParamsViewModel @Inject constructor(
         _state.update { it.copy(genderState = it.genderState.copy(selectedGender = gender)) }
     }
 
-    private fun onSelectAgeFrom(ageFrom: Int?) {
+    private fun onSelectAgeFrom(ageFrom: Int) {
         _state.update { it.copy(ageRangeState = it.ageRangeState.copy(selectedAgeFrom = ageFrom)) }
 
-        val ageTo = state.value.ageRangeState.selectedAgeTo
-        if (ageFrom == null || ageTo == null) return
+        val ageTo = state.value.ageRangeState.selectedAgeTo ?: return
 
         if (ageFrom > ageTo) {
             _state.update { it.copy(ageRangeState = it.ageRangeState.copy(selectedAgeTo = ageFrom)) }
@@ -214,7 +213,7 @@ internal class ParamsViewModel @Inject constructor(
         _state.update { it.copy(ageRangeState = it.ageRangeState.copy(selectedAgeTo = ageTo)) }
 
         val ageFrom = state.value.ageRangeState.selectedAgeFrom
-        if (ageFrom == null || ageTo == null) return
+        if (ageTo == null) return
 
         if (ageFrom > ageTo) {
             _state.update { it.copy(ageRangeState = it.ageRangeState.copy(selectedAgeFrom = ageTo)) }

@@ -23,7 +23,7 @@ internal sealed interface ParamsEvent {
 
     data class OnSelectGender(val gender: Gender) : ParamsEvent
 
-    data class OnSelectAgeFrom(val ageFrom: Int?) : ParamsEvent
+    data class OnSelectAgeFrom(val ageFrom: Int) : ParamsEvent
 
     data class OnSelectAgeTo(val ageTo: Int?) : ParamsEvent
 

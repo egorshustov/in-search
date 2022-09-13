@@ -10,7 +10,6 @@ import com.egorshustov.vpoiske.core.common.R
 import com.egorshustov.vpoiske.core.common.utils.MAX_COLUMN_COUNT
 import com.egorshustov.vpoiske.core.common.utils.NO_VALUE_F
 import com.egorshustov.vpoiske.core.common.utils.combine
-import com.egorshustov.vpoiske.core.common.utils.log
 import com.egorshustov.vpoiske.core.domain.column.GetColumnCountUseCase
 import com.egorshustov.vpoiske.core.domain.column.SaveColumnCountUseCase
 import com.egorshustov.vpoiske.core.domain.column.SaveColumnCountUseCaseParams
@@ -27,7 +26,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,20 +42,20 @@ internal class MainSearchViewModel @Inject constructor(
     private val liveWorkInfo: MediatorLiveData<WorkInfo?> = MediatorLiveData<WorkInfo?>()
 
     private val workInfoLiveObserver = Observer<List<WorkInfo>?> {
-        Timber.e("Observer $it")
         liveWorkInfo.value = it.firstOrNull()
     }
 
     private val workInfoFlow: Flow<WorkInfo?> = liveWorkInfo.asFlow()
 
     init {
+        savedStateHandle.get<Long>(SearchDestination.searchIdArg)?.also {
+            onTriggerEvent(MainSearchEvent.OnStartSearchProcess(it))
+        }
+
         liveWorkInfo.addSource(
             workManager.getWorkInfosForUniqueWorkLiveData(SEARCH_WORK_NAME),
             workInfoLiveObserver
         )
-        workInfoFlow.onEach { // todo: remove after testing
-            Timber.e(it.toString())
-        }.launchIn(viewModelScope)
     }
 
     private val loadingState = ObservableLoadingCounter()
@@ -134,16 +132,11 @@ internal class MainSearchViewModel @Inject constructor(
             isLoading = isLoading,
             message = message
         )
-    }.log("MainSearchState")
-        .stateIn(
-            scope = viewModelScope,
-            started = WhileSubscribed,
-            initialValue = MainSearchState.Empty
-        )
-
-    private val searchId: Long? = savedStateHandle.get<Long>(SearchDestination.searchIdArg)?.also {
-        onTriggerEvent(MainSearchEvent.OnStartSearchProcess(it))
-    }
+    }.stateIn(
+        scope = viewModelScope,
+        started = WhileSubscribed,
+        initialValue = MainSearchState.Empty
+    )
 
     fun onTriggerEvent(event: MainSearchEvent) {
         when (event) {

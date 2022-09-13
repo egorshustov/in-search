@@ -38,7 +38,6 @@
     <string name="params_age">Возраст</string>
     <string name="params_from">от %s</string>
     <string name="params_to">до %s</string>
-    <string name="params_from_any">от любого</string>
     <string name="params_to_any">до любого</string>
     <string name="params_relation">Семейное положение</string>
     <string name="params_with_phone_only">Только с телефоном</string>

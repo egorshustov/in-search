@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.egorshustov.vpoiske.core.domain.token.GetAccessTokenUseCase
 import com.egorshustov.vpoiske.core.domain.token.SaveAccessTokenUseCase
 import com.egorshustov.vpoiske.core.domain.token.SaveAccessTokenUseCaseParams
+import com.egorshustov.vpoiske.core.ui.api.UiMessage
 import com.egorshustov.vpoiske.core.ui.api.UiMessageManager
 import com.egorshustov.vpoiske.core.ui.util.ObservableLoadingCounter
 import com.egorshustov.vpoiske.core.ui.util.unwrapResult
+import com.egorshustov.vpoiske.feature.auth.utils.AuthWebViewError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,7 +24,7 @@ internal class AuthViewModel @Inject constructor(
     private val loadingState = ObservableLoadingCounter()
     private val uiMessageManager = UiMessageManager()
 
-    private val _state: MutableStateFlow<AuthState> = MutableStateFlow(AuthState())
+    private val _state: MutableStateFlow<AuthState> = MutableStateFlow(AuthState.Default)
     val state: StateFlow<AuthState> = _state.asStateFlow()
 
     init {
@@ -41,7 +43,7 @@ internal class AuthViewModel @Inject constructor(
                 event.accessToken
             )
             AuthEvent.OnNeedToFinishAuthProcessed -> onNeedToFinishAuthProcessed()
-            AuthEvent.OnAuthError -> onAuthError()
+            is AuthEvent.OnAuthError -> onAuthError(event.error)
             is AuthEvent.OnMessageShown -> onMessageShown(event.uiMessageId)
         }
     }
@@ -56,6 +58,7 @@ internal class AuthViewModel @Inject constructor(
 
     private fun onStartAuthProcess() {
         loadingState.addLoader()
+        _state.update { it.copy(isAuthInProcess = true) }
     }
 
     private fun onAuthDataObtained(userId: String, accessToken: String) {
@@ -66,9 +69,16 @@ internal class AuthViewModel @Inject constructor(
 
     private fun onNeedToFinishAuthProcessed() {
         _state.update { it.copy(needToFinishAuth = false) }
+        loadingState.removeLoader()
     }
 
-    private fun onAuthError() {
+    private fun onAuthError(error: AuthWebViewError) {
+        _state.update {
+            it.copy(
+                isAuthInProcess = false,
+                message = UiMessage(error.errorResId)
+            )
+        }
         loadingState.removeLoader()
     }
 

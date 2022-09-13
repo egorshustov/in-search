@@ -15,10 +15,10 @@ import com.egorshustov.vpoiske.feature.params.R
 @Composable
 internal fun AgeRangeLayout(
     ageRangeState: AgeRangeState,
-    onAgeFromItemClick: (ageFrom: Int?) -> Unit,
+    onAgeFromItemClick: (ageFrom: Int) -> Unit,
     onAgeToItemClick: (ageTo: Int?) -> Unit
 ) {
-    val menuItems = remember { listOf<Int?>(null) + ageRangeState.commonAgeRange.toList() }
+    val menuItems = remember { ageRangeState.commonAgeRange.toList() }
 
     Column {
         Text(text = stringResource(R.string.params_age))
@@ -34,7 +34,7 @@ internal fun AgeRangeLayout(
             Spacer(modifier = Modifier.padding(8.dp))
             AppDropdownMenu(
                 modifier = Modifier.weight(0.5f),
-                items = menuItems,
+                items = listOf<Int?>(null) + menuItems,
                 onItemClick = { onAgeToItemClick(it) },
                 itemText = { item -> Text(getAgeToText(item)) },
                 selectedItemValue = getAgeToText(ageRangeState.selectedAgeTo)
@@ -44,11 +44,7 @@ internal fun AgeRangeLayout(
 }
 
 @Composable
-private fun getAgeFromText(ageFrom: Int?): String = if (ageFrom == null) {
-    stringResource(R.string.params_from_any)
-} else {
-    stringResource(R.string.params_from, ageFrom)
-}
+private fun getAgeFromText(ageFrom: Int): String = stringResource(R.string.params_from, ageFrom)
 
 @Composable
 private fun getAgeToText(ageTo: Int?): String = if (ageTo == null) {

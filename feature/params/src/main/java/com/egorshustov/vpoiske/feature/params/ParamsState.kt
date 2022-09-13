@@ -7,6 +7,8 @@ import com.egorshustov.vpoiske.core.model.data.Gender
 import com.egorshustov.vpoiske.core.model.data.Relation
 import com.egorshustov.vpoiske.core.ui.api.UiMessage
 
+private const val DEFAULT_SELECTED_AGE_FROM = 18
+
 private const val DEFAULT_WITH_PHONE_ONLY = false
 private const val DEFAULT_FOUND_USERS_LIMIT = 100
 private const val DEFAULT_DAYS_INTERVAL = 3
@@ -32,11 +34,7 @@ internal data class ParamsState(
     val followersRangeState: FollowersRangeState = FollowersRangeState(),
     val isLoading: Boolean = false,
     val message: UiMessage? = null
-) {
-    companion object {
-        val Default = ParamsState()
-    }
-}
+)
 
 @Immutable
 internal data class SearchState(
@@ -68,7 +66,7 @@ internal data class GenderState(
 @Immutable
 internal data class AgeRangeState(
     val commonAgeRange: IntRange = 18..50,
-    val selectedAgeFrom: Int? = null,
+    val selectedAgeFrom: Int = DEFAULT_SELECTED_AGE_FROM,
     val selectedAgeTo: Int? = null
 )
 
@@ -101,7 +99,7 @@ internal val ParamsState.areSelectionParamsDefault
     get() = countriesState.selectedCountry == null
             && citiesState.selectedCity == null
             && genderState.selectedGender == Gender.NOT_DEFINED
-            && ageRangeState.selectedAgeFrom == null
+            && ageRangeState.selectedAgeFrom == DEFAULT_SELECTED_AGE_FROM
             && ageRangeState.selectedAgeTo == null
             && relationState.selectedRelation == Relation.NOT_DEFINED
             && extraOptionsState.withPhoneOnly == DEFAULT_WITH_PHONE_ONLY

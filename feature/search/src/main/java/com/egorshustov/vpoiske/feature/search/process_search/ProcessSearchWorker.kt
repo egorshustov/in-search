@@ -3,7 +3,6 @@ package com.egorshustov.vpoiske.feature.search.process_search
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
@@ -12,6 +11,7 @@ import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.MAIN
 import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.common.utils.NOTIFICATION_CHANNEL_ID
+import com.egorshustov.vpoiske.core.common.utils.showMessage
 import com.egorshustov.vpoiske.core.ui.R
 import com.egorshustov.vpoiske.core.ui.api.UiMessage
 import dagger.assisted.Assisted
@@ -97,11 +97,7 @@ internal class ProcessSearchWorker @AssistedInject constructor(
     }
 
     private suspend fun showMessage(message: UiMessage) = withContext(mainDispatcher) {
-        Toast.makeText(
-            applicationContext,
-            message.getText(applicationContext),
-            Toast.LENGTH_LONG
-        ).show()
+        applicationContext.showMessage(message.getText(applicationContext))
         Timber.d("showMessage. message: $message")
         presenter?.onMessageShown(message.id)
     }

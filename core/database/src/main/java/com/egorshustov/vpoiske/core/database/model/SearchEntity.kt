@@ -23,7 +23,7 @@ data class SearchEntity(
     val gender: Gender,
 
     @ColumnInfo(name = "age_from")
-    val ageFrom: Int?,
+    val ageFrom: Int,
 
     @ColumnInfo(name = "age_to")
     val ageTo: Int?,

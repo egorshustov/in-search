@@ -4,11 +4,11 @@ import android.net.http.SslError
 import android.os.Build
 import android.webkit.*
 import androidx.annotation.RequiresApi
-import com.egorshustov.vpoiske.feature.auth.utils.AuthWebViewErrorType
+import com.egorshustov.vpoiske.feature.auth.utils.AuthWebViewError
 
 internal class AuthWebViewClient(
     private val jsInterfaceName: String,
-    private val onErrorReceived: ((errorType: AuthWebViewErrorType) -> Unit)? = null
+    private val onErrorReceived: ((errorType: AuthWebViewError) -> Unit)? = null
 ) : WebViewClient() {
 
     override fun onPageFinished(view: WebView?, url: String?) {
@@ -20,7 +20,7 @@ internal class AuthWebViewClient(
     }
 
     override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
-        onErrorReceived?.invoke(AuthWebViewErrorType.UNDEFINED)
+        onErrorReceived?.invoke(AuthWebViewError.UNDEFINED)
         super.onReceivedSslError(view, handler, error)
     }
 
@@ -32,9 +32,9 @@ internal class AuthWebViewClient(
     ) {
         if (request?.isForMainFrame == true) {
             val errorType = if (error?.errorCode == ERROR_HOST_LOOKUP) {
-                AuthWebViewErrorType.NO_INTERNET_CONNECTION_OR_UNAVAILABLE
+                AuthWebViewError.NO_INTERNET_CONNECTION_OR_UNAVAILABLE
             } else {
-                AuthWebViewErrorType.UNDEFINED
+                AuthWebViewError.UNDEFINED
             }
             onErrorReceived?.invoke(errorType)
         }
@@ -46,7 +46,7 @@ internal class AuthWebViewClient(
         request: WebResourceRequest?,
         errorResponse: WebResourceResponse?
     ) {
-        if (request?.isForMainFrame == true) onErrorReceived?.invoke(AuthWebViewErrorType.UNDEFINED)
+        if (request?.isForMainFrame == true) onErrorReceived?.invoke(AuthWebViewError.UNDEFINED)
         super.onReceivedHttpError(view, request, errorResponse)
     }
 }

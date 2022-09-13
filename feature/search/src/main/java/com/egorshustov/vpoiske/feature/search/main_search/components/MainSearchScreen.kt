@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.egorshustov.vpoiske.core.model.data.mockUser
 import com.egorshustov.vpoiske.core.ui.R
 import com.egorshustov.vpoiske.core.ui.component.AppTopAppBar
+import com.egorshustov.vpoiske.core.ui.component.LoadingStub
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchEvent
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchState
 
@@ -42,6 +43,7 @@ internal fun MainSearchScreen(
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             Box(contentAlignment = Alignment.BottomCenter) {
                 AppTopAppBar(
