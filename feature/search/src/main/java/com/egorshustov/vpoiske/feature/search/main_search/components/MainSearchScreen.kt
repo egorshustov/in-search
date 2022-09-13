@@ -88,13 +88,13 @@ internal fun MainSearchScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-        if (state.users.isEmpty()) {
-            NoSearchesStub(
+        when {
+            state.isLoading || (state.isSearchRunning && state.users.isEmpty()) -> LoadingStub()
+            state.users.isEmpty() -> NoUsersStub(
                 onStartNewSearchClick = onStartNewSearchClick,
                 modifier = Modifier.padding(innerPadding)
             )
-        } else {
-            LazyVerticalGrid(
+            else -> LazyVerticalGrid(
                 columns = GridCells.Fixed(state.columnCount),
                 contentPadding = innerPadding
             ) {

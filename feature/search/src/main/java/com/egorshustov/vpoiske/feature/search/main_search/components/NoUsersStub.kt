@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.egorshustov.vpoiske.core.common.R
 
 @Composable
-internal fun NoSearchesStub(
+internal fun NoUsersStub(
     onStartNewSearchClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -26,7 +26,7 @@ internal fun NoSearchesStub(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = stringResource(R.string.search_main_no_searches))
+        Text(text = stringResource(R.string.search_main_no_users))
         Spacer(modifier = Modifier.size(padding))
         Button(
             modifier = Modifier.padding(padding),
@@ -45,6 +45,6 @@ internal fun NoSearchesStub(
 
 @Preview
 @Composable
-internal fun NoSearchesStubPreview() {
-    NoSearchesStub(onStartNewSearchClick = {})
+internal fun NoUsersStubPreview() {
+    NoUsersStub(onStartNewSearchClick = {})
 }
