@@ -33,5 +33,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
 
+    implementation(libs.androidx.lifecycle.livedataKtx)
+
     kapt(libs.dagger.hilt.compiler)
 }

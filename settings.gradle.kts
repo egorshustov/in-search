@@ -21,5 +21,6 @@ include(
 
     ":feature:auth",
     ":feature:search",
-    ":feature:params"
+    ":feature:params",
+    ":feature:history"
 )
