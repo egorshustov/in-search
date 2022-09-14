@@ -79,6 +79,7 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":core:ui"))
     implementation(project(":feature:auth"))
+    implementation(project(":feature:history"))
     implementation(project(":feature:params"))
     implementation(project(":feature:search"))
 

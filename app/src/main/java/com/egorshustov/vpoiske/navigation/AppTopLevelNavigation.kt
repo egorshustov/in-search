@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.egorshustov.feature.history.navigation.HistoryDestination
 import com.egorshustov.vpoiske.R
 import com.egorshustov.vpoiske.feature.params.navigation.ParamsDestination
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
@@ -54,7 +55,7 @@ enum class TopLevelDestination(
     ),
 
     SEARCH_HISTORY(
-        destination = "search_history", // TODO: add destination from search history feature
+        destination = HistoryDestination.destination,
         titleResId = R.string.app_search_history,
         drawableResId = R.drawable.ic_baseline_history_24
     )

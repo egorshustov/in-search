@@ -9,7 +9,7 @@ import com.egorshustov.vpoiske.core.navigation.AppNavigationDestination
 import com.egorshustov.vpoiske.feature.search.main_search.MainSearchRoute
 
 object SearchDestination : AppNavigationDestination {
-    const val searchIdArg = "searchId"
+    internal const val searchIdArg = "searchId"
     override val route = "search_route?$searchIdArg={$searchIdArg}"
     override val destination = "search_destination"
 

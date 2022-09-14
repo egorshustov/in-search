@@ -14,7 +14,7 @@ object ParamsDestination : AppNavigationDestination {
 fun NavGraphBuilder.paramsGraph(
     startSearchProcess: (searchId: Long) -> Unit,
     navigateToAuth: () -> Unit,
-    onBackClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     navigation(
         route = ParamsDestination.route,
