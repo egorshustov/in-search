@@ -124,6 +124,12 @@ internal class ParamsViewModel @Inject constructor(
                 _state.updateAndGetParamsStateFromSearchModel(lastSearch)
                 getCities(lastSearch.country.id)
             }
+
+            /*repeat(100) { // todo remove after testing
+                val search = createSearchModelFromParamsState(state.value)
+                saveSearchUseCase(SaveSearchUseCaseParams(search!!))
+                delay(100)
+            }*/
         }
     }
 

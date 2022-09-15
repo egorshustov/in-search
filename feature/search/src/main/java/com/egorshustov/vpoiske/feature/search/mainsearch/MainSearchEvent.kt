@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.main_search
+package com.egorshustov.vpoiske.feature.search.mainsearch
 
 import android.content.Context
 

@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.process_search
+package com.egorshustov.vpoiske.feature.search.processsearch
 
 import com.egorshustov.vpoiske.core.common.exceptions.NetworkException
 import com.egorshustov.vpoiske.core.common.model.Result
@@ -74,7 +74,7 @@ internal class ProcessSearchPresenterImpl @AssistedInject constructor(
     }.stateIn(
         scope = presenterScope,
         started = WhileSubscribed,
-        initialValue = ProcessSearchState.Empty
+        initialValue = ProcessSearchState.Default
     )
 
     init {

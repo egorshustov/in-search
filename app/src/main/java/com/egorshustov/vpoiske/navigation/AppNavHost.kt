@@ -42,7 +42,7 @@ fun AppNavHost(
             navigateToParams = {
                 navController.navigate(ParamsDestination.route)
             },
-            openDrawer = openDrawer,
+            openDrawer = openDrawer
         )
 
         paramsGraph(

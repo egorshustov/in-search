@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 @Composable
 internal fun HistorySearchItemRoute(
     modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
 ) {
     Text(text = "HistorySearchItemRoute")
 }

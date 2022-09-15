@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.main_search
+package com.egorshustov.vpoiske.feature.search.mainsearch
 
 import androidx.compose.runtime.Immutable
 import com.egorshustov.vpoiske.core.model.data.User
@@ -17,6 +17,6 @@ internal data class MainSearchState(
     val message: UiMessage? = null
 ) {
     companion object {
-        val Empty = MainSearchState()
+        val Default = MainSearchState()
     }
 }

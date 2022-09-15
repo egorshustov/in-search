@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.main_search.components
+package com.egorshustov.vpoiske.feature.search.mainsearch.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
@@ -24,11 +24,12 @@ import com.egorshustov.vpoiske.core.model.data.mockUser
 @Composable
 internal fun UserCard(
     user: User,
-    onUserCardClick: (userId: Long) -> Unit
+    onUserCardClick: (userId: Long) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
         shape = RoundedCornerShape(0.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f)
             .clickable { onUserCardClick(user.id) }

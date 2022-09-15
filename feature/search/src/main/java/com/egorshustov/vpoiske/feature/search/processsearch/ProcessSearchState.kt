@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.process_search
+package com.egorshustov.vpoiske.feature.search.processsearch
 
 import com.egorshustov.vpoiske.core.ui.api.UiMessage
 
@@ -8,6 +8,6 @@ internal data class ProcessSearchState(
     val message: UiMessage? = null
 ) {
     companion object {
-        val Empty = ProcessSearchState()
+        val Default = ProcessSearchState()
     }
 }

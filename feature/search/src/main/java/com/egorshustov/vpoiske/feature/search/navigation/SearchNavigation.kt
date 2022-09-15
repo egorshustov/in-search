@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.egorshustov.vpoiske.core.navigation.AppNavigationDestination
-import com.egorshustov.vpoiske.feature.search.main_search.MainSearchRoute
+import com.egorshustov.vpoiske.feature.search.mainsearch.MainSearchRoute
 
 object SearchDestination : AppNavigationDestination {
     internal const val searchIdArg = "searchId"

@@ -1,6 +1,7 @@
 package com.egorshustov.vpoiske.core.domain.search
 
 import androidx.paging.PagingData
+import androidx.paging.map
 import com.egorshustov.vpoiske.core.common.base.FlowUseCase
 import com.egorshustov.vpoiske.core.common.model.Result
 import com.egorshustov.vpoiske.core.common.network.AppDispatchers.IO
@@ -8,22 +9,33 @@ import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.common.utils.asResult
 import com.egorshustov.vpoiske.core.data.repository.SearchesRepository
 import com.egorshustov.vpoiske.core.model.data.SearchWithUsers
+import com.egorshustov.vpoiske.core.model.data.SearchWithUsersPhotos
 import com.egorshustov.vpoiske.core.model.data.requestsparams.PagingConfigParams
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-data class GetSearchesWithUsersParams(
+data class GetSearchesWithUsersPhotosParams(
     val params: PagingConfigParams
 )
 
-class GetSearchesWithUsersUseCase @Inject constructor(
+class GetSearchesWithUsersPhotosUseCase @Inject constructor(
     private val searchesRepository: SearchesRepository,
     @Dispatcher(IO) ioDispatcher: CoroutineDispatcher
-) : FlowUseCase<GetSearchesWithUsersParams, PagingData<SearchWithUsers>>(ioDispatcher) {
+) : FlowUseCase<GetSearchesWithUsersPhotosParams, PagingData<SearchWithUsersPhotos>>(ioDispatcher) {
 
-    override fun execute(parameters: GetSearchesWithUsersParams): Flow<Result<PagingData<SearchWithUsers>>> =
+    override fun execute(parameters: GetSearchesWithUsersPhotosParams): Flow<Result<PagingData<SearchWithUsersPhotos>>> =
         searchesRepository
             .getSearchesWithUsersStream(parameters.params)
+            .map { pagingSearchWithUsers ->
+                pagingSearchWithUsers.map { it.toSearchesWithSomeUsersPhotos(photosCount = 9) }
+            }
             .asResult()
+
+    private fun SearchWithUsers.toSearchesWithSomeUsersPhotos(photosCount: Int) =
+        SearchWithUsersPhotos(
+            search = search,
+            photos = users.take(photosCount).map { it.photosInfo.photo50 }
+        )
 }

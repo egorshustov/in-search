@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.main_search.components
+package com.egorshustov.vpoiske.feature.search.mainsearch.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
@@ -19,8 +19,8 @@ import com.egorshustov.vpoiske.core.model.data.mockUser
 import com.egorshustov.vpoiske.core.ui.R
 import com.egorshustov.vpoiske.core.ui.component.AppTopAppBar
 import com.egorshustov.vpoiske.core.ui.component.LoadingStub
-import com.egorshustov.vpoiske.feature.search.main_search.MainSearchEvent
-import com.egorshustov.vpoiske.feature.search.main_search.MainSearchState
+import com.egorshustov.vpoiske.feature.search.mainsearch.MainSearchEvent
+import com.egorshustov.vpoiske.feature.search.mainsearch.MainSearchState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

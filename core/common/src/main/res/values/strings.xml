@@ -55,6 +55,9 @@
     <string name="auth_password">Пароль</string>
     <string name="auth_login">Войти</string>
 
+    <!--History feature strings-->
+    <string name="history_search_history">История поисков</string>
+
     <!--Error description strings-->
 
     <string name="error_something_went_wrong">Что-то пошло не так. Попробуйте повторить позднее</string>

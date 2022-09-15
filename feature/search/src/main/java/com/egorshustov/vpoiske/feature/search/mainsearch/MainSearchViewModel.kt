@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.main_search
+package com.egorshustov.vpoiske.feature.search.mainsearch
 
 import android.content.Context
 import android.content.Intent
@@ -21,7 +21,7 @@ import com.egorshustov.vpoiske.core.ui.util.ObservableLoadingCounter
 import com.egorshustov.vpoiske.core.ui.util.WhileSubscribed
 import com.egorshustov.vpoiske.core.ui.util.unwrapResult
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination
-import com.egorshustov.vpoiske.feature.search.process_search.ProcessSearchWorker
+import com.egorshustov.vpoiske.feature.search.processsearch.ProcessSearchWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
@@ -135,7 +135,7 @@ internal class MainSearchViewModel @Inject constructor(
     }.stateIn(
         scope = viewModelScope,
         started = WhileSubscribed,
-        initialValue = MainSearchState.Empty
+        initialValue = MainSearchState.Default
     )
 
     fun onTriggerEvent(event: MainSearchEvent) {

@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.main_search.components
+package com.egorshustov.vpoiske.feature.search.mainsearch.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button

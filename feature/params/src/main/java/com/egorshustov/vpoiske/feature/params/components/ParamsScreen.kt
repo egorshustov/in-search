@@ -47,7 +47,7 @@ internal fun ParamsScreen(
         modifier = modifier,
         topBar = {
             AppTopAppBar(
-                titleRes = R.string.app_new_search,
+                titleRes = R.string.params_search_params,
                 navigationIcon = Icons.Filled.ArrowBack,
                 navigationIconContentDescriptionRes = R.string.app_return_back,
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

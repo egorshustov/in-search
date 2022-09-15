@@ -25,10 +25,15 @@ fun NavGraphBuilder.historyGraph(
         startDestination = HistoryDestination.destination
     ) {
         composable(route = HistoryDestination.destination) {
-            HistorySearchListRoute()
+            HistorySearchListRoute(
+                onSearchItemClick = {},
+                onBackClick = onBackClick
+            )
         }
         composable(route = HistoryDestination.destinationItem) {
-            HistorySearchItemRoute()
+            HistorySearchItemRoute(
+                onBackClick = { navController.popBackStack() }
+            )
         }
     }
 }

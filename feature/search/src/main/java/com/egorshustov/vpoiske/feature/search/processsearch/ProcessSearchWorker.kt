@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.process_search
+package com.egorshustov.vpoiske.feature.search.processsearch
 
 import android.app.PendingIntent
 import android.content.Context

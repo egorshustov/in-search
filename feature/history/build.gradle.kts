@@ -34,6 +34,8 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(libs.androidx.lifecycle.livedataKtx)
+    implementation(libs.androidx.paging.runtimeKtx)
+    implementation(libs.androidx.paging.compose)
 
     kapt(libs.dagger.hilt.compiler)
 }
