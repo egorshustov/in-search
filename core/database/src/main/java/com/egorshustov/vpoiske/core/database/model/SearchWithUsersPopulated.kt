@@ -14,6 +14,6 @@ data class SearchWithUsersPopulated(
 )
 
 fun SearchWithUsersPopulated.asExternalModel() = SearchWithUsers(
-    search = search.asExternalModel(),
+    search = search.asExternalModel(foundUsersCount = users.size),
     users = users.asExternalModelList()
 )

@@ -18,7 +18,8 @@ data class Search(
     val followersMinCount: Int,
     val followersMaxCount: Int,
     val startTime: UnixSeconds,
-    val id: Long? = null
+    val id: Long? = null,
+    val foundUsersCount: Int? = null
 )
 
 val Search.isFriendsLimitSet: Boolean
@@ -40,5 +41,6 @@ val mockSearch = Search( // todo: move to tests directory later
     followersMinCount = 0,
     followersMaxCount = 200,
     startTime = UnixSeconds(1663486092),
-    id = 1
+    id = 1,
+    foundUsersCount = 100
 )

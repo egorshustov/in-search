@@ -26,7 +26,9 @@ fun NavGraphBuilder.historyGraph(
     ) {
         composable(route = HistoryDestination.destination) {
             HistorySearchListRoute(
-                onSearchItemClick = {},
+                onSearchItemClick = { searchId ->
+
+                },
                 onBackClick = onBackClick
             )
         }

@@ -11,3 +11,5 @@ fun UrlString.prepareUrlAndParseSafely(): Uri? = try {
 }
 
 fun String.extractDigits(): String = replace("\\D+".toRegex(), "")
+
+fun String.removeDots(): String = replace(".", "")

@@ -58,7 +58,7 @@ data class SearchEntity(
     var id: Long = 0
 }
 
-fun SearchEntity.asExternalModel() = Search(
+fun SearchEntity.asExternalModel(foundUsersCount: Int? = null) = Search(
     country = Country(country.id ?: NO_VALUE, country.title),
     city = City(city.id ?: NO_VALUE, city.title, "", ""),
     homeTown = homeTown,
@@ -74,5 +74,6 @@ fun SearchEntity.asExternalModel() = Search(
     followersMinCount = followersMinCount,
     followersMaxCount = followersMaxCount,
     startTime = UnixSeconds(startUnixSeconds),
-    id = id
+    id = id,
+    foundUsersCount = foundUsersCount
 )

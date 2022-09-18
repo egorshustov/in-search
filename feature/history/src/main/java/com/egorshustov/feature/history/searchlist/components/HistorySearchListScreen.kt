@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -70,16 +70,9 @@ internal fun HistorySearchListScreen(
                 modifier = modifier,
                 contentPadding = innerPadding
             ) {
-                /*if (searchWithUsersPhotosPagingItems.loadState.refresh == LoadState.Loading) {
-                    item {
-                        Text(
-                            text = "Waiting for items to load from the backend",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentWidth(Alignment.CenterHorizontally)
-                        )
-                    }
-                }*/
+                if (searchWithUsersPhotosPagingItems.loadState.refresh == LoadState.Loading) {
+                    item { LoadingStub() }
+                }
 
                 items(
                     items = searchWithUsersPhotosPagingItems,
@@ -90,14 +83,14 @@ internal fun HistorySearchListScreen(
                             search = it.search,
                             photos = it.photos,
                             onSearchCardClick = { searchId ->
-                                onTriggerEvent(HistorySearchListEvent.OnClickSearch(searchId))
+                                onTriggerEvent(HistorySearchListEvent.OnClickSearchItem(searchId))
                             },
-                            modifier = modifier//.padding(38.dp) // todo remove later
+                            modifier = modifier
                         )
                     }
                 }
 
-                /*if (searchWithUsersPhotosPagingItems.loadState.append == LoadState.Loading) {
+                if (searchWithUsersPhotosPagingItems.loadState.append == LoadState.Loading) {
                     item {
                         CircularProgressIndicator(
                             modifier = Modifier
@@ -105,7 +98,7 @@ internal fun HistorySearchListScreen(
                                 .wrapContentWidth(Alignment.CenterHorizontally)
                         )
                     }
-                }*/
+                }
             }
         }
     }

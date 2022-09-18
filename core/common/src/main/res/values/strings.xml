@@ -62,6 +62,7 @@
     <string name="history_search_any">любого</string>
     <string name="history_search_with_phone_yes">Только с телефоном: да</string>
     <string name="history_search_with_phone_no">Только с телефоном: нет</string>
+    <string name="history_search_users_count">Количество найденных пользователей</string>
 
     <!--Error description strings-->
 

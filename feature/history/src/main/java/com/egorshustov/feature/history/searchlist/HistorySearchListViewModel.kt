@@ -14,10 +14,7 @@ import com.egorshustov.vpoiske.core.ui.util.ObservableLoadingCounter
 import com.egorshustov.vpoiske.core.ui.util.WhileSubscribed
 import com.egorshustov.vpoiske.core.ui.util.unwrapResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,18 +33,21 @@ internal class HistorySearchListViewModel @Inject constructor(
                 PagingConfigParams(
                     pageSize = 10,
                     maxSize = 30,
-                    enablePlaceholders = false
+                    enablePlaceholders = true
                 )
             )
         ).unwrapResult(loadingState, uiMessageManager)
             .cachedIn(viewModelScope)
 
+    private val clickedSearchIdFlow = MutableStateFlow<Long?>(null)
 
     val state: StateFlow<HistorySearchListState> = combine(
+        clickedSearchIdFlow,
         loadingState.flow,
         uiMessageManager.message
-    ) { isLoading, message ->
+    ) { clickedSearchId, isLoading, message ->
         HistorySearchListState(
+            clickedSearchId = clickedSearchId,
             isLoading = isLoading,
             message = message
         )
@@ -59,17 +59,22 @@ internal class HistorySearchListViewModel @Inject constructor(
 
     fun onTriggerEvent(event: HistorySearchListEvent) {
         when (event) {
-            is HistorySearchListEvent.OnClickSearch -> onClickSearch()
-            is HistorySearchListEvent.OnDismissSearch -> onDismissSearch()
+            is HistorySearchListEvent.OnClickSearchItem -> onClickSearchItem(event.searchId)
+            HistorySearchListEvent.OnClickSearchItemHandled -> onClickSearchItemHandled()
+            is HistorySearchListEvent.OnDismissSearchItem -> onDismissSearchItem(event.searchId)
             is HistorySearchListEvent.OnMessageShown -> onMessageShown(event.uiMessageId)
         }
     }
 
-    private fun onClickSearch() {
-
+    private fun onClickSearchItem(searchId: Long) {
+        clickedSearchIdFlow.update { searchId }
     }
 
-    private fun onDismissSearch() {
+    private fun onClickSearchItemHandled() {
+        clickedSearchIdFlow.update { null }
+    }
+
+    private fun onDismissSearchItem(searchId: Long) {
 
     }
 

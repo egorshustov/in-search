@@ -15,7 +15,7 @@ import com.egorshustov.vpoiske.core.model.data.SearchWithUsersPhotos
 @Composable
 internal fun HistorySearchListRoute(
     modifier: Modifier = Modifier,
-    onSearchItemClick: () -> Unit,
+    onSearchItemClick: (searchId: Long) -> Unit,
     onBackClick: () -> Unit,
     viewModel: HistorySearchListViewModel = hiltViewModel()
 ) {
@@ -24,6 +24,11 @@ internal fun HistorySearchListRoute(
         viewModel.searchWithUsersPhotosPagedFlow.collectAsLazyPagingItems()
 
     val onTriggerEvent = viewModel::onTriggerEvent
+
+    state.clickedSearchId?.let {
+        onSearchItemClick(it)
+        onTriggerEvent(HistorySearchListEvent.OnClickSearchItemHandled)
+    }
 
     HistorySearchListScreen(
         state = state,
