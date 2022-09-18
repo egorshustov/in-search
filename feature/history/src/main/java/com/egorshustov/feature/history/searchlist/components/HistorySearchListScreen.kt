@@ -67,7 +67,7 @@ internal fun HistorySearchListScreen(
     ) { innerPadding ->
         Box(contentAlignment = Alignment.Center) {
             LazyColumn(
-                modifier = modifier.padding(8.dp),
+                modifier = modifier,
                 contentPadding = innerPadding
             ) {
                 /*if (searchWithUsersPhotosPagingItems.loadState.refresh == LoadState.Loading) {
@@ -84,11 +84,15 @@ internal fun HistorySearchListScreen(
                 items(
                     items = searchWithUsersPhotosPagingItems,
                     key = { it.search.id ?: NO_VALUE_L }
-                ) { searchWithUsers ->
-                    searchWithUsers?.let {
-                        Text(
-                            modifier = modifier.padding(38.dp),
-                            text = searchWithUsers.search.id.toString()
+                ) { searchWithUsersPhotos ->
+                    searchWithUsersPhotos?.let {
+                        SearchCard(
+                            search = it.search,
+                            photos = it.photos,
+                            onSearchCardClick = { searchId ->
+                                onTriggerEvent(HistorySearchListEvent.OnClickSearch(searchId))
+                            },
+                            modifier = modifier//.padding(38.dp) // todo remove later
                         )
                     }
                 }
@@ -102,11 +106,10 @@ internal fun HistorySearchListScreen(
                         )
                     }
                 }*/
-
             }
         }
-        if (state.isLoading) LoadingStub()
     }
+    if (state.isLoading) LoadingStub()
 }
 
 @Preview

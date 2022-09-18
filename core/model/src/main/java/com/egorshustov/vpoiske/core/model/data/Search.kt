@@ -23,3 +23,22 @@ data class Search(
 
 val Search.isFriendsLimitSet: Boolean
     get() = friendsMinCount != null || friendsMaxCount != null
+
+val mockSearch = Search( // todo: move to tests directory later
+    country = Country(1, "Russia"),
+    city = City(1, "Saint Petersburg", "", ""),
+    homeTown = "Kurgan",
+    gender = Gender.FEMALE,
+    ageFrom = 18,
+    ageTo = 40,
+    relation = Relation.NOT_MARRIED,
+    withPhoneOnly = false,
+    foundUsersLimit = 100,
+    daysInterval = 3,
+    friendsMinCount = 50,
+    friendsMaxCount = 250,
+    followersMinCount = 0,
+    followersMaxCount = 200,
+    startTime = UnixSeconds(1663486092),
+    id = 1
+)

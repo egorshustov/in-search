@@ -57,6 +57,11 @@
 
     <!--History feature strings-->
     <string name="history_search_history">История поисков</string>
+    <string name="history_search_photo_description">Изображение пользователя</string>
+    <string name="history_search_age_from_to">Возраст: от %1$s до %2$s</string>
+    <string name="history_search_any">любого</string>
+    <string name="history_search_with_phone_yes">Только с телефоном: да</string>
+    <string name="history_search_with_phone_no">Только с телефоном: нет</string>
 
     <!--Error description strings-->
 

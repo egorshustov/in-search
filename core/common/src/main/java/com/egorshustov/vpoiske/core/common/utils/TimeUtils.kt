@@ -22,7 +22,10 @@ fun Seconds.toMillis(): Millis = Millis(count.toLong() * MILLIS_IN_SECOND)
 fun Seconds.toDuration(): Duration = count.toDuration(DurationUnit.SECONDS)
 
 @JvmInline
-value class Millis(val count: Long)
+value class Millis(val count: Long) : Comparable<Millis> {
+
+    override fun compareTo(other: Millis): Int = (count - other.count).toInt()
+}
 typealias UnixMillis = Millis
 
 fun Millis.toSeconds(): Seconds = Seconds((count / MILLIS_IN_SECOND).toInt())

@@ -17,7 +17,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 data class GetSearchesWithUsersPhotosParams(
-    val params: PagingConfigParams
+    val params: PagingConfigParams,
+    val photosMaxCount: Int = 9
 )
 
 class GetSearchesWithUsersPhotosUseCase @Inject constructor(
@@ -29,13 +30,17 @@ class GetSearchesWithUsersPhotosUseCase @Inject constructor(
         searchesRepository
             .getSearchesWithUsersStream(parameters.params)
             .map { pagingSearchWithUsers ->
-                pagingSearchWithUsers.map { it.toSearchesWithSomeUsersPhotos(photosCount = 9) }
+                pagingSearchWithUsers.map {
+                    it.toSearchesWithSomeUsersPhotos(photosMaxCount = parameters.photosMaxCount)
+                }
             }
             .asResult()
 
-    private fun SearchWithUsers.toSearchesWithSomeUsersPhotos(photosCount: Int) =
+    private fun SearchWithUsers.toSearchesWithSomeUsersPhotos(photosMaxCount: Int) =
         SearchWithUsersPhotos(
             search = search,
-            photos = users.take(photosCount).map { it.photosInfo.photo50 }
+            photos = users.sortedBy { it.foundTime }
+                .take(photosMaxCount)
+                .map { it.photosInfo.photo50 }
         )
 }
