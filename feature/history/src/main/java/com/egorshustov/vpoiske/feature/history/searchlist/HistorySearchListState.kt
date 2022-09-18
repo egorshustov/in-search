@@ -1,4 +1,4 @@
-package com.egorshustov.feature.history.searchlist
+package com.egorshustov.vpoiske.feature.history.searchlist
 
 import androidx.compose.runtime.Immutable
 import com.egorshustov.vpoiske.core.ui.api.UiMessage

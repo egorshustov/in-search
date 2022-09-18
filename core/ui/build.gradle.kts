@@ -28,6 +28,7 @@ android {
 dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":core:common"))
+    implementation(project(":core:model"))
 
     api(libs.androidx.compose.material3)
     api(libs.androidx.compose.ui)

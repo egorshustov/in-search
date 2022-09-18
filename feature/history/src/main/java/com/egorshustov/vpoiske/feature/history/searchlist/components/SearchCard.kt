@@ -1,4 +1,4 @@
-package com.egorshustov.feature.history.searchlist.components
+package com.egorshustov.vpoiske.feature.history.searchlist.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable

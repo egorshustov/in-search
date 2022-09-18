@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.egorshustov.feature.history.navigation.HistoryDestination
+import com.egorshustov.vpoiske.feature.history.navigation.HistoryDestination
 import com.egorshustov.vpoiske.R
 import com.egorshustov.vpoiske.feature.params.navigation.ParamsDestination
 import com.egorshustov.vpoiske.feature.search.navigation.SearchDestination

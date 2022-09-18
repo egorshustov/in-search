@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.egorshustov.feature.history.navigation.historyGraph
+import com.egorshustov.vpoiske.feature.history.navigation.historyGraph
 import com.egorshustov.vpoiske.feature.auth.navigation.AuthDestination
 import com.egorshustov.vpoiske.feature.auth.navigation.authGraph
 import com.egorshustov.vpoiske.feature.params.navigation.ParamsDestination

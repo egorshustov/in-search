@@ -1,4 +1,4 @@
-package com.egorshustov.feature.history.searchlist.components
+package com.egorshustov.vpoiske.feature.history.searchlist.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,8 +19,11 @@ private const val photosCountInGrid = 9
 private const val photosInRow = 3
 
 @Composable
-internal fun UsersPhotosGrid(photos: List<UrlString>, modifier: Modifier = Modifier) {
-    Column {
+internal fun UsersPhotosGrid(
+    photos: List<UrlString>,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
         val visiblePhotos = photos.take(photosCountInGrid).toMutableList()
         if (visiblePhotos.size < photosCountInGrid) {
             visiblePhotos.addAll(List(photosCountInGrid - visiblePhotos.size) { "" })

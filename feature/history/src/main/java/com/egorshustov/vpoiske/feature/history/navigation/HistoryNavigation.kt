@@ -1,4 +1,4 @@
-package com.egorshustov.feature.history.navigation
+package com.egorshustov.vpoiske.feature.history.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -6,8 +6,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import com.egorshustov.feature.history.searchitem.HistorySearchItemRoute
-import com.egorshustov.feature.history.searchlist.HistorySearchListRoute
+import com.egorshustov.vpoiske.feature.history.searchitem.HistorySearchItemRoute
+import com.egorshustov.vpoiske.feature.history.searchlist.HistorySearchListRoute
 import com.egorshustov.vpoiske.core.navigation.AppNavigationDestination
 
 object HistoryDestination : AppNavigationDestination {

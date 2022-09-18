@@ -1,10 +1,11 @@
-package com.egorshustov.feature.history.searchlist
+package com.egorshustov.vpoiske.feature.history.searchlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.egorshustov.vpoiske.core.domain.search.DeleteSearchUseCase
+import com.egorshustov.vpoiske.core.domain.search.DeleteSearchUseCaseParams
 import com.egorshustov.vpoiske.core.domain.search.GetSearchesWithUsersPhotosParams
 import com.egorshustov.vpoiske.core.domain.search.GetSearchesWithUsersPhotosUseCase
 import com.egorshustov.vpoiske.core.model.data.SearchWithUsersPhotos
@@ -24,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class HistorySearchListViewModel @Inject constructor(
     getSearchesWithUsersPhotosUseCase: GetSearchesWithUsersPhotosUseCase,
-    deleteSearchUseCase: DeleteSearchUseCase
+    private val deleteSearchUseCase: DeleteSearchUseCase
 ) : ViewModel() {
 
     private val loadingState = ObservableLoadingCounter()
@@ -64,7 +65,9 @@ internal class HistorySearchListViewModel @Inject constructor(
     }
 
     private fun onDismissSearchItem(searchId: Long) {
-
+        viewModelScope.launch {
+            deleteSearchUseCase(DeleteSearchUseCaseParams(searchId))
+        }
     }
 
     private fun onMessageShown(uiMessageId: Long) {

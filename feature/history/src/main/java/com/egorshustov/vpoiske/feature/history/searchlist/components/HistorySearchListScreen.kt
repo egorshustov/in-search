@@ -1,4 +1,4 @@
-package com.egorshustov.feature.history.searchlist.components
+package com.egorshustov.vpoiske.feature.history.searchlist.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,13 +18,13 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.egorshustov.feature.history.searchlist.HistorySearchListEvent
-import com.egorshustov.feature.history.searchlist.HistorySearchListState
 import com.egorshustov.vpoiske.core.common.R
 import com.egorshustov.vpoiske.core.common.utils.NO_VALUE_L
 import com.egorshustov.vpoiske.core.model.data.SearchWithUsersPhotos
 import com.egorshustov.vpoiske.core.ui.component.AppTopAppBar
 import com.egorshustov.vpoiske.core.ui.component.LoadingStub
+import com.egorshustov.vpoiske.feature.history.searchlist.HistorySearchListEvent
+import com.egorshustov.vpoiske.feature.history.searchlist.HistorySearchListState
 import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,4 +1,4 @@
-package com.egorshustov.vpoiske.feature.search.mainsearch.components
+package com.egorshustov.vpoiske.core.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
@@ -22,7 +22,7 @@ import com.egorshustov.vpoiske.core.model.data.User
 import com.egorshustov.vpoiske.core.model.data.mockUser
 
 @Composable
-internal fun UserCard(
+fun UserCard(
     user: User,
     onUserCardClick: (userId: Long) -> Unit,
     modifier: Modifier = Modifier
@@ -53,7 +53,7 @@ internal fun UserCard(
 
 @Preview
 @Composable
-internal fun UserCardPreview() {
+fun UserCardPreview() {
     UserCard(
         user = mockUser,
         onUserCardClick = {}

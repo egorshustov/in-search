@@ -2,9 +2,6 @@ package com.egorshustov.vpoiske.feature.search.mainsearch.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
@@ -18,7 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.egorshustov.vpoiske.core.model.data.mockUser
 import com.egorshustov.vpoiske.core.ui.R
 import com.egorshustov.vpoiske.core.ui.component.AppTopAppBar
+import com.egorshustov.vpoiske.core.ui.component.ChangeColumnCountIconButton
 import com.egorshustov.vpoiske.core.ui.component.LoadingStub
+import com.egorshustov.vpoiske.core.ui.component.UsersGrid
 import com.egorshustov.vpoiske.feature.search.mainsearch.MainSearchEvent
 import com.egorshustov.vpoiske.feature.search.mainsearch.MainSearchState
 
@@ -96,19 +95,14 @@ internal fun MainSearchScreen(
                 onStartNewSearchClick = onStartNewSearchClick,
                 modifier = Modifier.padding(innerPadding)
             )
-            else -> LazyVerticalGrid(
-                columns = GridCells.Fixed(state.columnCount),
+            else -> UsersGrid(
+                users = state.users,
+                columnCount = state.columnCount,
+                onUserCardClick = { userId ->
+                    onTriggerEvent(MainSearchEvent.OnClickUserCard(userId, context))
+                },
                 contentPadding = innerPadding
-            ) {
-                items(state.users) { user ->
-                    UserCard(
-                        user = user,
-                        onUserCardClick = { userId ->
-                            onTriggerEvent(MainSearchEvent.OnClickUserCard(userId, context))
-                        }
-                    )
-                }
-            }
+            )
         }
     }
 }

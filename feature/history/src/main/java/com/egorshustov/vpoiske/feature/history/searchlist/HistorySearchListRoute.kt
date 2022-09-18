@@ -1,4 +1,4 @@
-package com.egorshustov.feature.history.searchlist
+package com.egorshustov.vpoiske.feature.history.searchlist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,7 +8,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.egorshustov.feature.history.searchlist.components.HistorySearchListScreen
+import com.egorshustov.vpoiske.feature.history.searchlist.components.HistorySearchListScreen
 import com.egorshustov.vpoiske.core.model.data.SearchWithUsersPhotos
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
