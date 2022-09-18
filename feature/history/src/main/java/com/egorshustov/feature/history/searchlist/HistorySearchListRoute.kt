@@ -25,15 +25,11 @@ internal fun HistorySearchListRoute(
 
     val onTriggerEvent = viewModel::onTriggerEvent
 
-    state.clickedSearchId?.let {
-        onSearchItemClick(it)
-        onTriggerEvent(HistorySearchListEvent.OnClickSearchItemHandled)
-    }
-
     HistorySearchListScreen(
         state = state,
         searchWithUsersPhotosPagingItems = searchWithUsersPhotosPagingItems,
         onTriggerEvent = onTriggerEvent,
+        onSearchItemClick = onSearchItemClick,
         onBackClick = onBackClick,
         modifier = modifier
     )

@@ -33,6 +33,7 @@ internal fun HistorySearchListScreen(
     state: HistorySearchListState,
     searchWithUsersPhotosPagingItems: LazyPagingItems<SearchWithUsersPhotos>,
     onTriggerEvent: (HistorySearchListEvent) -> Unit,
+    onSearchItemClick: (searchId: Long) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -82,9 +83,7 @@ internal fun HistorySearchListScreen(
                         SearchCard(
                             search = it.search,
                             photos = it.photos,
-                            onSearchCardClick = { searchId ->
-                                onTriggerEvent(HistorySearchListEvent.OnClickSearchItem(searchId))
-                            },
+                            onSearchCardClick = onSearchItemClick,
                             modifier = modifier
                         )
                     }
@@ -113,6 +112,7 @@ internal fun HistorySearchListScreenPreview() {
         searchWithUsersPhotosPagingItems = flowOf(PagingData.from(emptyList<SearchWithUsersPhotos>()))
             .collectAsLazyPagingItems(),
         onTriggerEvent = {},
+        onSearchItemClick = {},
         onBackClick = {}
     )
 }

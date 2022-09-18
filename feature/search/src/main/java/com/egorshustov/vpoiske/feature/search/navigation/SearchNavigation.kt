@@ -16,7 +16,7 @@ object SearchDestination : AppNavigationDestination {
     /**
      * Creates destination route for a searchId
      */
-    fun createNavigationRoute(searchId: Long): String = "search_route?${searchIdArg}=$searchId"
+    fun createNavigationRoute(searchId: Long): String = "search_route?$searchIdArg=$searchId"
 }
 
 fun NavGraphBuilder.searchGraph(
