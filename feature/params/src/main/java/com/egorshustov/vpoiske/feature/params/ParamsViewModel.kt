@@ -194,6 +194,7 @@ internal class ParamsViewModel @Inject constructor(
         ).unwrapResult(loadingState, uiMessageManager)
             .onEach { cities ->
                 _state.update { it.copy(citiesState = it.citiesState.copy(cities = cities)) }
+                if (cities.size == 1) onSelectCity(cities[0])
             }.launchIn(viewModelScope)
     }
 

@@ -23,6 +23,7 @@ fun <T : Any?> AppDropdownMenu(
         modifier = modifier
     ) {
         TextField(
+            modifier = Modifier.menuAnchor(),
             enabled = enabled,
             readOnly = true,
             value = selectedItemValue,
