@@ -7,6 +7,7 @@ import com.egorshustov.vpoiske.core.common.network.Dispatcher
 import com.egorshustov.vpoiske.core.model.data.requestsparams.GetCountriesRequestParams
 import com.egorshustov.vpoiske.core.model.data.requestsparams.VkCommonRequestParams
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
+import com.egorshustov.vpoiske.core.network.AppReserveUrl
 import com.egorshustov.vpoiske.core.network.isSuccessful
 import com.egorshustov.vpoiske.core.network.model.getcountries.CountryResponse
 import com.egorshustov.vpoiske.core.network.model.getcountries.GetCountriesResponse
@@ -24,6 +25,7 @@ import javax.inject.Singleton
 internal class CountriesKtorDataSource @Inject constructor(
     private val httpClient: HttpClient,
     @AppBaseUrl private val baseUrl: String,
+    @AppReserveUrl private val reserveUrl: String,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher
 ) : CountriesNetworkDataSource {
 
@@ -34,7 +36,7 @@ internal class CountriesKtorDataSource @Inject constructor(
         emit(Result.Loading)
 
         try {
-            val httpResponse = httpClient.get("$baseUrl/database.getCountries") {
+            var httpResponse = httpClient.get("$baseUrl/database.getCountries") {
                 parameter("need_all", if (getCountriesParams.needAll) 1 else 0)
                 parameter("count", getCountriesParams.count)
                 parameter("access_token", commonParams.accessToken)
@@ -42,7 +44,12 @@ internal class CountriesKtorDataSource @Inject constructor(
                 parameter("lang", commonParams.responseLanguage)
             }
 
-            val responseBody = httpResponse.body<GetCountriesResponse>()
+            var responseBody = httpResponse.body<GetCountriesResponse>()
+
+            if (responseBody.response?.countryResponseList.isNullOrEmpty()) {
+                httpResponse = httpClient.get("$reserveUrl/getCountries.json")
+                responseBody = httpResponse.body()
+            }
 
             if (httpResponse.isSuccessful && responseBody.error == null) {
                 emit(Result.Success(responseBody.response?.countryResponseList.orEmpty()))

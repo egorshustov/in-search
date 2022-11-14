@@ -1,6 +1,7 @@
 package com.egorshustov.vpoiske.core.network.di
 
 import com.egorshustov.vpoiske.core.network.AppBaseUrl
+import com.egorshustov.vpoiske.core.network.AppReserveUrl
 import com.egorshustov.vpoiske.core.network.VkUrlConfig
 import com.egorshustov.vpoiske.core.network.datasource.*
 import com.egorshustov.vpoiske.core.network.ktor.KtorClientFactory
@@ -47,5 +48,10 @@ internal interface NetworkModule {
         @Provides
         @AppBaseUrl
         internal fun provideBaseUrl(): String = VkUrlConfig.BASE_URL
+
+        @Singleton
+        @Provides
+        @AppReserveUrl
+        internal fun provideReserveUrl(): String = VkUrlConfig.RESERVE_URL
     }
 }
