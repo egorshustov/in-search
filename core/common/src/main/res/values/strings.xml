@@ -2,105 +2,105 @@
 
     <!--App strings-->
 
-    <string name="app_name">ВПоиске</string>
-    <string name="app_channel_description">Уведомления приложения ВПоиске</string>
-    <string name="app_open_drawer">Открыть меню</string>
-    <string name="app_return_back">Вернуться назад</string>
-    <string name="app_last_search">Последний поиск</string>
-    <string name="app_new_search">Новый поиск</string>
-    <string name="app_search_history">История поисков</string>
-    <string name="app_change_theme">Сменить тему</string>
+    <string name="app_name">InSearch</string>
+    <string name="app_channel_description">InSearch notifications</string>
+    <string name="app_open_drawer">Open menu</string>
+    <string name="app_return_back">Return back</string>
+    <string name="app_last_search">Last Search</string>
+    <string name="app_new_search">New Search</string>
+    <string name="app_search_history">Search history</string>
+    <string name="app_change_theme">Change theme</string>
 
     <!--Search feature strings-->
 
-    <string name="search_main_title">ВПоиске</string>
-    <string name="search_main_no_users">Найденные пользователи отсутствуют</string>
-    <string name="search_main_start_new_search">Начать новый поиск</string>
-    <string name="search_main_user_description">Изображение пользователя %s</string>
-    <string name="search_main_stop_search">Остановить поиск</string>
-    <string name="search_main_change_view">Изменить вид</string>
+    <string name="search_main_title">InSearch</string>
+    <string name="search_main_no_users">No found users</string>
+    <string name="search_main_start_new_search">Start new search</string>
+    <string name="search_main_user_description">User photo %s</string>
+    <string name="search_main_stop_search">Stop search</string>
+    <string name="search_main_change_view">Change view</string>
 
-    <string name="search_process_in_progress">Выполняется поиск</string>
-    <string name="search_process_cancel">Отмена</string>
-    <string name="search_process_found">Найдено %1$s/%2$s</string>
-    <string name="search_process_is_running">Поиск выполняется…</string>
-    <string name="search_process_completed">Поиск завершён</string>
-    <string name="search_process_cancelled">Поиск отменён</string>
+    <string name="search_process_in_progress">Search in progress</string>
+    <string name="search_process_cancel">Cancel</string>
+    <string name="search_process_found">Found %1$s/%2$s</string>
+    <string name="search_process_is_running">Search is running…</string>
+    <string name="search_process_completed">Search completed</string>
+    <string name="search_process_cancelled">Search cancelled</string>
 
     <!--Params feature strings-->
 
-    <string name="params_search_params">Параметры поиска</string>
-    <string name="params_reset">Сбросить</string>
-    <string name="params_country_and_city">Страна и город</string>
-    <string name="params_country">Страна</string>
-    <string name="params_city">Город</string>
-    <string name="params_gender">Пол</string>
-    <string name="params_age">Возраст</string>
-    <string name="params_from">от %s</string>
-    <string name="params_to">до %s</string>
-    <string name="params_to_any">до любого</string>
-    <string name="params_relation">Семейное положение</string>
-    <string name="params_with_phone_only">Только с телефоном</string>
-    <string name="params_users_to_find">Сколько людей найти?</string>
-    <string name="params_were_online_during">Были в сети в течение дней:</string>
-    <string name="params_set_friends_limit">Ограничить количество друзей</string>
-    <string name="params_from_to">от %1$s до %2$s</string>
-    <string name="params_set_followers_limit">Ограничить количество подписчиков</string>
-    <string name="params_start_search">Начать поиск</string>
+    <string name="params_search_params">Search params</string>
+    <string name="params_reset">Reset</string>
+    <string name="params_country_and_city">Country and city</string>
+    <string name="params_country">Country</string>
+    <string name="params_city">City</string>
+    <string name="params_gender">Gender</string>
+    <string name="params_age">Age</string>
+    <string name="params_from">from %s</string>
+    <string name="params_to">to %s</string>
+    <string name="params_to_any">to any</string>
+    <string name="params_relation">Relationship</string>
+    <string name="params_with_phone_only">With phone only</string>
+    <string name="params_users_to_find">How many users to find?</string>
+    <string name="params_were_online_during">Were online during _ days:</string>
+    <string name="params_set_friends_limit">Limit users\'s friends count</string>
+    <string name="params_from_to">from %1$s to %2$s</string>
+    <string name="params_set_followers_limit">Limit users\'s subscribers count</string>
+    <string name="params_start_search">Start search</string>
 
     <!--Auth feature strings-->
 
-    <string name="auth_title">Авторизация</string>
-    <string name="auth_email_or_phone">Email или телефон</string>
-    <string name="auth_password">Пароль</string>
-    <string name="auth_login">Войти</string>
+    <string name="auth_title">Login</string>
+    <string name="auth_email_or_phone">Email or phone</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_login">Log in</string>
 
     <!--History feature strings-->
-    <string name="history_search_history">История поисков</string>
-    <string name="history_search_photo_description">Изображение пользователя</string>
-    <string name="history_search_age_from_to">Возраст: от %1$s до %2$s</string>
-    <string name="history_search_any">любого</string>
-    <string name="history_search_with_phone_yes">Только с телефоном: да</string>
-    <string name="history_search_with_phone_no">Только с телефоном: нет</string>
-    <string name="history_search_users_count">Количество найденных пользователей</string>
-    <string name="history_search_users">Пользователи</string>
-    <string name="history_search_no_users">Найденные пользователи отсутствуют</string>
+
+    <string name="history_search_history">Search history</string>
+    <string name="history_search_photo_description">User photo</string>
+    <string name="history_search_age_from_to">Age: from %1$s to %2$s</string>
+    <string name="history_search_any">any</string>
+    <string name="history_search_with_phone_yes">With phone only: yes</string>
+    <string name="history_search_with_phone_no">With phone only: no</string>
+    <string name="history_search_users_count">Found users quantity</string>
+    <string name="history_search_users">Users</string>
+    <string name="history_search_no_users">No found users</string>
 
     <!--Error description strings-->
 
-    <string name="error_something_went_wrong">Что-то пошло не так. Попробуйте повторить позднее</string>
+    <string name="error_something_went_wrong">Something went wrong. Try repeat later</string>
 
-    <string name="error_unexpected">Непредвиденная ошибка</string>
-    <string name="error_network_check_internet_or_unavailable">Ошибка соединения: отсутствует подключение к сети или сервер недоступен</string>
-    <string name="error_network_wrong_login_or_password">Указан неверный логин или пароль!</string>
-    <string name="error_network_flood">Вы слишком часто отправляете запросы! Подождите и попробуйте позже</string>
+    <string name="error_unexpected">Unexpected error</string>
+    <string name="error_network_check_internet_or_unavailable">Network connection: no network or server unavailable</string>
+    <string name="error_network_wrong_login_or_password">Wrong login or password!</string>
+    <string name="error_network_flood">You\'re sending events too frequently! Wait and try later</string>
 
-    <string name="error_database_entries_not_found">Ошибка! Не удалось получить сохранённые данные</string>
-    <string name="error_database_request">Не удалось выполнить операцию с базой данных</string>
+    <string name="error_database_entries_not_found">Error! Saved data was not obtained</string>
+    <string name="error_database_request">Database operation error</string>
 
     <!--Other strings-->
 
-    <string name="gender_any">Любой</string>
-    <string name="gender_female">Женский</string>
-    <string name="gender_male">Мужской</string>
-
-    <string name="relation_female_any">Любое</string>
-    <string name="relation_male_any">Любое</string>
-    <string name="relation_female_not_married">Не замужем</string>
-    <string name="relation_male_not_married">Не женат</string>
-    <string name="relation_female_has_friend">Есть друг</string>
-    <string name="relation_male_has_friend">Есть подруга</string>
-    <string name="relation_female_engaged">Помолвлена</string>
-    <string name="relation_male_engaged">Помолвлен</string>
-    <string name="relation_female_married">Замужем</string>
-    <string name="relation_male_married">Женат</string>
-    <string name="relation_female_all_complicated">Всё сложно</string>
-    <string name="relation_male_all_complicated">Всё сложно</string>
-    <string name="relation_female_in_active_search">В активном поиске</string>
-    <string name="relation_male_in_active_search">В активном поиске</string>
-    <string name="relation_female_in_love">Влюблена</string>
-    <string name="relation_male_in_love">Влюблён</string>
-    <string name="relation_female_in_civil_marriage">В гражданском браке</string>
-    <string name="relation_male_in_civil_marriage">В гражданском браке</string>
+    <string name="gender_any">Any</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_male">Male</string>
+    <string name="relation_female_any">Any</string>
+    <string name="relation_male_any">Any</string>
+    <string name="relation_female_not_married">Not married</string>
+    <string name="relation_male_not_married">Not married</string>
+    <string name="relation_female_has_friend">Has friend</string>
+    <string name="relation_male_has_friend">Has girlfriend</string>
+    <string name="relation_female_engaged">Engaged</string>
+    <string name="relation_male_engaged">Engaged</string>
+    <string name="relation_female_married">Married</string>
+    <string name="relation_male_married">Married</string>
+    <string name="relation_female_all_complicated">All complicated</string>
+    <string name="relation_male_all_complicated">All complicated</string>
+    <string name="relation_female_in_active_search">In active search</string>
+    <string name="relation_male_in_active_search">In active search</string>
+    <string name="relation_female_in_love">In love</string>
+    <string name="relation_male_in_love">In love</string>
+    <string name="relation_female_in_civil_marriage">In civil marriage</string>
+    <string name="relation_male_in_civil_marriage">In civil marriage</string>
 
 </resources>
