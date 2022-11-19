@@ -92,7 +92,7 @@ internal class AuthViewModel @Inject constructor(
         getAccessTokenUseCase(Unit)
             .unwrapResult(loadingState, uiMessageManager)
             .onEach { accessToken ->
-                //_state.update { it.copy(needToFinishAuth = accessToken.isNotBlank()) }
+                _state.update { it.copy(needToFinishAuth = accessToken.isNotBlank()) }
             }.launchIn(viewModelScope)
     }
 
