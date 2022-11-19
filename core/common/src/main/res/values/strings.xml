@@ -50,7 +50,7 @@
 
     <!--Auth feature strings-->
 
-    <string name="auth_title">Login</string>
+    <string name="auth_title">Login at VK.com</string>
     <string name="auth_email_or_phone">Email or phone</string>
     <string name="auth_password">Password</string>
     <string name="auth_login">Log in</string>

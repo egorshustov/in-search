@@ -50,7 +50,7 @@
 
     <!--Auth feature strings-->
 
-    <string name="auth_title">Авторизация</string>
+    <string name="auth_title">Войдите на VK.com</string>
     <string name="auth_email_or_phone">Email или телефон</string>
     <string name="auth_password">Пароль</string>
     <string name="auth_login">Войти</string>

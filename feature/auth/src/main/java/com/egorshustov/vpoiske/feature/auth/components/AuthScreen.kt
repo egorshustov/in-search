@@ -15,6 +15,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.egorshustov.vpoiske.core.ui.component.LoadingStub
 import com.egorshustov.vpoiske.feature.auth.AuthEvent
 import com.egorshustov.vpoiske.feature.auth.AuthProcessWebView
@@ -48,7 +50,10 @@ internal fun AuthScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-        Box(contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.imePadding(),
+            contentAlignment = Alignment.Center
+        ) {
             val keyboardController = LocalSoftwareKeyboardController.current
             Column(
                 modifier = modifier
@@ -91,8 +96,13 @@ internal fun AuthScreen(
                     colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.surface)
                 )
                 Button(
-                    modifier = modifier.fillMaxWidth(),
                     enabled = !state.isLoading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
                     onClick = { onTriggerEvent(AuthEvent.OnStartAuthProcess) }
                 ) {
                     Text(stringResource(R.string.auth_login))
@@ -114,4 +124,13 @@ internal fun AuthScreen(
         }
         if (state.isLoading) LoadingStub()
     }
+}
+
+@Preview
+@Composable
+internal fun AuthScreenPreview() {
+    AuthScreen(
+        state = AuthState(),
+        onTriggerEvent = {}
+    )
 }

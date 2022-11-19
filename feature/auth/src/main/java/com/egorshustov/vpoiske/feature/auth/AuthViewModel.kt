@@ -49,11 +49,11 @@ internal class AuthViewModel @Inject constructor(
     }
 
     private fun onUpdateLogin(login: String) {
-        _state.update { it.copy(typedLoginText = login) }
+        _state.update { it.copy(typedLoginText = login.trim()) }
     }
 
     private fun onUpdatePassword(password: String) {
-        _state.update { it.copy(typedPasswordText = password) }
+        _state.update { it.copy(typedPasswordText = password.trim()) }
     }
 
     private fun onStartAuthProcess() {
@@ -92,7 +92,7 @@ internal class AuthViewModel @Inject constructor(
         getAccessTokenUseCase(Unit)
             .unwrapResult(loadingState, uiMessageManager)
             .onEach { accessToken ->
-                _state.update { it.copy(needToFinishAuth = accessToken.isNotBlank()) }
+                //_state.update { it.copy(needToFinishAuth = accessToken.isNotBlank()) }
             }.launchIn(viewModelScope)
     }
 
