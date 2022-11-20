@@ -6,7 +6,7 @@ internal object AuthHelper {
 
     private const val CLIENT_ID = 6604827
     private const val CLIENT_SECRET = "KfFi8pmxRpGDLdmlqruf"
-    private const val REQUIRED_TOKEN_SCOPE = "messages,offline"
+    private const val REQUIRED_TOKEN_SCOPE = "offline"
     private const val REDIRECT_URL = "https://oauth.vk.com/blank.html"
 
     const val URL_FOR_OBTAIN_TOKEN =
@@ -40,7 +40,7 @@ internal object AuthHelper {
 
     const val CLICK_BUTTON_SCRIPT = "javascript:document.querySelector('.button').click()"
 
-    const val SERVICE_MSG_WARNING_HTML_TEXT = "service_msg_warning"
+    const val SERVICE_MSG_WARNING_HTML_TEXT = "service_msg service_msg_warning"
     const val EMAIL_INPUT_HTML_CODE = "name=\"email\""
     const val SECURITY_ERROR_HTML_TEXT = "Security Error"
     const val AUTHORIZATION_CODE_ERROR_HTML_TEXT = "Code is invalid or expired"

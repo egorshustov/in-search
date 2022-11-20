@@ -12,9 +12,9 @@ import com.egorshustov.insearch.core.common.utils.UrlString
 import com.egorshustov.insearch.core.common.utils.evaluateJavascriptInMainThread
 import com.egorshustov.insearch.core.common.utils.loadUrlInMainThread
 import com.egorshustov.insearch.core.common.utils.prepareUrlAndParseSafely
-import com.egorshustov.insearch.feature.auth.utils.AuthWebViewError
 import com.egorshustov.insearch.feature.auth.utils.AuthHelper
 import com.egorshustov.insearch.feature.auth.utils.AuthRequestType
+import com.egorshustov.insearch.feature.auth.utils.AuthWebViewError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 internal fun AuthProcessWebView(
     login: String,
     password: String,
-    onAuthDataObtained: (userId: String, accessToken: String) -> Unit,
+    onAuthDataObtained: (accessToken: String, userId: String) -> Unit,
     onError: (errorType: AuthWebViewError) -> Unit
 ) {
     var webView: WebView
@@ -75,8 +75,8 @@ internal fun AuthProcessWebView(
                             else -> {
                                 val accessToken = uri.getQueryParameter("access_token")
                                 val userId = uri.getQueryParameter("user_id")
-                                if (userId != null && accessToken != null) {
-                                    onAuthDataObtained(userId, accessToken)
+                                if (accessToken != null && userId != null) {
+                                    onAuthDataObtained(accessToken, userId)
                                     CoroutineScope(Dispatchers.Main).launch {
                                         webView.clearCache(true) // TODO remove after testing
                                     }

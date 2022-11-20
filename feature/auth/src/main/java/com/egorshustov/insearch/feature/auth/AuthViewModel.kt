@@ -38,9 +38,10 @@ internal class AuthViewModel @Inject constructor(
             is AuthEvent.OnUpdateLogin -> onUpdateLogin(event.login)
             is AuthEvent.OnUpdatePassword -> onUpdatePassword(event.password)
             AuthEvent.OnStartAuthProcess -> onStartAuthProcess()
+            is AuthEvent.OnClickDemoLogin -> onClickDemoLogin(event.accessToken)
             is AuthEvent.OnAuthDataObtained -> onAuthDataObtained(
-                event.userId,
-                event.accessToken
+                accessToken = event.accessToken,
+                userId = event.userId
             )
             AuthEvent.OnNeedToFinishAuthProcessed -> onNeedToFinishAuthProcessed()
             is AuthEvent.OnAuthError -> onAuthError(event.error)
@@ -56,12 +57,18 @@ internal class AuthViewModel @Inject constructor(
         _state.update { it.copy(typedPasswordText = password.trim()) }
     }
 
+    private fun onClickDemoLogin(accessToken: String) {
+        viewModelScope.launch {
+            saveAccessTokenUseCase(SaveAccessTokenUseCaseParams(accessToken = accessToken))
+        }
+    }
+
     private fun onStartAuthProcess() {
         loadingState.addLoader()
         _state.update { it.copy(isAuthInProcess = true) }
     }
 
-    private fun onAuthDataObtained(userId: String, accessToken: String) {
+    private fun onAuthDataObtained(accessToken: String, userId: String) {
         viewModelScope.launch {
             saveAccessTokenUseCase(SaveAccessTokenUseCaseParams(accessToken = accessToken))
         }

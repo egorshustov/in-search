@@ -107,14 +107,28 @@ internal fun AuthScreen(
                 ) {
                     Text(stringResource(R.string.auth_login))
                 }
+                Button(
+                    enabled = !state.isLoading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
+                    onClick = {
+                        onTriggerEvent(AuthEvent.OnClickDemoLogin(context.getString(R.string.demo_api_token)))
+                    }
+                ) {
+                    Text(stringResource(R.string.auth_demo_login))
+                }
             }
 
             if (state.isAuthInProcess && !state.needToFinishAuth) {
                 AuthProcessWebView(
                     login = state.typedLoginText,
                     password = state.typedPasswordText,
-                    onAuthDataObtained = { userId, accessToken ->
-                        onTriggerEvent(AuthEvent.OnAuthDataObtained(userId, accessToken))
+                    onAuthDataObtained = { accessToken, userId ->
+                        onTriggerEvent(AuthEvent.OnAuthDataObtained(accessToken, userId))
                     },
                     onError = {
                         onTriggerEvent(AuthEvent.OnAuthError(it))

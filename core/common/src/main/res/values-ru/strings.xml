@@ -54,6 +54,7 @@
     <string name="auth_email_or_phone">Email или телефон</string>
     <string name="auth_password">Пароль</string>
     <string name="auth_login">Войти</string>
+    <string name="auth_demo_login">Войти в демо-режиме</string>
 
     <!--History feature strings-->
 

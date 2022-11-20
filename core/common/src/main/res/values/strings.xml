@@ -50,10 +50,11 @@
 
     <!--Auth feature strings-->
 
-    <string name="auth_title">Login at VK.com</string>
+    <string name="auth_title">Sign in to VK.com</string>
     <string name="auth_email_or_phone">Email or phone</string>
     <string name="auth_password">Password</string>
-    <string name="auth_login">Log in</string>
+    <string name="auth_login">Sign in</string>
+    <string name="auth_demo_login">Sign in with demo credentials</string>
 
     <!--History feature strings-->
 

@@ -10,7 +10,9 @@ internal sealed interface AuthEvent {
 
     object OnStartAuthProcess : AuthEvent
 
-    data class OnAuthDataObtained(val userId: String, val accessToken: String) : AuthEvent
+    data class OnClickDemoLogin(val accessToken: String) : AuthEvent
+
+    data class OnAuthDataObtained(val accessToken: String, val userId: String) : AuthEvent
 
     object OnNeedToFinishAuthProcessed : AuthEvent
 
