@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.ApkSigningConfig
 import java.io.FileInputStream
 import java.util.*
 
@@ -16,20 +17,7 @@ kapt {
 
 android {
     signingConfigs {
-        create("release") {
-            val localProps = Properties()
-            val keyProps = Properties()
-            try {
-                localProps.load(FileInputStream(file("../local.properties")))
-                keyProps.load(FileInputStream(file(localProps["keystore.props.file"]!!)))
-
-                storeFile = file("$rootDir/egorshustov.jks")
-                storePassword = keyProps["KEYSTORE_PASSWORD"].toString()
-                keyAlias = keyProps["KEY_ALIAS"].toString()
-                keyPassword = keyProps["KEY_PASSWORD"].toString()
-            } catch (ignored: Exception) {
-            }
-        }
+        create("release") { setKeyStoreAliasAndPassword() }
     }
     compileSdk = AppConfig.compileSdk
     defaultConfig {
@@ -46,14 +34,26 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            //applicationIdSuffix = ".debug"
+            isDebuggable = true
+        }
         getByName("release") {
-            isMinifyEnabled = false
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
         }
+        /*create("staging") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".staging"
+            isDebuggable = true
+        }*/
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -71,6 +71,21 @@ android {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
+    }
+}
+
+fun ApkSigningConfig.setKeyStoreAliasAndPassword() {
+    val localProps = Properties()
+    val keyProps = Properties()
+    try {
+        localProps.load(FileInputStream(file("../local.properties")))
+        keyProps.load(FileInputStream(file(localProps["keystore.props.file"]!!)))
+
+        storeFile = file("$rootDir/egorshustov.jks")
+        storePassword = keyProps["KEYSTORE_PASSWORD"].toString()
+        keyAlias = keyProps["KEY_ALIAS"].toString()
+        keyPassword = keyProps["KEY_PASSWORD"].toString()
+    } catch (ignored: Exception) {
     }
 }
 

@@ -5,7 +5,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "VPoiske"
+rootProject.name = "insearch"
 include(
     ":app",
 

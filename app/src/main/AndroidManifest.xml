@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.egorshustov.vpoiske">
+    package="com.egorshustov.insearch">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".VPoiskeApplication"
+        android:name=".InSearchApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".VPoiskeActivity"
+            android:name=".InSearchActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
 
@@ -33,7 +33,7 @@
 
                 <data
                     android:host="egorshustov.com"
-                    android:pathPattern="/vpoiske"
+                    android:pathPattern="/insearch"
                     android:scheme="https" />
             </intent-filter>
 
