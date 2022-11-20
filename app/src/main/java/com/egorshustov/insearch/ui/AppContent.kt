@@ -51,8 +51,7 @@ fun AppContent() {
                     },
                     closeDrawer = {
                         coroutineScope.launch { drawerState.close() }
-                    },
-                    onChangeThemeClick = {}
+                    }
                 )
             })
         {
