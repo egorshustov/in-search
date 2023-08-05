@@ -42,7 +42,7 @@ internal class MainSearchViewModel @Inject constructor(
     private val liveWorkInfo: MediatorLiveData<WorkInfo?> = MediatorLiveData<WorkInfo?>()
 
     private val workInfoLiveObserver = Observer<List<WorkInfo>?> {
-        liveWorkInfo.value = it.firstOrNull()
+        liveWorkInfo.value = it?.firstOrNull()
     }
 
     private val workInfoFlow: Flow<WorkInfo?> = liveWorkInfo.asFlow()

@@ -17,9 +17,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.egorshustov.insearch.core.common.R
-import com.egorshustov.insearch.core.common.utils.NO_VALUE_L
 import com.egorshustov.insearch.core.model.data.SearchWithUsersPhotos
 import com.egorshustov.insearch.core.ui.component.AppTopAppBar
 import com.egorshustov.insearch.core.ui.component.LoadingStub
@@ -75,11 +73,9 @@ internal fun HistorySearchListScreen(
                     item { LoadingStub() }
                 }
 
-                items(
-                    items = searchWithUsersPhotosPagingItems,
-                    key = { it.search.id ?: NO_VALUE_L }
-                ) { searchWithUsersPhotos ->
-                    searchWithUsersPhotos?.let {
+                items(count = searchWithUsersPhotosPagingItems.itemCount) { index ->
+                    val item = searchWithUsersPhotosPagingItems[index]
+                    item?.let {
                         SearchCard(
                             search = it.search,
                             photos = it.photos,

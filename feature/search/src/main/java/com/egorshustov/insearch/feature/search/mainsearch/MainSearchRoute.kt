@@ -4,11 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.egorshustov.insearch.feature.search.mainsearch.components.MainSearchScreen
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun MainSearchRoute(
     modifier: Modifier = Modifier,
