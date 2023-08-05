@@ -40,6 +40,7 @@ internal fun AuthProcessWebView(
     AndroidView(factory = {
         webView = WebView(it).apply {
             settings.javaScriptEnabled = true
+            settings.userAgentString = "PostmanRuntime/7.32.3"
             webViewClient = authWebViewClient
             visibility = View.GONE
         }
@@ -61,17 +62,20 @@ internal fun AuthProcessWebView(
                                 onError(AuthWebViewError.WRONG_LOGIN_OR_PASSWORD)
                                 return
                             }
+
                             html.contains(AuthHelper.EMAIL_INPUT_HTML_CODE) -> {
                                 webView.evaluateJavascriptInMainThread(
                                     AuthHelper.getFillCredentialsAndSubmitScript(login, password)
                                 )
                                 return
                             }
+
                             html.contains(AuthHelper.SECURITY_ERROR_HTML_TEXT) -> {
                                 currentRequestType = AuthRequestType.AUTHORIZATION_CODE_FLOW
                                 webView.loadUrlInMainThread(AuthHelper.URL_FOR_OBTAIN_CODE)
                                 return
                             }
+
                             else -> {
                                 val accessToken = uri.getQueryParameter("access_token")
                                 val userId = uri.getQueryParameter("user_id")
@@ -85,11 +89,13 @@ internal fun AuthProcessWebView(
                             }
                         }
                     }
+
                     AuthRequestType.AUTHORIZATION_CODE_FLOW -> {
                         when {
                             html.contains(AuthHelper.AUTHORIZATION_CODE_ERROR_HTML_TEXT) -> {
                                 onError(AuthWebViewError.UNDEFINED)
                             }
+
                             else -> {
                                 uri.getQueryParameter("code")?.let { code ->
                                     webView.loadUrlInMainThread(
